@@ -1,6 +1,6 @@
 ﻿namespace Services.UI;
 
-public class MobileApplicationUICustomizationService : UICustomizationService
+public class MobileUICustomizationService : UICustomizationService
 {
     
 }
