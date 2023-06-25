@@ -9,6 +9,7 @@ public class UnitOfWork : IDisposable
     public EmployeeRepository Employees { get; private set; }
     public McpRepository Mcps { get; private set; }
     public TaskRepository Tasks { get; private set; }
+    public MessageRepository Messages { get; private set; }
 
     public UnitOfWork(UwcDbContext uwcDbContext)
     {
@@ -17,6 +18,7 @@ public class UnitOfWork : IDisposable
         Employees = new EmployeeRepository(_uwcDbContext);
         Mcps = new McpRepository(_uwcDbContext);
         Tasks = new TaskRepository(_uwcDbContext);
+        Messages = new MessageRepository(_uwcDbContext);
     }
 
     public int Complete()
