@@ -65,4 +65,17 @@ public class EmployeeInformationController : ControllerBase
         var result = _employeeInformationService.GetAllEmployee();
         return result;
     }
+
+    [HttpGet("get-employee-id/{employeeId}")]
+    public IActionResult GetEmployeeById([FromRoute] int employeeId)
+    {
+        var (success, result) = _employeeInformationService.GetEmployeeById(employeeId);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }

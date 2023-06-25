@@ -13,6 +13,8 @@ public interface IEmployeeInformationService
     public (bool success, object result) UpdateRoleEmployee(int employeeId, int role);
 
     public List<Models.Employee> GetAllEmployee();
+
+    public (bool success, object result) GetEmployeeById(int id);
 }
 
 public class EmployeeInformationService : IEmployeeInformationService
@@ -78,5 +80,16 @@ public class EmployeeInformationService : IEmployeeInformationService
     {
         var employeeList = _unitOfWork.Employees.GetAll();
         return employeeList.ToList();
+    }
+
+    public (bool success, object result) GetEmployeeById(int id)
+    {
+        if (!_unitOfWork.Employees.DoesIdExist(id))
+        {
+            return (false, "Employee Id does not exist.");
+        }
+        
+        var employee = _unitOfWork.Employees.Find(employee => employee.Id == id).First();
+        return (true, employee);
     }
 }
