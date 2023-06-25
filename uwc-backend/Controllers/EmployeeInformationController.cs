@@ -43,4 +43,19 @@ public class EmployeeInformationController : ControllerBase
         
         return Ok(result);
     }
+
+    [HttpPut("update-role-employee-id")]
+    public IActionResult UpdateRoleEmployeeId(UpdateRoleEmployeeRequest updateRoleEmployeeRequest)
+    {
+        var (success, result) =
+            _employeeInformationService.UpdateRoleEmployee(updateRoleEmployeeRequest.Employee,
+                updateRoleEmployeeRequest.Role);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
