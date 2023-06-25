@@ -1,8 +1,7 @@
 namespace Models;
 
-public class Message
+public class Message : IndexedEntity
 {
-    public int Id { get; set; }
     public Employee Sender { get; set; }
     public Employee Receiver { get; set; }
     public DateTime TextTime { get; set; }
