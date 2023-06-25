@@ -45,4 +45,18 @@ public class AccountController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("update-password")]
+    public IActionResult UpdatePassword(UpdatePasswordRequest updatePasswordRequest)
+    {
+        var (success, result) = _authenticationService.UpdatePassword(updatePasswordRequest.Username,
+            updatePasswordRequest.OldPassword, updatePasswordRequest.NewPassword);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
