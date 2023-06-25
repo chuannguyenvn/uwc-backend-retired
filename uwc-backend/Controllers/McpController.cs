@@ -30,4 +30,17 @@ public class McpController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("empty-mcp/{mcpId}")]
+    public IActionResult EmptyMcp([FromRoute] int mcpId)
+    {
+        var (success, result) = _mcpService.EmptyMcp(mcpId);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
