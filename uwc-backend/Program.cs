@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Implementations;
 using Services.Authentication;
+using Services.Employee;
 using Services.LiveData;
 using Services.Message;
 using Services.Report;
@@ -26,6 +27,7 @@ builder.Services.AddTransient<UnitOfWork>();
 #region Services
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IEmployeeInformationService, EmployeeInformationService>();
 
 builder.Services.AddSingleton<McpCapacityService>();
 builder.Services.AddSingleton<VehiclePositionService>();
@@ -45,8 +47,6 @@ builder.Services.AddScoped<DesktopUICustomizationService>();
 builder.Services.AddScoped<MobileUICustomizationService>();
 
 #endregion
-
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 var app = builder.Build();
 

@@ -8,7 +8,7 @@ public class EmployeeRepository : GenericRepository<Employee>
     {
     }
 
-    public IEnumerable<Employee> GetEmployeesWithRole(string role)
+    public IEnumerable<Employee> GetEmployeesWithRole(int role)
     {
         return _context.Employees.Where(employee => employee.Role == role);
     }
