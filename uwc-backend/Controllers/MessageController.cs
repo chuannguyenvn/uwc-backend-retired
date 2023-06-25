@@ -42,4 +42,11 @@ public class MessageController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-message-in-24-hour")]
+    public List<Models.Message> GetMessageIn24Hour()
+    {
+        var result = _messageService.GetMessagesIn24Hour();
+        return result;
+    }
 }

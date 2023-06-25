@@ -1,4 +1,5 @@
-﻿using Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Repositories;
 
 namespace Services.Message;
 
@@ -6,6 +7,7 @@ public interface IMessageService
 {
     public (bool success, object result) AddMessage(int sender, int receiver, DateTime textTime, string textContent);
     public (bool success, object result) UpdateMessageContent(int id, string textContent);
+    public List<Models.Message> GetMessagesIn24Hour();
 }
 public class MessageService : IMessageService
 {
@@ -55,5 +57,13 @@ public class MessageService : IMessageService
         _unitOfWork.Complete();
 
         return (true, "Message content updated successfully");
+    }
+    
+    public List<Models.Message> GetMessagesIn24Hour()
+    {
+        var message =
+            _unitOfWork.Messages.Find(text => text.TextTime >= DateTime.Today.AddDays(-1) && text.TextTime <= DateTime.Now).ToList();
+        
+        return message;
     }
 }
