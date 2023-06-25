@@ -15,6 +15,8 @@ public interface IEmployeeInformationService
     public List<Models.Employee> GetAllEmployee();
 
     public (bool success, object result) GetEmployeeById(int id);
+
+    public List<Models.Employee> GetEmployeeByRole(int role);
 }
 
 public class EmployeeInformationService : IEmployeeInformationService
@@ -91,5 +93,11 @@ public class EmployeeInformationService : IEmployeeInformationService
         
         var employee = _unitOfWork.Employees.Find(employee => employee.Id == id).First();
         return (true, employee);
+    }
+
+    public List<Models.Employee> GetEmployeeByRole(int role)
+    {
+        var employeeList = _unitOfWork.Employees.Find(employee => employee.Role == role);
+        return employeeList.ToList();
     }
 }

@@ -78,4 +78,11 @@ public class EmployeeInformationController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-employee-by-role/{role}")]
+    public List<Models.Employee> GetEmployeeByRole([FromRoute] int role)
+    {
+        var result = _employeeInformationService.GetEmployeeByRole(role);
+        return result;
+    }
 }
