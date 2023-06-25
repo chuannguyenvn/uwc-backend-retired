@@ -4,6 +4,7 @@ using Repositories.Implementations;
 using Services.Authentication;
 using Services.Employee;
 using Services.LiveData;
+using Services.Mcp;
 using Services.Message;
 using Services.Report;
 using Services.Routing;
@@ -28,8 +29,8 @@ builder.Services.AddTransient<UnitOfWork>();
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmployeeInformationService, EmployeeInformationService>();
+builder.Services.AddScoped<IMcpService, McpService>();
 
-builder.Services.AddSingleton<McpCapacityService>();
 builder.Services.AddSingleton<VehiclePositionService>();
 
 builder.Services.AddScoped<MessageService>();

@@ -19,4 +19,8 @@
       <Folder Include="Services\Task" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Services\Mcp.cs" />
+    </ItemGroup>
+
 </Project>
