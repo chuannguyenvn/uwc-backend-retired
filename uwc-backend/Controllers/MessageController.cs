@@ -20,7 +20,21 @@ public class MessageController : ControllerBase
     {
         var (success, result) = _messageService.AddMessage(addMessageRequest.Sender, addMessageRequest.Receiver,
             addMessageRequest.TextTime, addMessageRequest.TextContent);
-        
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpPut("update-message-content")]
+    public IActionResult UpdateMessageContent(UpdateMessageRequest updateMessageRequest)
+    {
+        var (success, result) =
+            _messageService.UpdateMessageContent(updateMessageRequest.Id, updateMessageRequest.TextContent);
+
         if (!success)
         {
             return BadRequest(result);

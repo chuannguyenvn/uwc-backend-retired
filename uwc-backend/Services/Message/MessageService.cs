@@ -5,6 +5,7 @@ namespace Services.Message;
 public interface IMessageService
 {
     public (bool success, object result) AddMessage(int sender, int receiver, DateTime textTime, string textContent);
+    public (bool success, object result) UpdateMessageContent(int id, string textContent);
 }
 public class MessageService : IMessageService
 {
@@ -40,5 +41,19 @@ public class MessageService : IMessageService
         _unitOfWork.Messages.Add(messageInformation);
         _unitOfWork.Complete();
         return (true, "Add message successfully.");
+    }
+
+    public (bool success, object result) UpdateMessageContent(int id, string textContent)
+    {
+        if (!_unitOfWork.Messages.DoesIdExist(id))
+        {
+            return (false, "Message Id does not exist.");
+        }
+
+        var message = _unitOfWork.Messages.Find(message => message.Id == id).First();
+        message.TextContent = textContent;
+        _unitOfWork.Complete();
+
+        return (true, "Message content updated successfully");
     }
 }
