@@ -58,4 +58,11 @@ public class EmployeeInformationController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-all-employee")]
+    public List<Models.Employee> GetAllEmployee()
+    {
+        var result = _employeeInformationService.GetAllEmployee();
+        return result;
+    }
 }

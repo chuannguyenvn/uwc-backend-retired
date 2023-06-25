@@ -11,6 +11,8 @@ public interface IEmployeeInformationService
     public (bool success, object result) DeleteEmployee(int id);
 
     public (bool success, object result) UpdateRoleEmployee(int employeeId, int role);
+
+    public List<Models.Employee> GetAllEmployee();
 }
 
 public class EmployeeInformationService : IEmployeeInformationService
@@ -70,5 +72,11 @@ public class EmployeeInformationService : IEmployeeInformationService
         employee.Role = role;
         _unitOfWork.Complete();
         return (true, "Update role successfully.");
+    }
+
+    public List<Models.Employee> GetAllEmployee()
+    {
+        var employeeList = _unitOfWork.Employees.GetAll();
+        return employeeList.ToList();
     }
 }
