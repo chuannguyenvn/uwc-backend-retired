@@ -8,5 +8,6 @@ namespace uwc_backend.Communications
     {
         [JsonProperty("Username")] public string Username { get; set; }
         [JsonProperty("Password")] public string Password { get; set; }
+        [JsonProperty("Employee")] public int Employee { get; set; }
     }
 }

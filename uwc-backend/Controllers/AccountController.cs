@@ -22,7 +22,7 @@ public class AccountController : ControllerBase
     public IActionResult Register(AuthenticationRequest authenticationRequest)
     {
         var (success, result) =
-            _authenticationService.Register(authenticationRequest.Username, authenticationRequest.Password);
+            _authenticationService.Register(authenticationRequest.Username, authenticationRequest.Password, authenticationRequest.Employee);
 
         if (!success)
         {
