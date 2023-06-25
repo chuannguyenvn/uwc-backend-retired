@@ -10,6 +10,8 @@ public interface IMcpService
     public (bool success, object result) EmptyMcp(int mcpId);
 
     public List<Models.Mcp> GetFullMcps();
+
+    public List<Models.Mcp> GetMcpsInRange(double latitude, double longitude, double radius);
 }
 
 public class McpService : IMcpService
@@ -30,10 +32,10 @@ public class McpService : IMcpService
             Latitude = latitude,
             Longitude = longitude,
         };
-        
+
         _unitOfWork.Mcps.Add(mcpInformation);
         _unitOfWork.Complete();
-        
+
         return (true, "Add new mcp successfully.");
     }
 
@@ -55,6 +57,14 @@ public class McpService : IMcpService
     public List<Models.Mcp> GetFullMcps()
     {
         var mcpList = _unitOfWork.Mcps.Find(mcp => Math.Abs(mcp.CurrentLoad - 100.0) < 0.01);
+        return mcpList.ToList();
+    }
+
+    public List<Models.Mcp> GetMcpsInRange(double latitude, double longitude, double radius)
+    {
+        var mcpList = _unitOfWork.Mcps.Find(
+            mcp => Math.Pow(mcp.Longitude - longitude, 2) + Math.Pow(mcp.Latitude - latitude, 2) <=
+                   Math.Pow(radius, 2));
         return mcpList.ToList();
     }
 }

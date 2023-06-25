@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Services.Mcp;
 using uwc_backend.Communications.Mcp;
 
@@ -48,6 +49,14 @@ public class McpController : ControllerBase
     public List<Models.Mcp> GetFullMcps()
     {
         var result = _mcpService.GetFullMcps();
+        return result;
+    }
+
+    [HttpGet("get-mcps-in-range")]
+    public List<Models.Mcp> GetMcpsInRange(GetMcpsInRangeRequest getMcpsInRangeRequest)
+    {
+        var result = _mcpService.GetMcpsInRange(getMcpsInRangeRequest.Latitude, getMcpsInRangeRequest.Longitude,
+            getMcpsInRangeRequest.Radius);
         return result;
     }
 }
