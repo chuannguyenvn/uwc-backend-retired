@@ -14,6 +14,8 @@ public interface IMcpService
     public List<Models.Mcp> GetMcpsInRange(double latitude, double longitude, double radius);
 
     public List<Models.Mcp> GetAllMcps();
+
+    public (bool success, object result) DeleteMcp(int id);
 }
 
 public class McpService : IMcpService
@@ -74,5 +76,17 @@ public class McpService : IMcpService
     {
         var mcpList = _unitOfWork.Mcps.GetAll();
         return mcpList.ToList();
+    }
+
+    public (bool success, object result) DeleteMcp(int id)
+    {
+        if (!_unitOfWork.Mcps.DoesIdExist(id))
+        {
+            return (false, "Mcp Id does not exist.");
+        }
+        
+        _unitOfWork.Mcps.RemoveById(id);
+        _unitOfWork.Complete();
+        return (true, "Mcp deleted successfully.");
     }
 }

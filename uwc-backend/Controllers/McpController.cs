@@ -66,4 +66,17 @@ public class McpController : ControllerBase
         var result = _mcpService.GetAllMcps();
         return result;
     }
+
+    [HttpDelete("delete-mcp-id/{mcpId}")]
+    public IActionResult DeleteMcp([FromRoute] int mcpId)
+    {
+        var (success, result) = _mcpService.DeleteMcp(mcpId);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
