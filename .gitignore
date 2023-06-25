@@ -37,3 +37,4 @@ msbuild.wrn
 .vs/
 Server/appsettings.Development.json
 Server/appsettings.json
+uwc-backend/obj/
