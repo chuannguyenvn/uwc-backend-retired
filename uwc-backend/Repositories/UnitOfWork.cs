@@ -12,6 +12,7 @@ public class UnitOfWork : IDisposable
     public McpRepository Mcps { get; private set; }
     public TaskRepository Tasks { get; private set; }
     public MessageRepository Messages { get; private set; }
+    public RouteRepository Routes { get; private set; }
 
     public UnitOfWork(UwcDbContext uwcDbContext)
     {
@@ -22,6 +23,7 @@ public class UnitOfWork : IDisposable
         Mcps = new McpRepository(_uwcDbContext);
         Tasks = new TaskRepository(_uwcDbContext);
         Messages = new MessageRepository(_uwcDbContext);
+        Routes = new RouteRepository(_uwcDbContext);
     }
 
     public int Complete()

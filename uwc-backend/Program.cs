@@ -31,6 +31,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmployeeInformationService, EmployeeInformationService>();
 builder.Services.AddScoped<IMcpService, McpService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IRouteService, RouteService>();
 
 builder.Services.AddSingleton<VehiclePositionService>();
 builder.Services.AddScoped<CleanerReportService>();
