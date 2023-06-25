@@ -30,11 +30,9 @@ builder.Services.AddTransient<UnitOfWork>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmployeeInformationService, EmployeeInformationService>();
 builder.Services.AddScoped<IMcpService, McpService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 builder.Services.AddSingleton<VehiclePositionService>();
-
-builder.Services.AddScoped<MessageService>();
-
 builder.Services.AddScoped<CleanerReportService>();
 builder.Services.AddScoped<DriverReportService>();
 builder.Services.AddScoped<McpRepository>();
