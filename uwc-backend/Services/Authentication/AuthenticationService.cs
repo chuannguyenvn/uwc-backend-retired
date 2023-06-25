@@ -6,7 +6,7 @@ namespace Services.Authentication;
 public interface IAuthenticationService
 {
     public (bool success, string content) Register(string username, string password);
-    public (bool success, string token) Login(string username, string password);
+    public Task<(bool success, string token)> Login(string username, string password);
 }
 
 public class AuthenticationService : IAuthenticationService
@@ -37,7 +37,7 @@ public class AuthenticationService : IAuthenticationService
         return (true, "Registered successfully.");
     }
 
-    public (bool success, string token) Login(string username, string password)
+    public async Task<(bool success, string token)> Login(string username, string password)
     {
         var userList = _unitOfWork.Accounts.Find(account => account.Username == username);
         if (userList.Count() == 0)

@@ -33,10 +33,10 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login(AuthenticationRequest authenticationRequest)
+    public async Task<IActionResult> Login(AuthenticationRequest authenticationRequest)
     {
         var (success, result) =
-            _authenticationService.Login(authenticationRequest.Username, authenticationRequest.Password);
+            await _authenticationService.Login(authenticationRequest.Username, authenticationRequest.Password);
 
         if (!success)
         {
