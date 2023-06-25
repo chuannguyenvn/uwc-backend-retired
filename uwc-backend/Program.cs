@@ -6,6 +6,7 @@ using Services.LiveData;
 using Services.Message;
 using Services.Report;
 using Services.Routing;
+using Services.Task;
 using Services.UI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +38,8 @@ builder.Services.AddScoped<McpRepository>();
 builder.Services.AddScoped<VehicleReportService>();
 
 builder.Services.AddScoped<RouteOptimizationService>();
+
+builder.Services.AddScoped<TaskService>();
 
 builder.Services.AddScoped<DesktopUICustomizationService>();
 builder.Services.AddScoped<MobileUICustomizationService>();

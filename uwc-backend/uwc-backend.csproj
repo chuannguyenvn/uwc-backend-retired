@@ -16,7 +16,6 @@
 
     <ItemGroup>
       <Folder Include="Communications" />
-      <Folder Include="Services\Task" />
     </ItemGroup>
 
 </Project>
