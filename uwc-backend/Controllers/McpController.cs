@@ -43,4 +43,11 @@ public class McpController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-full-mcps")]
+    public List<Models.Mcp> GetFullMcps()
+    {
+        var result = _mcpService.GetFullMcps();
+        return result;
+    }
 }

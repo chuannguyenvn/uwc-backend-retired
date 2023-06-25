@@ -8,6 +8,8 @@ public interface IMcpService
         double longitude);
 
     public (bool success, object result) EmptyMcp(int mcpId);
+
+    public List<Models.Mcp> GetFullMcps();
 }
 
 public class McpService : IMcpService
@@ -48,5 +50,11 @@ public class McpService : IMcpService
         _unitOfWork.Complete();
 
         return (true, "Empty mcp successfully.");
+    }
+
+    public List<Models.Mcp> GetFullMcps()
+    {
+        var mcpList = _unitOfWork.Mcps.Find(mcp => Math.Abs(mcp.CurrentLoad - 100.0) < 0.01);
+        return mcpList.ToList();
     }
 }

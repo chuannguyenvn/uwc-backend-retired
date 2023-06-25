@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Constants = Utilities.Constants;
 using Models;
 
 namespace Repositories;
@@ -66,5 +67,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
     public void RemoveById(int id)
     {
         _context.Set<T>().Remove(_context.Set<T>().Single(x => x.Id == id));
-    } 
+    }
+
+    public bool CompareDouble(double a, double b)
+    {
+        return Math.Abs(a - b) < Constants.EPSILON_COMPARE_DOUBLE;
+    }
 }
