@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <Compile Remove="Services\Mcp.cs" />
+      <Compile Remove="Controllers\TestController.cs" />
     </ItemGroup>
 
 </Project>
