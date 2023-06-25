@@ -51,4 +51,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
     {
         return _context.Set<T>().Any(entity => entity.Id == id);
     }
+
+    public bool HasAny()
+    {
+        return _context.Set<T>().Any();
+    }
+
+    public int GetNextId()
+    {
+        if (!HasAny()) return 1;
+        return _context.Set<T>().Max(entity => entity.Id) + 1;
+    }
 }

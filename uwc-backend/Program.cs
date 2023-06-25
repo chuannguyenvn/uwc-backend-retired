@@ -25,7 +25,7 @@ builder.Services.AddTransient<UnitOfWork>();
 
 #region Services
 
-builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddSingleton<McpCapacityService>();
 builder.Services.AddSingleton<VehiclePositionService>();

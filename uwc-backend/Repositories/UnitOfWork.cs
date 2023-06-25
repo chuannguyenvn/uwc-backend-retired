@@ -1,4 +1,5 @@
-﻿using Repositories.Implementations;
+﻿using Models;
+using Repositories.Implementations;
 
 namespace Repositories;
 
@@ -6,6 +7,7 @@ public class UnitOfWork : IDisposable
 {
     private readonly UwcDbContext _uwcDbContext;
 
+    public AccountRepository Accounts { get; private set; }
     public EmployeeRepository Employees { get; private set; }
     public McpRepository Mcps { get; private set; }
     public TaskRepository Tasks { get; private set; }
@@ -15,6 +17,7 @@ public class UnitOfWork : IDisposable
     {
         _uwcDbContext = uwcDbContext;
 
+        Accounts = new AccountRepository(_uwcDbContext);
         Employees = new EmployeeRepository(_uwcDbContext);
         Mcps = new McpRepository(_uwcDbContext);
         Tasks = new TaskRepository(_uwcDbContext);
