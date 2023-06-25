@@ -8,6 +8,7 @@ public interface IMessageService
     public (bool success, object result) AddMessage(int sender, int receiver, DateTime textTime, string textContent);
     public (bool success, object result) UpdateMessageContent(int id, string textContent);
     public List<Models.Message> GetMessagesIn24Hour();
+    public List<Models.Message> GetAllMessages();
 }
 public class MessageService : IMessageService
 {
@@ -65,5 +66,11 @@ public class MessageService : IMessageService
             _unitOfWork.Messages.Find(text => text.TextTime >= DateTime.Today.AddDays(-1) && text.TextTime <= DateTime.Now).ToList();
         
         return message;
+    }
+
+    public List<Models.Message> GetAllMessages()
+    {
+        var messageList = _unitOfWork.Messages.GetAll();
+        return messageList.ToList();
     }
 }

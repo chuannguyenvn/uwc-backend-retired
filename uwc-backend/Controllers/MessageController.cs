@@ -49,4 +49,11 @@ public class MessageController : ControllerBase
         var result = _messageService.GetMessagesIn24Hour();
         return result;
     }
+
+    [HttpGet("get-all-messages")]
+    public List<Models.Message> GetAllMessages()
+    {
+        var result = _messageService.GetAllMessages();
+        return result;
+    }
 }
