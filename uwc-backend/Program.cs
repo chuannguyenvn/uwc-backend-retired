@@ -32,6 +32,7 @@ builder.Services.AddScoped<IEmployeeInformationService, EmployeeInformationServi
 builder.Services.AddScoped<IMcpService, McpService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddSingleton<VehiclePositionService>();
 builder.Services.AddScoped<CleanerReportService>();
@@ -40,8 +41,6 @@ builder.Services.AddScoped<McpRepository>();
 builder.Services.AddScoped<VehicleReportService>();
 
 builder.Services.AddScoped<RouteOptimizationService>();
-
-builder.Services.AddScoped<TaskService>();
 
 builder.Services.AddScoped<DesktopUICustomizationService>();
 builder.Services.AddScoped<MobileUICustomizationService>();
