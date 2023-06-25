@@ -43,6 +43,8 @@ builder.Services.AddScoped<MobileUICustomizationService>();
 
 #endregion
 
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
