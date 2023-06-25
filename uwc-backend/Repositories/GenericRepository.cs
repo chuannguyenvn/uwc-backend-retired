@@ -62,4 +62,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
         if (!HasAny()) return 1;
         return _context.Set<T>().Max(entity => entity.Id) + 1;
     }
+
+    public void RemoveById(int id)
+    {
+        _context.Set<T>().Remove(_context.Set<T>().Single(x => x.Id == id));
+    } 
 }

@@ -30,4 +30,17 @@ public class EmployeeInformationController : ControllerBase
 
         return Ok(result);
     }
+    
+    [HttpDelete("delete-employee-id/{employeeId}")]
+    public IActionResult DeleteEmployeeId([FromRoute] int employeeId)
+    {
+        var (success, result) = _employeeInformationService.DeleteEmployee(employeeId);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+        
+        return Ok(result);
+    }
 }
