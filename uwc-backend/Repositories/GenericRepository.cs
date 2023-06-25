@@ -1,8 +1,9 @@
 ﻿using System.Linq.Expressions;
+using Models;
 
 namespace Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : class
+public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntity
 {
     protected readonly UwcDbContext _context;
 
@@ -44,5 +45,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public void RemoveRange(IEnumerable<T> entities)
     {
         _context.Set<T>().RemoveRange(entities);
+    }
+
+    public bool DoesIdExist(int id)
+    {
+        return _context.Set<T>().Any(entity => entity.Id == id);
     }
 }
