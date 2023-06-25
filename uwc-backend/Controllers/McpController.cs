@@ -59,4 +59,11 @@ public class McpController : ControllerBase
             getMcpsInRangeRequest.Radius);
         return result;
     }
+
+    [HttpGet("get-all-mcps")]
+    public List<Models.Mcp> GetAllMcps()
+    {
+        var result = _mcpService.GetAllMcps();
+        return result;
+    }
 }
