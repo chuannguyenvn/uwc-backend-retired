@@ -28,4 +28,18 @@ public class RouteController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("update-route")]
+    public IActionResult UpdateRoute(UpdateRouteRequest updateRouteRequest)
+    {
+        var (success, result) = _routeService.UpdateRoute(updateRouteRequest.Id, updateRouteRequest.RouteName,
+            updateRouteRequest.TotalLength, updateRouteRequest.RouteDetails);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
