@@ -61,4 +61,18 @@ public class TaskController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("update-task")]
+    public IActionResult UpdateTask(UpdateTaskRequest updateTaskRequest)
+    {
+        var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id, updateTaskRequest.Date,
+            updateTaskRequest.Supervisor, updateTaskRequest.Worker, updateTaskRequest.Route);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }

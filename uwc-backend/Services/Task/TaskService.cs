@@ -8,6 +8,7 @@ public interface ITaskService
     public List<Models.Task> GetTasksOfEmployee(int id);
     public (bool success, object result) DeleteTasksOfEmployee(int id);
     public (bool success, object result) DeleteTask(int id);
+    public (bool success, object result) UpdateTask(int id, DateTime date, int supervisorId, int workerId, int routeId);
 }
 
 public class TaskService : ITaskService
@@ -101,5 +102,41 @@ public class TaskService : ITaskService
         _unitOfWork.Complete();
 
         return (true, "Task removed successfully");
+    }
+
+    public (bool success, object result) UpdateTask(int id, DateTime date, int supervisorId, int workerId, int routeId)
+    {
+        if (!_unitOfWork.Tasks.DoesIdExist(id))
+        {
+            return (false, "Task Id does not exist.");
+        }
+        
+        if (!_unitOfWork.Employees.DoesIdExist(supervisorId))
+        {
+            return (false, "Supervisor Id does not exist.");
+        }
+        
+        if (!_unitOfWork.Employees.DoesIdExist(workerId))
+        {
+            return (false, "Worker Id does not exist.");
+        }
+        
+        if (!_unitOfWork.Routes.DoesIdExist(routeId))
+        {
+            return (false, "Route Id does not exist.");
+        }
+
+        var supervisor = _unitOfWork.Employees.Find(supervisor => supervisor.Id == supervisorId).First();
+        var worker = _unitOfWork.Employees.Find(worker => worker.Id == workerId).First();
+        var route = _unitOfWork.Routes.Find(route => route.Id == routeId).First();
+
+        var task = _unitOfWork.Tasks.Find(task => task.Id == id).First();
+        task.Supervisor = supervisor;
+        task.Worker = worker;
+        task.Route = route;
+        task.Date = date;
+
+        _unitOfWork.Complete();
+        return (true, "Task updated successfully");
     }
 }
