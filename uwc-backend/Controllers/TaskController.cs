@@ -40,7 +40,7 @@ public class TaskController : ControllerBase
     public IActionResult DeleteTasksOfEmployee([FromRoute] int employeeId)
     {
         var (success, result) = _taskService.DeleteTasksOfEmployee(employeeId);
-        
+
         if (!success)
         {
             return BadRequest(result);
@@ -53,7 +53,7 @@ public class TaskController : ControllerBase
     public IActionResult DeleteTask([FromRoute] int taskId)
     {
         var (success, result) = _taskService.DeleteTask(taskId);
-        
+
         if (!success)
         {
             return BadRequest(result);
@@ -67,12 +67,21 @@ public class TaskController : ControllerBase
     {
         var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id, updateTaskRequest.Date,
             updateTaskRequest.Supervisor, updateTaskRequest.Worker, updateTaskRequest.Route);
-        
+
         if (!success)
         {
             return BadRequest(result);
         }
 
         return Ok(result);
+    }
+
+    [HttpGet("get-tasks-in-time-range")]
+    public List<Models.Task> GetTasksInTimeRange(GetTasksInTimeRangeRequest getTasksInTimeRangeRequest)
+    {
+        var result =
+            _taskService.GetTasksInTimeRange(getTasksInTimeRangeRequest.StartTime, getTasksInTimeRangeRequest.EndTime);
+
+        return result;
     }
 }

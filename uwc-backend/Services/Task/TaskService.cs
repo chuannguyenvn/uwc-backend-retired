@@ -9,6 +9,7 @@ public interface ITaskService
     public (bool success, object result) DeleteTasksOfEmployee(int id);
     public (bool success, object result) DeleteTask(int id);
     public (bool success, object result) UpdateTask(int id, DateTime date, int supervisorId, int workerId, int routeId);
+    public List<Models.Task> GetTasksInTimeRange(DateTime startTime, DateTime endTime);
 }
 
 public class TaskService : ITaskService
@@ -138,5 +139,11 @@ public class TaskService : ITaskService
 
         _unitOfWork.Complete();
         return (true, "Task updated successfully");
+    }
+
+    public List<Models.Task> GetTasksInTimeRange(DateTime startTime, DateTime endTime)
+    {
+        var taskList = _unitOfWork.Tasks.Find(task => (task.Date >= startTime && task.Date <= endTime));
+        return taskList.ToList();
     }
 }
