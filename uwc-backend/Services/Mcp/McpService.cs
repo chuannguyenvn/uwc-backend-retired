@@ -18,6 +18,10 @@ public interface IMcpService
     public (bool success, object result) DeleteMcp(int id);
 
     public (bool success, object result) UpdateMcpCurrentLoad(int id, double currentLoad);
+
+    public List<Models.Mcp> SortByCurrentLoadDescendingly();
+
+    public List<Models.Mcp> SortByCurrentLoadAscendingly();
 }
 
 public class McpService : IMcpService
@@ -104,5 +108,17 @@ public class McpService : IMcpService
 
         _unitOfWork.Complete();
         return (true, "Mcp current load updated successfully");
+    }
+
+    public List<Models.Mcp> SortByCurrentLoadDescendingly()
+    {
+        var mcpList = _unitOfWork.Mcps.GetAll();
+        return mcpList.OrderByDescending(mcp => mcp.CurrentLoad).ToList();
+    }
+
+    public List<Models.Mcp> SortByCurrentLoadAscendingly()
+    {
+        var mcpList = _unitOfWork.Mcps.GetAll();
+        return mcpList.OrderBy(mcp => mcp.CurrentLoad).ToList();
     }
 }

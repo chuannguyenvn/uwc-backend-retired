@@ -93,4 +93,18 @@ public class McpController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("sort-current-load-ascendingly")]
+    public List<Models.Mcp> SortMcpByCurrentLoadAscendingly()
+    {
+        var result = _mcpService.SortByCurrentLoadAscendingly();
+        return result;
+    }
+
+    [HttpGet("sort-current-load-descendingly")]
+    public List<Models.Mcp> SortMcpByCurrentLoadDescendingly()
+    {
+        var result = _mcpService.SortByCurrentLoadDescendingly();
+        return result;
+    }
 }
