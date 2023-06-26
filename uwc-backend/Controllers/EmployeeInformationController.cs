@@ -30,7 +30,7 @@ public class EmployeeInformationController : ControllerBase
 
         return Ok(result);
     }
-    
+
     [HttpDelete("delete-employee-id/{employeeId}")]
     public IActionResult DeleteEmployeeId([FromRoute] int employeeId)
     {
@@ -40,16 +40,18 @@ public class EmployeeInformationController : ControllerBase
         {
             return BadRequest(result);
         }
-        
+
         return Ok(result);
     }
 
-    [HttpPut("update-role-employee-id")]
-    public IActionResult UpdateRoleEmployeeId(UpdateRoleEmployeeRequest updateRoleEmployeeRequest)
+    [HttpPut("update-employee-id")]
+    public IActionResult UpdateRoleEmployeeId(UpdateEmployeeRequest updateEmployeeRequest)
     {
         var (success, result) =
-            _employeeInformationService.UpdateRoleEmployee(updateRoleEmployeeRequest.Employee,
-                updateRoleEmployeeRequest.Role);
+            _employeeInformationService.UpdateRoleEmployee(updateEmployeeRequest.Employee,
+                updateEmployeeRequest.FirstName, updateEmployeeRequest.LastName,
+                updateEmployeeRequest.Gender, updateEmployeeRequest.DateOfBirth,
+                updateEmployeeRequest.Role);
 
         if (!success)
         {

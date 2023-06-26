@@ -10,7 +10,7 @@ public interface IEmployeeInformationService
 
     public (bool success, object result) DeleteEmployee(int id);
 
-    public (bool success, object result) UpdateRoleEmployee(int employeeId, int role);
+    public (bool success, object result) UpdateRoleEmployee(int employeeId, string firstname, string lastname, int gender, DateTime dateOfBirth, int role);
 
     public List<Models.Employee> GetAllEmployee();
 
@@ -58,11 +58,16 @@ public class EmployeeInformationService : IEmployeeInformationService
         return (true, "Delete employee successfully.");
     }
 
-    public (bool success, object result) UpdateRoleEmployee(int employeeId, int role)
+    public (bool success, object result) UpdateRoleEmployee(int employeeId, string firstname, string lastname, int gender, DateTime dateOfBirth, int role)
     {
         if(role < 0 || role > 2)
         {
             return (false, "Invalid role");
+        }
+
+        if (gender != 0 && gender != 1)
+        {
+            return (false, "Invalid gender");
         }
         
         if (!_unitOfWork.Employees.DoesIdExist(employeeId))
@@ -73,9 +78,14 @@ public class EmployeeInformationService : IEmployeeInformationService
         var employeeList = _unitOfWork.Employees.Find(employee => employee.Id == employeeId);
         var employee = employeeList.First();
 
+        employee.FirstName = firstname;
+        employee.LastName = lastname;
+        employee.Gender = gender;
+        employee.DateOfBirth = dateOfBirth;
         employee.Role = role;
+        
         _unitOfWork.Complete();
-        return (true, "Update role successfully.");
+        return (true, "Update employee information successfully.");
     }
 
     public List<Models.Employee> GetAllEmployee()
