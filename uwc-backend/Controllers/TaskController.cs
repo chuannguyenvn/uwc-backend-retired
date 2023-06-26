@@ -48,4 +48,17 @@ public class TaskController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpDelete("delete-task/{taskId}")]
+    public IActionResult DeleteTask([FromRoute] int taskId)
+    {
+        var (success, result) = _taskService.DeleteTask(taskId);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
