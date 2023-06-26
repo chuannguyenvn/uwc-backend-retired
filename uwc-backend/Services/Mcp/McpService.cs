@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Repositories;
 
 namespace Services.Mcp;
@@ -22,6 +23,10 @@ public interface IMcpService
     public List<Models.Mcp> SortByCurrentLoadDescendingly();
 
     public List<Models.Mcp> SortByCurrentLoadAscendingly();
+
+    public List<Models.Mcp> SortByDistanceDescendingly(double latitude, double longitude);
+
+    public List<Models.Mcp> SortByDistanceAscendingly(double latitude, double longitude);
 }
 
 public class McpService : IMcpService
@@ -90,7 +95,7 @@ public class McpService : IMcpService
         {
             return (false, "Mcp Id does not exist.");
         }
-        
+
         _unitOfWork.Mcps.RemoveById(id);
         _unitOfWork.Complete();
         return (true, "Mcp deleted successfully.");
@@ -120,5 +125,21 @@ public class McpService : IMcpService
     {
         var mcpList = _unitOfWork.Mcps.GetAll();
         return mcpList.OrderBy(mcp => mcp.CurrentLoad).ToList();
+    }
+
+    public List<Models.Mcp> SortByDistanceDescendingly(double latitude, double longitude)
+    {
+        var mcpList = _unitOfWork.Mcps.GetAll();
+        return mcpList
+            .OrderByDescending(mcp => Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2))
+            .ToList();
+    }
+
+    public List<Models.Mcp> SortByDistanceAscendingly(double latitude, double longitude)
+    {
+        var mcpList = _unitOfWork.Mcps.GetAll();
+        return mcpList
+            .OrderBy(mcp => Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2))
+            .ToList();
     }
 }

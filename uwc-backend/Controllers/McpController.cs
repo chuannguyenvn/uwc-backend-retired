@@ -36,7 +36,7 @@ public class McpController : ControllerBase
     public IActionResult EmptyMcp([FromRoute] int mcpId)
     {
         var (success, result) = _mcpService.EmptyMcp(mcpId);
-        
+
         if (!success)
         {
             return BadRequest(result);
@@ -85,7 +85,7 @@ public class McpController : ControllerBase
     {
         var (success, result) =
             _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id, updateMcpCurrentLoad.CurrentLoad);
-        
+
         if (!success)
         {
             return BadRequest(result);
@@ -105,6 +105,22 @@ public class McpController : ControllerBase
     public List<Models.Mcp> SortMcpByCurrentLoadDescendingly()
     {
         var result = _mcpService.SortByCurrentLoadDescendingly();
+        return result;
+    }
+
+    [HttpGet("sort-distance-ascendingly")]
+    public List<Models.Mcp> SortMcpByDistanceAscendingly(SortDistanceRequest sortDistanceRequest)
+    {
+        var result =
+            _mcpService.SortByDistanceAscendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
+        return result;
+    }
+
+    [HttpGet("sort-distance-descendingly")]
+    public List<Models.Mcp> SortMcpByDistanceDescendingly(SortDistanceRequest sortDistanceRequest)
+    {
+        var result =
+            _mcpService.SortByDistanceDescendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
         return result;
     }
 }
