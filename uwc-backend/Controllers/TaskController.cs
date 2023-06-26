@@ -28,4 +28,11 @@ public class TaskController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-all-task/{employeeId}")]
+    public List<Models.Task> GetTaskOfEmployee([FromRoute] int employeeId)
+    {
+        var result = _taskService.GetTasksOfEmployee(employeeId);
+        return result;
+    }
 }
