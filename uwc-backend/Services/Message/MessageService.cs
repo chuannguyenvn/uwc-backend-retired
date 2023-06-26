@@ -11,6 +11,7 @@ public interface IMessageService
     public List<Models.Message> GetMessagesIn24Hour();
     public List<Models.Message> GetAllMessages();
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId);
+    public List<Models.Message> GetMessagesContainWord(int senderId, int receiverId, string word);
 }
 public class MessageService : IMessageService
 {
@@ -87,15 +88,29 @@ public class MessageService : IMessageService
         {
             return new List<Models.Message>();
         }
-
-        var senderEmployee = _unitOfWork.Employees.Find(employee => employee.Id == senderId).First();
-        var receiverEmployee = _unitOfWork.Employees.Find(employee => employee.Id == receiverId).First();
-
+        
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
             (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
 
         var result = messageList.OrderBy(message => message.TextTime).ToList();
         return result;
+    }
+
+    public List<Models.Message> GetMessagesContainWord(int senderId, int receiverId, string word)
+    {
+        if (!_unitOfWork.Employees.DoesIdExist(senderId))
+        {
+            return new List<Models.Message>();
+        }
+
+        if (!_unitOfWork.Employees.DoesIdExist(receiverId))
+        {
+            return new List<Models.Message>();
+        }
+
+        var messageList = _unitOfWork.Messages.Find(message => _unitOfWork.Messages.ContainSubstring(Convert.ToString(message), word));
+
+        return messageList.OrderBy(message => message.TextTime).ToList();
     }
 }

@@ -64,4 +64,14 @@ public class MessageController : ControllerBase
             getMessagesOfTwoUsersRequest.Receiver);
         return result;
     }
+
+    [HttpGet("get-messages-2-users-contain-word")]
+    public List<Models.Message> GetMessages2UsersContainWord(
+        GetMessagesContainWordRequest getMessagesContainWordRequest)
+    {
+        var result = _messageService.GetMessagesContainWord(getMessagesContainWordRequest.Sender,
+            getMessagesContainWordRequest.Receiver, getMessagesContainWordRequest.Word);
+
+        return result;
+    }
 }
