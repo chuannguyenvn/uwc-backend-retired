@@ -94,4 +94,18 @@ public class EmployeeInformationController : ControllerBase
         var result = _employeeInformationService.GetFreeEmployees();
         return result;
     }
+
+    [HttpGet("sort-employees-tasks-descendingly")]
+    public List<Models.Employee> GetEmployeesByTaskDescendingly()
+    {
+        var result = _employeeInformationService.SortByTasksDescendingly();
+        return result;
+    }
+
+    [HttpGet("sort-employees-tasks-ascendingly")]
+    public List<Models.Employee> GetEmployeesByTaskAscendingly()
+    {
+        var result = _employeeInformationService.SortByTasksAscendingly();
+        return result;
+    }
 }

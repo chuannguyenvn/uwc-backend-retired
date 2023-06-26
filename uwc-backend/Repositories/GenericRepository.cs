@@ -78,4 +78,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
     {
         return parent.Contains(child);
     }
+
+    public int Count(Func<T, bool> predicate)
+    {
+        int count = 0;
+        foreach (var item in _context.Set<T>())
+        {
+            if (predicate(item))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
 }
