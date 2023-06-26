@@ -59,4 +59,18 @@ public class AccountController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpDelete("delete-account")]
+    public IActionResult DeleteAccount(AuthenticationRequest authenticationRequest)
+    {
+        var (success, result) =
+            _authenticationService.DeleteAccount(authenticationRequest.Username, authenticationRequest.Password);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }

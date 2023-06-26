@@ -8,6 +8,7 @@ public interface IAuthenticationService
     public (bool success, string content) Register(string username, string password, int employeeId);
     public Task<(bool success, string token)> Login(string username, string password);
     public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword);
+    public (bool success, object result) DeleteAccount(string username, string password);
 }
 
 public class AuthenticationService : IAuthenticationService
@@ -83,5 +84,23 @@ public class AuthenticationService : IAuthenticationService
         account.Password = newPassword;
         _unitOfWork.Complete();
         return (true, "Update password successfully");
+    }
+
+    public (bool success, object result) DeleteAccount(string username, string password)
+    {
+        if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
+        {
+            return (false, "Account does not exist.");
+        }
+
+        var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
+        if (account.Password != password)
+        {
+            return (false, "Incorrent password");
+        }
+        
+        _unitOfWork.Accounts.Remove(account);
+        _unitOfWork.Complete();
+        return (true, "Account deleted successfully");
     }
 }
