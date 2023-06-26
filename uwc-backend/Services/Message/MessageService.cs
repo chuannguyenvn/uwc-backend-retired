@@ -13,6 +13,7 @@ public interface IMessageService
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId);
     public List<Models.Message> GetMessagesContainWord(int senderId, int receiverId, string word);
 }
+
 public class MessageService : IMessageService
 {
     private readonly UnitOfWork _unitOfWork;
@@ -43,7 +44,7 @@ public class MessageService : IMessageService
             TextTime = textTime,
             TextContent = textContent,
         };
-        
+
         _unitOfWork.Messages.Add(messageInformation);
         _unitOfWork.Complete();
         return (true, "Add message successfully.");
@@ -62,12 +63,13 @@ public class MessageService : IMessageService
 
         return (true, "Message content updated successfully");
     }
-    
+
     public List<Models.Message> GetMessagesIn24Hour()
     {
         var message =
-            _unitOfWork.Messages.Find(text => text.TextTime >= DateTime.Today.AddDays(-1) && text.TextTime <= DateTime.Now).ToList();
-        
+            _unitOfWork.Messages
+                .Find(text => text.TextTime >= DateTime.Today.AddDays(-1) && text.TextTime <= DateTime.Now).ToList();
+
         return message;
     }
 
@@ -88,7 +90,7 @@ public class MessageService : IMessageService
         {
             return new List<Models.Message>();
         }
-        
+
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
             (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
@@ -110,11 +112,12 @@ public class MessageService : IMessageService
         }
 
         var messageList = _unitOfWork.Messages.Find(message =>
-            _unitOfWork.Messages.ContainSubstring(Convert.ToString(message.TextContent), word) && (
-                (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
-                (message.Sender.Id == receiverId && message.Receiver.Id == senderId)));
+            (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
+            (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
 
+        var result =
+            _unitOfWork.Messages.Find(message => _unitOfWork.Messages.ContainSubstring(message.TextContent, word));
 
-        return messageList.OrderBy(message => message.TextTime).ToList();
+        return messageList.ToList().OrderBy(message => message.TextTime).ToList();
     }
 }

@@ -17,6 +17,8 @@ public interface IEmployeeInformationService
     public (bool success, object result) GetEmployeeById(int id);
 
     public List<Models.Employee> GetEmployeeByRole(int role);
+
+    public List<Models.Employee> GetFreeEmployees();
 }
 
 public class EmployeeInformationService : IEmployeeInformationService
@@ -108,6 +110,13 @@ public class EmployeeInformationService : IEmployeeInformationService
     public List<Models.Employee> GetEmployeeByRole(int role)
     {
         var employeeList = _unitOfWork.Employees.Find(employee => employee.Role == role);
+        return employeeList.ToList();
+    }
+
+    public List<Models.Employee> GetFreeEmployees()
+    {
+        var taskList = _unitOfWork.Tasks.Find(task => task.Date >= DateTime.Now && task.Date <= DateTime.Now.AddHours(24));
+        var employeeList = _unitOfWork.Employees.Find(employee => employee.Role != 2 && taskList.All(task => task.Worker.Id != employee.Id));
         return employeeList.ToList();
     }
 }

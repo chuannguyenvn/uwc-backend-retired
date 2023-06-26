@@ -87,4 +87,11 @@ public class EmployeeInformationController : ControllerBase
         var result = _employeeInformationService.GetEmployeeByRole(role);
         return result;
     }
+
+    [HttpGet("get-free-employees")]
+    public List<Models.Employee> GetFreeEmployees()
+    {
+        var result = _employeeInformationService.GetFreeEmployees();
+        return result;
+    }
 }
