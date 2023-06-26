@@ -56,4 +56,12 @@ public class MessageController : ControllerBase
         var result = _messageService.GetAllMessages();
         return result;
     }
+
+    [HttpGet("get-all-messages-between-2-users")]
+    public List<Models.Message> GetAllMessagesBetween2Users(GetMessagesOfTwoUsersRequest getMessagesOfTwoUsersRequest)
+    {
+        var result = _messageService.GetAllMessagesOfTwoUsers(getMessagesOfTwoUsersRequest.Sender,
+            getMessagesOfTwoUsersRequest.Receiver);
+        return result;
+    }
 }

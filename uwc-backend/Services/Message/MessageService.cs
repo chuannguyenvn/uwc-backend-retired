@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Repositories;
 
 namespace Services.Message;
@@ -9,6 +10,7 @@ public interface IMessageService
     public (bool success, object result) UpdateMessageContent(int id, string textContent);
     public List<Models.Message> GetMessagesIn24Hour();
     public List<Models.Message> GetAllMessages();
+    public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId);
 }
 public class MessageService : IMessageService
 {
@@ -72,5 +74,28 @@ public class MessageService : IMessageService
     {
         var messageList = _unitOfWork.Messages.GetAll();
         return messageList.ToList();
+    }
+
+    public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
+    {
+        if (!_unitOfWork.Employees.DoesIdExist(senderId))
+        {
+            return new List<Models.Message>();
+        }
+
+        if (!_unitOfWork.Employees.DoesIdExist(receiverId))
+        {
+            return new List<Models.Message>();
+        }
+
+        var senderEmployee = _unitOfWork.Employees.Find(employee => employee.Id == senderId).First();
+        var receiverEmployee = _unitOfWork.Employees.Find(employee => employee.Id == receiverId).First();
+
+        var messageList = _unitOfWork.Messages.Find(message =>
+            (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
+            (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
+
+        var result = messageList.OrderBy(message => message.TextTime).ToList();
+        return result;
     }
 }
