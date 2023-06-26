@@ -109,7 +109,11 @@ public class MessageService : IMessageService
             return new List<Models.Message>();
         }
 
-        var messageList = _unitOfWork.Messages.Find(message => _unitOfWork.Messages.ContainSubstring(Convert.ToString(message), word));
+        var messageList = _unitOfWork.Messages.Find(message =>
+            _unitOfWork.Messages.ContainSubstring(Convert.ToString(message.TextContent), word) && (
+                (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
+                (message.Sender.Id == receiverId && message.Receiver.Id == senderId)));
+
 
         return messageList.OrderBy(message => message.TextTime).ToList();
     }
