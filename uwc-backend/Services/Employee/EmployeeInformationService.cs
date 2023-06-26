@@ -131,9 +131,8 @@ public class EmployeeInformationService : IEmployeeInformationService
     public List<Models.Employee> SortByTasksDescendingly()
     {
         var employeeList = _unitOfWork.Employees.GetAll().Where(employee => employee.Role != 0)
-                .OrderBy<Models.Employee, int>(employee =>
-                    _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id))
-            ;
+            .OrderBy<Models.Employee, int>(employee =>
+                _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
 
         return employeeList.ToList();
     }
@@ -141,9 +140,8 @@ public class EmployeeInformationService : IEmployeeInformationService
     public List<Models.Employee> SortByTasksAscendingly()
     {
         var employeeList = _unitOfWork.Employees.GetAll().Where(employee => employee.Role != 0)
-                .OrderByDescending<Models.Employee, int>(employee =>
-                    _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id))
-            ;
+            .OrderByDescending<Models.Employee, int>(employee =>
+                _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
 
         return employeeList.ToList();
     }
