@@ -79,4 +79,18 @@ public class McpController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("update-mcp-current-load")]
+    public IActionResult UpdateMcpCurrentLoad(UpdateMcpCurrentLoad updateMcpCurrentLoad)
+    {
+        var (success, result) =
+            _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id, updateMcpCurrentLoad.CurrentLoad);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }

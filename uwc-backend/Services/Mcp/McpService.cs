@@ -16,6 +16,8 @@ public interface IMcpService
     public List<Models.Mcp> GetAllMcps();
 
     public (bool success, object result) DeleteMcp(int id);
+
+    public (bool success, object result) UpdateMcpCurrentLoad(int id, double currentLoad);
 }
 
 public class McpService : IMcpService
@@ -88,5 +90,19 @@ public class McpService : IMcpService
         _unitOfWork.Mcps.RemoveById(id);
         _unitOfWork.Complete();
         return (true, "Mcp deleted successfully.");
+    }
+
+    public (bool success, object result) UpdateMcpCurrentLoad(int id, double currentLoad)
+    {
+        if (!_unitOfWork.Mcps.DoesIdExist(id))
+        {
+            return (false, "Mcp Id does not exist.");
+        }
+
+        var mcp = _unitOfWork.Mcps.Find(mcp => mcp.Id == id).First();
+        mcp.CurrentLoad = currentLoad;
+
+        _unitOfWork.Complete();
+        return (true, "Mcp current load updated successfully");
     }
 }
