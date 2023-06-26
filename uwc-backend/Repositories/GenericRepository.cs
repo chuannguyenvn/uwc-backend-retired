@@ -74,8 +74,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
         return Math.Abs(a - b) < Constants.EPSILON_COMPARE_DOUBLE;
     }
 
-    public bool ContainSubstring(string a, string b)
+    public bool ContainSubstring(string parent, string child)
     {
-        return a.Contains(b);
+        return parent.Contains(child);
     }
 }
