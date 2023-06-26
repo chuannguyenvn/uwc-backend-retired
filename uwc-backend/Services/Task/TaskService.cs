@@ -6,6 +6,7 @@ public interface ITaskService
 {
     public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, int route);
     public List<Models.Task> GetTasksOfEmployee(int id);
+    public (bool success, object result) DeleteTasksOfEmployee(int id);
 }
 
 public class TaskService : ITaskService
@@ -71,5 +72,19 @@ public class TaskService : ITaskService
 
         var result = _unitOfWork.Tasks.Find(task => task.Worker.Id == id);
         return result.OrderBy(task => task.Date).ToList();
+    }
+
+    public (bool success, object result) DeleteTasksOfEmployee(int id)
+    {
+        if (!_unitOfWork.Employees.DoesIdExist(id))
+        {
+            return (false, "Employee Id does not exist.");
+        }
+
+        var taskList = _unitOfWork.Tasks.Find(task => task.Worker.Id == id);
+        _unitOfWork.Tasks.RemoveRange(taskList);
+        _unitOfWork.Complete();
+
+        return (true, "Delete all tasks of an employee successfully.");
     }
 }

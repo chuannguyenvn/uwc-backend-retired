@@ -29,10 +29,23 @@ public class TaskController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-all-task/{employeeId}")]
-    public List<Models.Task> GetTaskOfEmployee([FromRoute] int employeeId)
+    [HttpGet("get-all-tasks/{employeeId}")]
+    public List<Models.Task> GetTasksOfEmployee([FromRoute] int employeeId)
     {
         var result = _taskService.GetTasksOfEmployee(employeeId);
         return result;
+    }
+
+    [HttpDelete("delete-all-task/{employeeId}")]
+    public IActionResult DeleteTasksOfEmployee([FromRoute] int employeeId)
+    {
+        var (success, result) = _taskService.DeleteTasksOfEmployee(employeeId);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
     }
 }
