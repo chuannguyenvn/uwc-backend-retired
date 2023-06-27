@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using Models;
 using Repositories;
 
@@ -9,11 +10,13 @@ public interface IDrivingLicenseService
         string type);
 
     public List<DrivingLicense> GetDrivingLicenseDriver(int id);
-    
+
     public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace,
         int ownerId, string type);
 
     public (bool success, object result) DeleteDrivingLicense(int id);
+
+    public (bool success, object result) DeleteOutdatedDrivingLicense();
 }
 
 public class DrivingLicenseService : IDrivingLicenseService
@@ -25,7 +28,8 @@ public class DrivingLicenseService : IDrivingLicenseService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type)
+    public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId,
+        string type)
     {
         if (!_unitOfWork.Employees.DoesIdExist(ownerId))
         {
@@ -38,7 +42,7 @@ public class DrivingLicenseService : IDrivingLicenseService
         {
             return (false, "Employee Id is not a driver");
         }
-        
+
         var drivingLicenseInformation = new DrivingLicense()
         {
             IssueDate = issueDate,
@@ -46,7 +50,7 @@ public class DrivingLicenseService : IDrivingLicenseService
             Owner = owner,
             Type = type,
         };
-        
+
         _unitOfWork.DrivingLicenses.Add(drivingLicenseInformation);
         _unitOfWork.Complete();
 
@@ -99,6 +103,16 @@ public class DrivingLicenseService : IDrivingLicenseService
         var drivingLicense = _unitOfWork.DrivingLicenses.Find(dl => dl.Id == id).First();
         _unitOfWork.DrivingLicenses.Remove(drivingLicense);
         _unitOfWork.Complete();
-        return (true, "Driving license deleted successfully");
+        return (true, "Driving license deleted successfully.");
+    }
+
+    public (bool success, object result) DeleteOutdatedDrivingLicense()
+    {
+        var outdatedDrivingLicenseList =
+            _unitOfWork.DrivingLicenses.Find(dl => dl.IssueDate <= DateTime.Now.AddYears(-10));
+
+        _unitOfWork.DrivingLicenses.RemoveRange(outdatedDrivingLicenseList);
+        _unitOfWork.Complete();
+        return (true, "Outdated Driving License removed successfully.");
     }
 }

@@ -64,4 +64,17 @@ public class DrivingLicenseController: ControllerBase
 
         return Ok(result);
     }
+
+    [HttpDelete("delete-outdated")]
+    public IActionResult DeleteOutdatedDrivingLicenses()
+    {
+        var (success, result) = _drivingLicenseService.DeleteOutdatedDrivingLicense();
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
