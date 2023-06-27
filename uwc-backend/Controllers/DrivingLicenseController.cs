@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using uwc_backend.Communications.Vehicle;
 using uwc_backend.Services.Vehicle;
 
@@ -27,6 +28,13 @@ public class DrivingLicenseController: ControllerBase
         }
 
         return Ok(result);
+    }
+
+    [HttpGet("get-driving-licenses/{driverId}")]
+    public List<DrivingLicense> GetDrivingLicenses([FromRoute] int driverId)
+    {
+        var result = _drivingLicenseService.GetDrivingLicenseDriver(driverId);
+        return result;
     }
 
     [HttpPut("update-driving-license")]

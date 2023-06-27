@@ -8,6 +8,8 @@ public interface IDrivingLicenseService
     public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId,
         string type);
 
+    public List<DrivingLicense> GetDrivingLicenseDriver(int id);
+    
     public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace,
         int ownerId, string type);
 
@@ -49,6 +51,17 @@ public class DrivingLicenseService : IDrivingLicenseService
         _unitOfWork.Complete();
 
         return (true, "Driving license added successfully");
+    }
+
+    public List<DrivingLicense> GetDrivingLicenseDriver(int id)
+    {
+        if (!_unitOfWork.Employees.DoesIdExist(id))
+        {
+            return new List<DrivingLicense>();
+        }
+
+        var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.Owner.Id == id);
+        return drivingLicenseList.ToList();
     }
 
     public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace,
