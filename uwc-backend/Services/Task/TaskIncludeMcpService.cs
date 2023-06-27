@@ -6,6 +6,7 @@ namespace Services.Task;
 public interface ITaskIncludeMcpSerivce
 {
     public (bool success, object result) AddTaskIncludeMcp(int taskId, int mcpId);
+    public (bool success, object result) DeleteTaskIncludeMcp(int id);
 }
 
 public class TaskIncludeMcpService : ITaskIncludeMcpSerivce
@@ -41,5 +42,19 @@ public class TaskIncludeMcpService : ITaskIncludeMcpSerivce
         _unitOfWork.Complete();
 
         return (true, "Add task-include-mcp successfully.");
+    }
+
+    public (bool success, object result) DeleteTaskIncludeMcp(int id)
+    {
+        if (!_unitOfWork.TaskIncludeMcps.DoesIdExist(id))
+        {
+            return (false, "Task Include Mcp Id does not exist.");
+        }
+
+        var taskIncludeMcp = _unitOfWork.TaskIncludeMcps.Find(record => record.Id == id).First();
+        _unitOfWork.TaskIncludeMcps.Remove(taskIncludeMcp);
+        _unitOfWork.Complete();
+
+        return (true, "Task Include Mcp deleted successfully.");
     }
 }

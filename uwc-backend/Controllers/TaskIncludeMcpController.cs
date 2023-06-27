@@ -29,5 +29,16 @@ public class TaskIncludeMcpController : ControllerBase
 
         return Ok(result);
     }
-    
+
+    [HttpDelete("delete-task-include-mcp/{taskIncludeMcpId}")]
+    public IActionResult DeleteTaskIncludeMcp([FromRoute] int taskIncludeMcpId)
+    {
+        var (success, result) = _taskIncludeMcpSerivce.DeleteTaskIncludeMcp(taskIncludeMcpId);
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
