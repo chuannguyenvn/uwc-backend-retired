@@ -14,6 +14,9 @@ public class UnitOfWork : IDisposable
     public MessageRepository Messages { get; private set; }
     public RouteRepository Routes { get; private set; }
     public TaskIncludeMcpRepository TaskIncludeMcps { get; private set; }
+    public VehicleRepository Vehicles { get; private set; }
+    public DriveRepository Drives { get; private set; }
+    public DrivingLicenseRepository DrivingLicenses { get; private set; }
 
     public UnitOfWork(UwcDbContext uwcDbContext)
     {
@@ -26,6 +29,9 @@ public class UnitOfWork : IDisposable
         Messages = new MessageRepository(_uwcDbContext);
         Routes = new RouteRepository(_uwcDbContext);
         TaskIncludeMcps = new TaskIncludeMcpRepository(_uwcDbContext);
+        Vehicles = new VehicleRepository(_uwcDbContext);
+        DrivingLicenses = new DrivingLicenseRepository(_uwcDbContext);
+        Drives = new DriveRepository(_uwcDbContext);
     }
 
     public int Complete()

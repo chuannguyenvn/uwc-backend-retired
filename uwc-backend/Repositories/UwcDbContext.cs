@@ -14,8 +14,9 @@ public class UwcDbContext : DbContext
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<Models.Task> Tasks { get; set; }
-    
     public DbSet<Models.Route> Routes { get; set; }
-    
     public DbSet<TaskIncludeMcp> TaskIncludeMcps { get; set; }
+    public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<Drive> Drives { get; set; }
+    public DbSet<DrivingLicense> DrivingLicenses { get; set; }
 }
