@@ -8,6 +8,7 @@ public interface ITaskIncludeMcpSerivce
     public (bool success, object result) AddTaskIncludeMcp(int taskId, int mcpId);
     public (bool success, object result) DeleteTaskIncludeMcp(int id);
     public List<Models.TaskIncludeMcp> GetMcpsInTask(int taskId);
+    public List<Models.TaskIncludeMcp> GetTasksBypassMcp(int mcpId);
 }
 
 public class TaskIncludeMcpService : ITaskIncludeMcpSerivce
@@ -61,9 +62,23 @@ public class TaskIncludeMcpService : ITaskIncludeMcpSerivce
 
     public List<Models.TaskIncludeMcp> GetMcpsInTask(int taskId)
     {
-        if (!_unitOfWork.Tasks.DoesIdExist(taskId)) return new List<Models.TaskIncludeMcp>();
+        if (!_unitOfWork.Tasks.DoesIdExist(taskId))
+        {
+            return new List<Models.TaskIncludeMcp>();
+        }
 
         var mcpList = _unitOfWork.TaskIncludeMcps.Find(tim => tim.Task.Id == taskId);
         return mcpList.ToList();
+    }
+
+    public List<TaskIncludeMcp> GetTasksBypassMcp(int mcpId)
+    {
+        if (!_unitOfWork.Mcps.DoesIdExist(mcpId))
+        {
+            return new List<Models.TaskIncludeMcp>();
+        }
+
+        var taskList = _unitOfWork.TaskIncludeMcps.Find(tim => tim.Mcp.Id == mcpId);
+        return taskList.ToList();
     }
 }

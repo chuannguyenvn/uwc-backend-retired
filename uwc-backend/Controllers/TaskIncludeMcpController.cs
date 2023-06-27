@@ -48,4 +48,11 @@ public class TaskIncludeMcpController : ControllerBase
         var result = _taskIncludeMcpSerivce.GetMcpsInTask(taskId);
         return result;
     }
+    
+    [HttpGet("get-tasks-bypass-mcp/{mcpId}")]
+    public List<Models.TaskIncludeMcp> GetTasksBypassMcp([FromRoute] int mcpId)
+    {
+        var result = _taskIncludeMcpSerivce.GetTasksBypassMcp(mcpId);
+        return result;
+    }
 }
