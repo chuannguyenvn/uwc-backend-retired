@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using uwc_backend.Communications.Vehicle;
 using uwc_backend.Services.Vehicle;
 
 namespace Controllers;
@@ -13,4 +14,39 @@ public class DriveController : ControllerBase
     {
         _driveService = driveService;
     }
+
+    [HttpPost("add-driving-history")]
+    public IActionResult AddDrivingHistory(AddDriveRequest addDriveRequest)
+    {
+        var (success, result) =
+            _driveService.AddDrive(addDriveRequest.Date, addDriveRequest.Driver, addDriveRequest.Vehicle);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpGet("get-driving-history")]
+    public List<Models.Drive> GetDrivingHistory()
+    {
+        var result = _driveService.GetAllDrives();
+        return result;
+    }
+
+    [HttpDelete("delete-driving-history/{driveId}")]
+    public IActionResult DeleteDrivingHistory([FromRoute] int driveId)
+    {
+        var (success, result) = _driveService.DeleteDrive(driveId);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+    
 }
