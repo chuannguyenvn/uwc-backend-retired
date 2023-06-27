@@ -28,4 +28,38 @@ public class VehicleController: ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-all-vehicles")]
+    public List<Models.Vehicle> GetAllVehicles()
+    {
+        var result = _vehicleService.GetAllVehicles();
+        return result;
+    }
+
+    [HttpPut("update-vehicle-info")]
+    public IActionResult UpdateVehicleInformation(UpdateVehicleInformationRequest updateVehicleInformationRequest)
+    {
+        var (success, result) = _vehicleService.UpdateVehicleInformation(updateVehicleInformationRequest.Id, updateVehicleInformationRequest.Capacity,
+            updateVehicleInformationRequest.CurrentLoad, updateVehicleInformationRequest.AverageSpeed);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpDelete("delete-vehicle/{vehicleId}")]
+    public IActionResult DeleteVehicle([FromRoute] int vehicleId)
+    {
+        var (success, result) = _vehicleService.DeleteVehicle(vehicleId);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
