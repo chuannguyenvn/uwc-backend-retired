@@ -22,7 +22,8 @@ public class AccountController : ControllerBase
     public IActionResult Register(AuthenticationRequest authenticationRequest)
     {
         var (success, result) =
-            _authenticationService.Register(authenticationRequest.Username, authenticationRequest.Password, authenticationRequest.Employee);
+            _authenticationService.Register(authenticationRequest.Username, authenticationRequest.Password,
+                authenticationRequest.Employee, authenticationRequest.Settings);
 
         if (!success)
         {
@@ -51,7 +52,7 @@ public class AccountController : ControllerBase
     {
         var (success, result) = _authenticationService.UpdatePassword(updatePasswordRequest.Username,
             updatePasswordRequest.OldPassword, updatePasswordRequest.NewPassword);
-        
+
         if (!success)
         {
             return BadRequest(result);

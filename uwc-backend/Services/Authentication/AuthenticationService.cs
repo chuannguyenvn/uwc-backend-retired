@@ -5,7 +5,7 @@ namespace Services.Authentication;
 
 public interface IAuthenticationService
 {
-    public (bool success, string content) Register(string username, string password, int employeeId);
+    public (bool success, string content) Register(string username, string password, int employeeId, string settings);
     public Task<(bool success, string token)> Login(string username, string password);
     public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword);
     public (bool success, object result) DeleteAccount(string username, string password);
@@ -20,7 +20,7 @@ public class AuthenticationService : IAuthenticationService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, string content) Register(string username, string password, int employeeId)
+    public (bool success, string content) Register(string username, string password, int employeeId, string settings)
     {
         if (_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
         {
@@ -44,6 +44,7 @@ public class AuthenticationService : IAuthenticationService
             Username = username,
             Password = password,
             Employee = employee,
+            Settings = settings,
         };
 
         _unitOfWork.Accounts.Add(accountInformation);
