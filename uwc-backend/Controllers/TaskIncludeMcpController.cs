@@ -41,4 +41,11 @@ public class TaskIncludeMcpController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("get-mcps-in-task/{taskId}")]
+    public List<Models.Mcp> GetMcpsInTask([FromRoute] int taskId)
+    {
+        var result = _taskIncludeMcpSerivce.GetMcpsInTask(taskId);
+        return result;
+    }
 }
