@@ -74,4 +74,18 @@ public class AccountController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("update-settings")]
+    public IActionResult UpdateSettings(UpdateSettingsRequest updateSettingsRequest)
+    {
+        var (success, result) = _authenticationService.UpdateSettings(updateSettingsRequest.Username,
+            updateSettingsRequest.Password, updateSettingsRequest.Settings);
+        
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
+    }
 }
