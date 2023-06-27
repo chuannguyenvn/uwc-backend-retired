@@ -16,4 +16,6 @@ public class UwcDbContext : DbContext
     public DbSet<Models.Task> Tasks { get; set; }
     
     public DbSet<Models.Route> Routes { get; set; }
+    
+    public DbSet<TaskIncludeMcp> TaskIncludeMcps { get; set; }
 }

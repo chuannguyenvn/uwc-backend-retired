@@ -16,10 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\Task" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="Services\Mcp.cs" />
       <Compile Remove="Controllers\TestController.cs" />
     </ItemGroup>

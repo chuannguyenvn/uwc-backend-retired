@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Repositories;
 using Repositories.Implementations;
 using Services.Authentication;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IMcpService, McpService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskIncludeMcpSerivce, TaskIncludeMcpService>();
 
 builder.Services.AddSingleton<VehiclePositionService>();
 builder.Services.AddScoped<CleanerReportService>();
