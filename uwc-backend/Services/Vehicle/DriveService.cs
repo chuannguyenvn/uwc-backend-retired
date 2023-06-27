@@ -6,9 +6,10 @@ namespace uwc_backend.Services.Vehicle;
 public interface IDriveService
 {
     public (bool success, object result) AddDrive(DateTime date, int driverId, int vehicleId);
-
-    public List<Models.Drive> GetAllDrives();
+    public List<Drive> GetAllDrives();
     public (bool success, object result) DeleteDrive(int id);
+    public List<Drive> GetDriverFullVehicleSortByName();
+    public List<Drive> GetDriverFullVehicleSortByCurrentLoad();
 }
 
 public class DriveService : IDriveService
@@ -71,5 +72,20 @@ public class DriveService : IDriveService
         _unitOfWork.Drives.Remove(drivingHistory);
         _unitOfWork.Complete();
         return (true, "Driving history deleted successfully");
+    }
+
+    // Null Exception Error or Empty List []: => Needed to be fixed
+    public List<Drive> GetDriverFullVehicleSortByName()
+    {
+        var driverFullVehicleList = _unitOfWork.Drives.Find(drive =>
+            (drive.Vehicle.CurrentLoad - 100.0 > 0) && (drive.Date.Day == DateTime.Today.Day));
+        return driverFullVehicleList.ToList().OrderBy(d => d.Driver.LastName).ToList();
+    }
+
+    public List<Drive> GetDriverFullVehicleSortByCurrentLoad()
+    {
+        var driverFullVehicleList = _unitOfWork.Drives.Find(drive =>
+            (drive.Vehicle.CurrentLoad - 100.0 > 0) && (drive.Date.Day == DateTime.Today.Day));
+        return driverFullVehicleList.ToList().OrderByDescending(d => d.Vehicle.CurrentLoad).ToList();
     }
 }

@@ -48,5 +48,18 @@ public class DriveController : ControllerBase
 
         return Ok(result);
     }
-    
+
+    [HttpGet("driver-full-vehicle-sort-by-name")]
+    public List<Models.Drive> GetDriverWithFullVehicleSortByName()
+    {
+        var result = _driveService.GetDriverFullVehicleSortByName();
+        return result;
+    }
+
+    [HttpGet("driver-full-vehicle-sort-by-current-load")]
+    public List<Models.Drive> GetDriverWithFullVehicleSortByCurrentLoad()
+    {
+        var result = _driveService.GetDriverFullVehicleSortByCurrentLoad();
+        return result;
+    }
 }
