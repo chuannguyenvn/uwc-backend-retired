@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using uwc_backend.Communications.Vehicle;
 using uwc_backend.Services.Vehicle;
 
 namespace Controllers;
@@ -12,5 +13,19 @@ public class VehicleController: ControllerBase
     public VehicleController(IVehicleService vehicleService)
     {
         _vehicleService = vehicleService;
+    }
+
+    [HttpPost("add-vehicle")]
+    public IActionResult AddVehicle(AddVehicleRequest addVehicleRequest)
+    {
+        var (success, result) = _vehicleService.AddVehicle(addVehicleRequest.Capacity, addVehicleRequest.CurrentLoad,
+            addVehicleRequest.AverageSpeed);
+
+        if (!success)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
     }
 }
