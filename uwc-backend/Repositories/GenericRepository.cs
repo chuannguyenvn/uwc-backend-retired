@@ -78,11 +78,6 @@ public class GenericRepository<T> where T : IndexedEntity
         _context.Set<T>().RemoveRange(entities);
     }
 
-    public bool ContainSubstring(string parent, string child)
-    {
-        return parent.Contains(child);
-    }
-
     public bool DoesIdExist(int id)
     {
         return _context.Set<T>().Any(entity => entity.Id == id);

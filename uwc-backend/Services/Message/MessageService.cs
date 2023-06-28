@@ -96,10 +96,7 @@ public class MessageService : IMessageService
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
             (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
-
-        var result = _unitOfWork.Messages.Find(message =>
-            _unitOfWork.Messages.ContainSubstring(message.TextContent, word));
-
+        
         return messageList.ToList().OrderBy(message => message.TextTime).ToList();
     }
 }
