@@ -4,11 +4,13 @@ namespace uwc_backend.Services.Vehicle;
 
 public interface IVehicleService
 {
-    public (bool success, object result) AddVehicle(double capacity, double currentLoad, double averageSpeed);
+    public (bool success, object result) AddVehicle(double capacity, double currentLoad,
+        double averageSpeed);
 
     public List<Models.Vehicle> GetAllVehicles();
-    public (bool success, object result) UpdateVehicleInformation(int id, double capacity, double currentLoad,
-        double averageSpeed);
+
+    public (bool success, object result) UpdateVehicleInformation(int id, double capacity,
+        double currentLoad, double averageSpeed);
 
     public (bool success, object result) DeleteVehicle(int id);
 }
@@ -23,15 +25,14 @@ public class VehicleService : IVehicleService
     }
 
 
-    public (bool success, object result) AddVehicle(double capacity, double currentLoad, double averageSpeed)
+    public (bool success, object result) AddVehicle(double capacity, double currentLoad,
+        double averageSpeed)
     {
-        var vehicleInformation = new Models.Vehicle()
+        var vehicleInformation = new Models.Vehicle
         {
-            Capacity = capacity,
-            CurrentLoad = currentLoad,
-            AverageSpeed = averageSpeed,
+            Capacity = capacity, CurrentLoad = currentLoad, AverageSpeed = averageSpeed
         };
-        
+
         _unitOfWork.Vehicles.Add(vehicleInformation);
         _unitOfWork.Complete();
 
@@ -44,13 +45,10 @@ public class VehicleService : IVehicleService
         return result.ToList();
     }
 
-    public (bool success, object result)
-        UpdateVehicleInformation(int id, double capacity, double currentLoad, double averageSpeed)
+    public (bool success, object result) UpdateVehicleInformation(int id, double capacity,
+        double currentLoad, double averageSpeed)
     {
-        if (!_unitOfWork.Vehicles.DoesIdExist(id))
-        {
-            return (false, "Vehicle Id does not exist.");
-        }
+        if (!_unitOfWork.Vehicles.DoesIdExist(id)) return (false, "Vehicle Id does not exist.");
 
         var vehicle = _unitOfWork.Vehicles.Find(vehicle => vehicle.Id == id).First();
         vehicle.Capacity = capacity;
@@ -63,10 +61,7 @@ public class VehicleService : IVehicleService
 
     public (bool success, object result) DeleteVehicle(int id)
     {
-        if (!_unitOfWork.Vehicles.DoesIdExist(id))
-        {
-            return (false, "Vehicle Id does not exist.");
-        }
+        if (!_unitOfWork.Vehicles.DoesIdExist(id)) return (false, "Vehicle Id does not exist.");
 
         var vehicle = _unitOfWork.Vehicles.Find(vehicle => vehicle.Id == id).First();
         _unitOfWork.Vehicles.Remove(vehicle);

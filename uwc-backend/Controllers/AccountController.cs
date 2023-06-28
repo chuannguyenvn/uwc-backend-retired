@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Services.Authentication;
 using uwc_backend.Communications;
-using AuthenticationService = Services.Authentication.AuthenticationService;
-using IAuthenticationService = Services.Authentication.IAuthenticationService;
 
 namespace Controllers;
 
@@ -21,14 +18,12 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(AuthenticationRequest authenticationRequest)
     {
-        var (success, result) =
-            _authenticationService.Register(authenticationRequest.Username, authenticationRequest.Password,
-                authenticationRequest.Employee, authenticationRequest.Settings);
+        var (success, result) = _authenticationService.Register(authenticationRequest.Username,
+            authenticationRequest.Password,
+            authenticationRequest.Employee,
+            authenticationRequest.Settings);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -36,13 +31,10 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(AuthenticationRequest authenticationRequest)
     {
-        var (success, result) =
-            await _authenticationService.Login(authenticationRequest.Username, authenticationRequest.Password);
+        var (success, result) = await _authenticationService.Login(authenticationRequest.Username,
+            authenticationRequest.Password);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -50,13 +42,12 @@ public class AccountController : ControllerBase
     [HttpPut("update-password")]
     public IActionResult UpdatePassword(UpdatePasswordRequest updatePasswordRequest)
     {
-        var (success, result) = _authenticationService.UpdatePassword(updatePasswordRequest.Username,
-            updatePasswordRequest.OldPassword, updatePasswordRequest.NewPassword);
+        var (success, result) = _authenticationService.UpdatePassword(
+            updatePasswordRequest.Username,
+            updatePasswordRequest.OldPassword,
+            updatePasswordRequest.NewPassword);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -64,13 +55,10 @@ public class AccountController : ControllerBase
     [HttpDelete("delete-account")]
     public IActionResult DeleteAccount(AuthenticationRequest authenticationRequest)
     {
-        var (success, result) =
-            _authenticationService.DeleteAccount(authenticationRequest.Username, authenticationRequest.Password);
+        var (success, result) = _authenticationService.DeleteAccount(authenticationRequest.Username,
+            authenticationRequest.Password);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -78,13 +66,12 @@ public class AccountController : ControllerBase
     [HttpPut("update-settings")]
     public IActionResult UpdateSettings(UpdateSettingsRequest updateSettingsRequest)
     {
-        var (success, result) = _authenticationService.UpdateSettings(updateSettingsRequest.Username,
-            updateSettingsRequest.Password, updateSettingsRequest.Settings);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        var (success, result) = _authenticationService.UpdateSettings(
+            updateSettingsRequest.Username,
+            updateSettingsRequest.Password,
+            updateSettingsRequest.Settings);
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }

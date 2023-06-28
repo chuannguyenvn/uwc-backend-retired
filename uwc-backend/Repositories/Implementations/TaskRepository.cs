@@ -1,14 +1,14 @@
-﻿using Repositories;
+﻿using Task = Models.Task;
 
 namespace Repositories.Implementations;
 
-public class TaskRepository : GenericRepository<Models.Task>
+public class TaskRepository : GenericRepository<Task>
 {
     public TaskRepository(UwcDbContext context) : base(context)
     {
     }
 
-    public IEnumerable<Models.Task> GetTasksOfEmployee(int employeeId)
+    public IEnumerable<Task> GetTasksOfEmployee(int employeeId)
     {
         return _context.Tasks.Where(task => task.Worker.Id == employeeId);
     }

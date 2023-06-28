@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
+using Route = Models.Route;
+using Task = Models.Task;
 
 namespace Repositories;
 
@@ -13,8 +15,8 @@ public class UwcDbContext : DbContext
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<Models.Task> Tasks { get; set; }
-    public DbSet<Models.Route> Routes { get; set; }
+    public DbSet<Task> Tasks { get; set; }
+    public DbSet<Route> Routes { get; set; }
     public DbSet<TaskIncludeMcp> TaskIncludeMcps { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<Drive> Drives { get; set; }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Task;
 using uwc_backend.Communications.Task;
+using Task = Models.Task;
 
 namespace Controllers;
 
@@ -18,19 +19,18 @@ public class TaskController : ControllerBase
     [HttpPost("add-task")]
     public IActionResult AddTask(AddTaskRequest addTaskRequest)
     {
-        var (success, result) = _taskService.AddTask(addTaskRequest.Date, addTaskRequest.Supervisor,
-            addTaskRequest.Worker, addTaskRequest.Route);
+        var (success, result) = _taskService.AddTask(addTaskRequest.Date,
+            addTaskRequest.Supervisor,
+            addTaskRequest.Worker,
+            addTaskRequest.Route);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-all-tasks/{employeeId}")]
-    public List<Models.Task> GetTasksOfEmployee([FromRoute] int employeeId)
+    public List<Task> GetTasksOfEmployee([FromRoute] int employeeId)
     {
         var result = _taskService.GetTasksOfEmployee(employeeId);
         return result;
@@ -41,10 +41,7 @@ public class TaskController : ControllerBase
     {
         var (success, result) = _taskService.DeleteTasksOfEmployee(employeeId);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -54,10 +51,7 @@ public class TaskController : ControllerBase
     {
         var (success, result) = _taskService.DeleteTask(taskId);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -65,22 +59,22 @@ public class TaskController : ControllerBase
     [HttpPut("update-task")]
     public IActionResult UpdateTask(UpdateTaskRequest updateTaskRequest)
     {
-        var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id, updateTaskRequest.Date,
-            updateTaskRequest.Supervisor, updateTaskRequest.Worker, updateTaskRequest.Route);
+        var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id,
+            updateTaskRequest.Date,
+            updateTaskRequest.Supervisor,
+            updateTaskRequest.Worker,
+            updateTaskRequest.Route);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-tasks-in-time-range")]
-    public List<Models.Task> GetTasksInTimeRange(GetTasksInTimeRangeRequest getTasksInTimeRangeRequest)
+    public List<Task> GetTasksInTimeRange(GetTasksInTimeRangeRequest getTasksInTimeRangeRequest)
     {
-        var result =
-            _taskService.GetTasksInTimeRange(getTasksInTimeRangeRequest.StartTime, getTasksInTimeRangeRequest.EndTime);
+        var result = _taskService.GetTasksInTimeRange(getTasksInTimeRangeRequest.StartTime,
+            getTasksInTimeRangeRequest.EndTime);
 
         return result;
     }

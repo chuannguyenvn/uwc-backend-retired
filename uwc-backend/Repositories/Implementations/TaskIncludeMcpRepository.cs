@@ -1,8 +1,8 @@
-using Repositories;
+using Models;
 
 namespace Repositories.Implementations;
 
-public class TaskIncludeMcpRepository : GenericRepository<Models.TaskIncludeMcp>
+public class TaskIncludeMcpRepository : GenericRepository<TaskIncludeMcp>
 {
     public TaskIncludeMcpRepository(UwcDbContext context) : base(context)
     {

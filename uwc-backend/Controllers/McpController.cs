@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Models;
 using Services.Mcp;
 using uwc_backend.Communications.Mcp;
 
@@ -21,13 +19,12 @@ public class McpController : ControllerBase
     [HttpPost("add-mcp")]
     public IActionResult AddMcp(AddMcpRequest addMcpRequest)
     {
-        var (success, result) = _mcpService.AddMcp(addMcpRequest.Capacity, addMcpRequest.CurrentLoad,
-            addMcpRequest.Latitude, addMcpRequest.Longitude);
+        var (success, result) = _mcpService.AddMcp(addMcpRequest.Capacity,
+            addMcpRequest.CurrentLoad,
+            addMcpRequest.Latitude,
+            addMcpRequest.Longitude);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -37,31 +34,29 @@ public class McpController : ControllerBase
     {
         var (success, result) = _mcpService.EmptyMcp(mcpId);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-full-mcps")]
-    public List<Models.Mcp> GetFullMcps()
+    public List<Mcp> GetFullMcps()
     {
         var result = _mcpService.GetFullMcps();
         return result;
     }
 
     [HttpGet("get-mcps-in-range")]
-    public List<Models.Mcp> GetMcpsInRange(GetMcpsInRangeRequest getMcpsInRangeRequest)
+    public List<Mcp> GetMcpsInRange(GetMcpsInRangeRequest getMcpsInRangeRequest)
     {
-        var result = _mcpService.GetMcpsInRange(getMcpsInRangeRequest.Latitude, getMcpsInRangeRequest.Longitude,
+        var result = _mcpService.GetMcpsInRange(getMcpsInRangeRequest.Latitude,
+            getMcpsInRangeRequest.Longitude,
             getMcpsInRangeRequest.Radius);
         return result;
     }
 
     [HttpGet("get-all-mcps")]
-    public List<Models.Mcp> GetAllMcps()
+    public List<Mcp> GetAllMcps()
     {
         var result = _mcpService.GetAllMcps();
         return result;
@@ -72,10 +67,7 @@ public class McpController : ControllerBase
     {
         var (success, result) = _mcpService.DeleteMcp(mcpId);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -83,44 +75,41 @@ public class McpController : ControllerBase
     [HttpPut("update-mcp-current-load")]
     public IActionResult UpdateMcpCurrentLoad(UpdateMcpCurrentLoad updateMcpCurrentLoad)
     {
-        var (success, result) =
-            _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id, updateMcpCurrentLoad.CurrentLoad);
+        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id,
+            updateMcpCurrentLoad.CurrentLoad);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("sort-current-load-ascendingly")]
-    public List<Models.Mcp> SortMcpByCurrentLoadAscendingly()
+    public List<Mcp> SortMcpByCurrentLoadAscendingly()
     {
         var result = _mcpService.SortByCurrentLoadAscendingly();
         return result;
     }
 
     [HttpGet("sort-current-load-descendingly")]
-    public List<Models.Mcp> SortMcpByCurrentLoadDescendingly()
+    public List<Mcp> SortMcpByCurrentLoadDescendingly()
     {
         var result = _mcpService.SortByCurrentLoadDescendingly();
         return result;
     }
 
     [HttpGet("sort-distance-ascendingly")]
-    public List<Models.Mcp> SortMcpByDistanceAscendingly(SortDistanceRequest sortDistanceRequest)
+    public List<Mcp> SortMcpByDistanceAscendingly(SortDistanceRequest sortDistanceRequest)
     {
-        var result =
-            _mcpService.SortByDistanceAscendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
+        var result = _mcpService.SortByDistanceAscendingly(sortDistanceRequest.Latitude,
+            sortDistanceRequest.Longitude);
         return result;
     }
 
     [HttpGet("sort-distance-descendingly")]
-    public List<Models.Mcp> SortMcpByDistanceDescendingly(SortDistanceRequest sortDistanceRequest)
+    public List<Mcp> SortMcpByDistanceDescendingly(SortDistanceRequest sortDistanceRequest)
     {
-        var result =
-            _mcpService.SortByDistanceDescendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
+        var result = _mcpService.SortByDistanceDescendingly(sortDistanceRequest.Latitude,
+            sortDistanceRequest.Longitude);
         return result;
     }
 }

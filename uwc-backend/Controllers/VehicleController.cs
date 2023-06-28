@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using uwc_backend.Communications.Vehicle;
 using uwc_backend.Services.Vehicle;
 
@@ -6,7 +7,7 @@ namespace Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class VehicleController: ControllerBase
+public class VehicleController : ControllerBase
 {
     private readonly IVehicleService _vehicleService;
 
@@ -18,34 +19,33 @@ public class VehicleController: ControllerBase
     [HttpPost("add-vehicle")]
     public IActionResult AddVehicle(AddVehicleRequest addVehicleRequest)
     {
-        var (success, result) = _vehicleService.AddVehicle(addVehicleRequest.Capacity, addVehicleRequest.CurrentLoad,
+        var (success, result) = _vehicleService.AddVehicle(addVehicleRequest.Capacity,
+            addVehicleRequest.CurrentLoad,
             addVehicleRequest.AverageSpeed);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-all-vehicles")]
-    public List<Models.Vehicle> GetAllVehicles()
+    public List<Vehicle> GetAllVehicles()
     {
         var result = _vehicleService.GetAllVehicles();
         return result;
     }
 
     [HttpPut("update-vehicle-info")]
-    public IActionResult UpdateVehicleInformation(UpdateVehicleInformationRequest updateVehicleInformationRequest)
+    public IActionResult UpdateVehicleInformation(
+        UpdateVehicleInformationRequest updateVehicleInformationRequest)
     {
-        var (success, result) = _vehicleService.UpdateVehicleInformation(updateVehicleInformationRequest.Id, updateVehicleInformationRequest.Capacity,
-            updateVehicleInformationRequest.CurrentLoad, updateVehicleInformationRequest.AverageSpeed);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        var (success, result) = _vehicleService.UpdateVehicleInformation(
+            updateVehicleInformationRequest.Id,
+            updateVehicleInformationRequest.Capacity,
+            updateVehicleInformationRequest.CurrentLoad,
+            updateVehicleInformationRequest.AverageSpeed);
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -54,11 +54,8 @@ public class VehicleController: ControllerBase
     public IActionResult DeleteVehicle([FromRoute] int vehicleId)
     {
         var (success, result) = _vehicleService.DeleteVehicle(vehicleId);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }

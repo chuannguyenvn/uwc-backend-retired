@@ -1,8 +1,8 @@
-using Models;
+using Route = Models.Route;
 
 namespace Repositories.Implementations;
 
-public class RouteRepository : GenericRepository<Models.Route>
+public class RouteRepository : GenericRepository<Route>
 {
     public RouteRepository(UwcDbContext context) : base(context)
     {

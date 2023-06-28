@@ -5,11 +5,18 @@ namespace Services.Authentication;
 
 public interface IAuthenticationService
 {
-    public (bool success, string content) Register(string username, string password, int employeeId, string settings);
+    public (bool success, string content) Register(string username, string password, int employeeId,
+        string settings);
+
     public Task<(bool success, string token)> Login(string username, string password);
-    public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword);
+
+    public (bool success, object result) UpdatePassword(string username, string oldPassword,
+        string newPassword);
+
     public (bool success, object result) DeleteAccount(string username, string password);
-    public (bool success, object result) UpdateSettings(string username, string password, string settings);
+
+    public (bool success, object result) UpdateSettings(string username, string password,
+        string settings);
 }
 
 public class AuthenticationService : IAuthenticationService
@@ -21,31 +28,22 @@ public class AuthenticationService : IAuthenticationService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, string content) Register(string username, string password, int employeeId, string settings)
+    public (bool success, string content) Register(string username, string password, int employeeId,
+        string settings)
     {
         if (_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
-        {
             return (false, "Username has already been taken.");
-        }
 
         if (!_unitOfWork.Employees.DoesIdExist(employeeId))
-        {
             return (false, "Employee does not exist.");
-        }
 
         var accountList = _unitOfWork.Accounts.Find(account => account.Employee.Id == employeeId);
-        if (accountList.Any())
-        {
-            return (false, "Employee has account already.");
-        }
+        if (accountList.Any()) return (false, "Employee has account already.");
 
         var employee = _unitOfWork.Employees.Find(employee => employee.Id == employeeId).First();
-        var accountInformation = new Account()
+        var accountInformation = new Account
         {
-            Username = username,
-            Password = password,
-            Employee = employee,
-            Settings = settings,
+            Username = username, Password = password, Employee = employee, Settings = settings
         };
 
         _unitOfWork.Accounts.Add(accountInformation);
@@ -57,31 +55,21 @@ public class AuthenticationService : IAuthenticationService
     public async Task<(bool success, string token)> Login(string username, string password)
     {
         var userList = _unitOfWork.Accounts.Find(account => account.Username == username);
-        if (userList.Count() == 0)
-        {
-            return (false, "Account does not exist.");
-        }
+        if (userList.Count() == 0) return (false, "Account does not exist.");
 
-        if (userList.First().Password != password)
-        {
-            return (false, "Password is incorrect.");
-        }
+        if (userList.First().Password != password) return (false, "Password is incorrect.");
 
         return (true, "Login successfully.");
     }
 
-    public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword)
+    public (bool success, object result) UpdatePassword(string username, string oldPassword,
+        string newPassword)
     {
         if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
-        {
             return (false, "Account does not exist.");
-        }
 
         var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
-        if (account.Password != oldPassword)
-        {
-            return (false, "Incorrect old password.");
-        }
+        if (account.Password != oldPassword) return (false, "Incorrect old password.");
 
         account.Password = newPassword;
         _unitOfWork.Complete();
@@ -91,39 +79,27 @@ public class AuthenticationService : IAuthenticationService
     public (bool success, object result) DeleteAccount(string username, string password)
     {
         if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
-        {
             return (false, "Account does not exist.");
-        }
 
         var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
-        if (account.Password != password)
-        {
-            return (false, "Incorrect password.");
-        }
-        
+        if (account.Password != password) return (false, "Incorrect password.");
+
         _unitOfWork.Accounts.Remove(account);
         _unitOfWork.Complete();
         return (true, "Account deleted successfully");
     }
 
-    public (bool success, object result) UpdateSettings(string username, string password, string settings)
+    public (bool success, object result) UpdateSettings(string username, string password,
+        string settings)
     {
         if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
-        {
             return (false, "Account does not exist.");
-        }
 
         var accountList = _unitOfWork.Accounts.Find(account => account.Username == username);
-        if (!accountList.Any())
-        {
-            return (false, "No matching username");
-        }
+        if (!accountList.Any()) return (false, "No matching username");
 
         var account = accountList.First();
-        if (account.Password != password)
-        {
-            return (false, "Incorrect password.");
-        }
+        if (account.Password != password) return (false, "Incorrect password.");
 
         account.Settings = settings;
         _unitOfWork.Complete();

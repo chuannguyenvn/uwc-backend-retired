@@ -18,13 +18,11 @@ public class RouteController : ControllerBase
     [HttpPost("add-route")]
     public IActionResult AddRoute(AddRouteRequest addRouteRequest)
     {
-        var (success, result) = _routeService.AddRoute(addRouteRequest.RouteName, addRouteRequest.TotalLength,
+        var (success, result) = _routeService.AddRoute(addRouteRequest.RouteName,
+            addRouteRequest.TotalLength,
             addRouteRequest.RouteDetails);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -32,13 +30,12 @@ public class RouteController : ControllerBase
     [HttpPut("update-route")]
     public IActionResult UpdateRoute(UpdateRouteRequest updateRouteRequest)
     {
-        var (success, result) = _routeService.UpdateRoute(updateRouteRequest.Id, updateRouteRequest.RouteName,
-            updateRouteRequest.TotalLength, updateRouteRequest.RouteDetails);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        var (success, result) = _routeService.UpdateRoute(updateRouteRequest.Id,
+            updateRouteRequest.RouteName,
+            updateRouteRequest.TotalLength,
+            updateRouteRequest.RouteDetails);
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }

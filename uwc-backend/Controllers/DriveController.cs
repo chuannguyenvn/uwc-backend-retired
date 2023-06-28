@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using uwc_backend.Communications.Vehicle;
 using uwc_backend.Services.Vehicle;
 
@@ -18,19 +19,17 @@ public class DriveController : ControllerBase
     [HttpPost("add-driving-history")]
     public IActionResult AddDrivingHistory(AddDriveRequest addDriveRequest)
     {
-        var (success, result) =
-            _driveService.AddDrive(addDriveRequest.Date, addDriveRequest.Driver, addDriveRequest.Vehicle);
+        var (success, result) = _driveService.AddDrive(addDriveRequest.Date,
+            addDriveRequest.Driver,
+            addDriveRequest.Vehicle);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-driving-history")]
-    public List<Models.Drive> GetDrivingHistory()
+    public List<Drive> GetDrivingHistory()
     {
         var result = _driveService.GetAllDrives();
         return result;
@@ -40,24 +39,21 @@ public class DriveController : ControllerBase
     public IActionResult DeleteDrivingHistory([FromRoute] int driveId)
     {
         var (success, result) = _driveService.DeleteDrive(driveId);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("driver-full-vehicle-sort-by-name")]
-    public List<Models.Drive> GetDriverWithFullVehicleSortByName()
+    public List<Drive> GetDriverWithFullVehicleSortByName()
     {
         var result = _driveService.GetDriverFullVehicleSortByName();
         return result;
     }
 
     [HttpGet("driver-full-vehicle-sort-by-current-load")]
-    public List<Models.Drive> GetDriverWithFullVehicleSortByCurrentLoad()
+    public List<Drive> GetDriverWithFullVehicleSortByCurrentLoad()
     {
         var result = _driveService.GetDriverFullVehicleSortByCurrentLoad();
         return result;

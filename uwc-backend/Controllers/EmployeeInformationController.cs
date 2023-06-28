@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Services.Employee;
 using uwc_backend.Communications;
-using IEmployeeInformationService = Services.Employee.IEmployeeInformationService;
 
 namespace Controllers;
 
@@ -19,14 +19,14 @@ public class EmployeeInformationController : ControllerBase
     [HttpPost("add-employee")]
     public IActionResult AddEmployee(AddEmployeeRequest addEmployeeRequest)
     {
-        var (success, result) = _employeeInformationService.AddEmployee(addEmployeeRequest.FirstName,
-            addEmployeeRequest.LastName, addEmployeeRequest.Gender, addEmployeeRequest.DateOfBirth,
+        var (success, result) = _employeeInformationService.AddEmployee(
+            addEmployeeRequest.FirstName,
+            addEmployeeRequest.LastName,
+            addEmployeeRequest.Gender,
+            addEmployeeRequest.DateOfBirth,
             addEmployeeRequest.Role);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -36,10 +36,7 @@ public class EmployeeInformationController : ControllerBase
     {
         var (success, result) = _employeeInformationService.DeleteEmployee(employeeId);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -47,22 +44,21 @@ public class EmployeeInformationController : ControllerBase
     [HttpPut("update-employee-id")]
     public IActionResult UpdateRoleEmployeeId(UpdateEmployeeRequest updateEmployeeRequest)
     {
-        var (success, result) =
-            _employeeInformationService.UpdateRoleEmployee(updateEmployeeRequest.Employee,
-                updateEmployeeRequest.FirstName, updateEmployeeRequest.LastName,
-                updateEmployeeRequest.Gender, updateEmployeeRequest.DateOfBirth,
-                updateEmployeeRequest.Role);
+        var (success, result) = _employeeInformationService.UpdateRoleEmployee(
+            updateEmployeeRequest.Employee,
+            updateEmployeeRequest.FirstName,
+            updateEmployeeRequest.LastName,
+            updateEmployeeRequest.Gender,
+            updateEmployeeRequest.DateOfBirth,
+            updateEmployeeRequest.Role);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-all-employee")]
-    public List<Models.Employee> GetAllEmployee()
+    public List<Employee> GetAllEmployee()
     {
         var result = _employeeInformationService.GetAllEmployee();
         return result;
@@ -73,37 +69,34 @@ public class EmployeeInformationController : ControllerBase
     {
         var (success, result) = _employeeInformationService.GetEmployeeById(employeeId);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
     [HttpGet("get-employee-by-role/{role}")]
-    public List<Models.Employee> GetEmployeeByRole([FromRoute] int role)
+    public List<Employee> GetEmployeeByRole([FromRoute] int role)
     {
         var result = _employeeInformationService.GetEmployeeByRole(role);
         return result;
     }
 
     [HttpGet("get-free-employees")]
-    public List<Models.Employee> GetFreeEmployees()
+    public List<Employee> GetFreeEmployees()
     {
         var result = _employeeInformationService.GetFreeEmployees();
         return result;
     }
 
     [HttpGet("sort-employees-tasks-descendingly")]
-    public List<Models.Employee> GetEmployeesByTaskDescendingly()
+    public List<Employee> GetEmployeesByTaskDescendingly()
     {
         var result = _employeeInformationService.SortByTasksDescendingly();
         return result;
     }
 
     [HttpGet("sort-employees-tasks-ascendingly")]
-    public List<Models.Employee> GetEmployeesByTaskAscendingly()
+    public List<Employee> GetEmployeesByTaskAscendingly()
     {
         var result = _employeeInformationService.SortByTasksAscendingly();
         return result;

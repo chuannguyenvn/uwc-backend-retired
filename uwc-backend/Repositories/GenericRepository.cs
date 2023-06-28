@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using Constants = Utilities.Constants;
 using Models;
+using Utilities;
 
 namespace Repositories;
 
@@ -48,6 +48,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
         _context.Set<T>().RemoveRange(entities);
     }
 
+    public bool ContainSubstring(string parent, string child)
+    {
+        return parent.Contains(child);
+    }
+
     public bool DoesIdExist(int id)
     {
         return _context.Set<T>().Any(entity => entity.Id == id);
@@ -74,22 +79,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
         return Math.Abs(a - b) < Constants.EPSILON_COMPARE_DOUBLE;
     }
 
-    public bool ContainSubstring(string parent, string child)
-    {
-        return parent.Contains(child);
-    }
-
     public int Count(Func<T, bool> predicate)
     {
-        int count = 0;
+        var count = 0;
         foreach (var item in _context.Set<T>())
-        {
             if (predicate(item))
-            {
                 count++;
-            }
-        }
         return count;
     }
-
 }

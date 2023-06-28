@@ -7,7 +7,7 @@ namespace Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class DrivingLicenseController: ControllerBase
+public class DrivingLicenseController : ControllerBase
 {
     private readonly IDrivingLicenseService _drivingLicenseService;
 
@@ -19,13 +19,13 @@ public class DrivingLicenseController: ControllerBase
     [HttpPost("add-driving-license")]
     public IActionResult AddDrivingLicense(AddDrivingLicenseRequest addDrivingLicenseRequest)
     {
-        var (success, result) = _drivingLicenseService.AddDrivingLicense(addDrivingLicenseRequest.IssueDate,
-            addDrivingLicenseRequest.IssuePlace, addDrivingLicenseRequest.Owner, addDrivingLicenseRequest.Type);
+        var (success, result) = _drivingLicenseService.AddDrivingLicense(
+            addDrivingLicenseRequest.IssueDate,
+            addDrivingLicenseRequest.IssuePlace,
+            addDrivingLicenseRequest.Owner,
+            addDrivingLicenseRequest.Type);
 
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -38,16 +38,17 @@ public class DrivingLicenseController: ControllerBase
     }
 
     [HttpPut("update-driving-license")]
-    public IActionResult UpdateDrivingLicense(UpdateDrivingLicenseRequest updateDrivingLicenseRequest)
+    public IActionResult UpdateDrivingLicense(
+        UpdateDrivingLicenseRequest updateDrivingLicenseRequest)
     {
-        var (success, result) = _drivingLicenseService.UpdateDrivingLicenseInformation(updateDrivingLicenseRequest.Id,
-            updateDrivingLicenseRequest.IssueDate, updateDrivingLicenseRequest.IssuePlace,
-            updateDrivingLicenseRequest.Owner, updateDrivingLicenseRequest.Type);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+        var (success, result) = _drivingLicenseService.UpdateDrivingLicenseInformation(
+            updateDrivingLicenseRequest.Id,
+            updateDrivingLicenseRequest.IssueDate,
+            updateDrivingLicenseRequest.IssuePlace,
+            updateDrivingLicenseRequest.Owner,
+            updateDrivingLicenseRequest.Type);
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -56,11 +57,8 @@ public class DrivingLicenseController: ControllerBase
     public IActionResult DeleteDrivingLicense([FromRoute] int drivingLicenseId)
     {
         var (success, result) = _drivingLicenseService.DeleteDrivingLicense(drivingLicenseId);
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }
@@ -69,11 +67,8 @@ public class DrivingLicenseController: ControllerBase
     public IActionResult DeleteOutdatedDrivingLicenses()
     {
         var (success, result) = _drivingLicenseService.DeleteOutdatedDrivingLicense();
-        
-        if (!success)
-        {
-            return BadRequest(result);
-        }
+
+        if (!success) return BadRequest(result);
 
         return Ok(result);
     }

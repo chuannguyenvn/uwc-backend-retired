@@ -1,22 +1,10 @@
-﻿using Models;
-using Repositories.Implementations;
+﻿using Repositories.Implementations;
 
 namespace Repositories;
 
 public class UnitOfWork : IDisposable
 {
     private readonly UwcDbContext _uwcDbContext;
-
-    public AccountRepository Accounts { get; private set; }
-    public EmployeeRepository Employees { get; private set; }
-    public McpRepository Mcps { get; private set; }
-    public TaskRepository Tasks { get; private set; }
-    public MessageRepository Messages { get; private set; }
-    public RouteRepository Routes { get; private set; }
-    public TaskIncludeMcpRepository TaskIncludeMcps { get; private set; }
-    public VehicleRepository Vehicles { get; private set; }
-    public DriveRepository Drives { get; private set; }
-    public DrivingLicenseRepository DrivingLicenses { get; private set; }
 
     public UnitOfWork(UwcDbContext uwcDbContext)
     {
@@ -34,6 +22,22 @@ public class UnitOfWork : IDisposable
         Drives = new DriveRepository(_uwcDbContext);
     }
 
+    public AccountRepository Accounts { get; }
+    public EmployeeRepository Employees { get; }
+    public McpRepository Mcps { get; }
+    public TaskRepository Tasks { get; }
+    public MessageRepository Messages { get; }
+    public RouteRepository Routes { get; }
+    public TaskIncludeMcpRepository TaskIncludeMcps { get; }
+    public VehicleRepository Vehicles { get; }
+    public DriveRepository Drives { get; }
+    public DrivingLicenseRepository DrivingLicenses { get; }
+
+    public void Dispose()
+    {
+        _uwcDbContext.Dispose();
+    }
+
     public int Complete()
     {
         return _uwcDbContext.SaveChanges();
@@ -42,10 +46,5 @@ public class UnitOfWork : IDisposable
     public Task<int> CompleteAsync()
     {
         return _uwcDbContext.SaveChangesAsync();
-    }
-
-    public void Dispose()
-    {
-        _uwcDbContext.Dispose();
     }
 }
