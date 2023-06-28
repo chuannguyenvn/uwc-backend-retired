@@ -4,7 +4,7 @@ using Utilities;
 
 namespace Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntity
+public class GenericRepository<T> where T : IndexedEntity
 {
     protected readonly UwcDbContext _context;
 
@@ -13,36 +13,66 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
         _context = context;
     }
 
+    /// <summary>
+    ///     Add one entity.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
     public void Add(T entity)
     {
         _context.Set<T>().Add(entity);
     }
 
+    /// <summary>
+    ///     Add an amount of entities.
+    /// </summary>
+    /// <param name="entities">The entities to add.</param>
     public void AddRange(IEnumerable<T> entities)
     {
         _context.Set<T>().AddRange(entities);
     }
 
+    /// <summary>
+    ///     Find all entities that satisfy a condition.
+    /// </summary>
+    /// <param name="condition">The condition to evaluate.</param>
+    /// <returns></returns>
     public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
     {
         return _context.Set<T>().Where(expression);
     }
 
+    /// <summary>
+    ///     Get all entities available.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<T> GetAll()
     {
         return _context.Set<T>().ToList();
     }
 
+    /// <summary>
+    ///     Get an entity by ID.
+    /// </summary>
+    /// <param name="id">The ID of the entity.</param>
+    /// <returns></returns>
     public T GetById(int id)
     {
         return _context.Set<T>().Find(id);
     }
 
+    /// <summary>
+    ///     Remove one entity.
+    /// </summary>
+    /// <param name="entity">The entity to remove.</param>
     public void Remove(T entity)
     {
         _context.Set<T>().Remove(entity);
     }
 
+    /// <summary>
+    ///     Remove an amount of entities.
+    /// </summary>
+    /// <param name="entities">The entities to remove.</param>
     public void RemoveRange(IEnumerable<T> entities)
     {
         _context.Set<T>().RemoveRange(entities);
