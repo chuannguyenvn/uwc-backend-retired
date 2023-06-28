@@ -47,6 +47,4 @@ public interface IGenericRepository<T> where T : class
     /// </summary>
     /// <param name="entities">The entities to remove.</param>
     void RemoveRange(IEnumerable<T> entities);
-
-    bool ContainSubstring(string parent, string child);
 }

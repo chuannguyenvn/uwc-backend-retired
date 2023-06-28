@@ -63,20 +63,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : IndexedEntit
         return _context.Set<T>().Any();
     }
 
-    public int GetNextId()
-    {
-        if (!HasAny()) return 1;
-        return _context.Set<T>().Max(entity => entity.Id) + 1;
-    }
-
     public void RemoveById(int id)
     {
         _context.Set<T>().Remove(_context.Set<T>().Single(x => x.Id == id));
-    }
-
-    public bool CompareDouble(double a, double b)
-    {
-        return Math.Abs(a - b) < Constants.EPSILON_COMPARE_DOUBLE;
     }
 
     public int Count(Func<T, bool> predicate)
