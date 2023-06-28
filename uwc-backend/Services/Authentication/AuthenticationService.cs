@@ -8,7 +8,7 @@ public interface IAuthenticationService
     public (bool success, string content) Register(string username, string password, int employeeId,
         string settings);
 
-    public Task<(bool success, string token)> Login(string username, string password);
+    public (bool success, string token) Login(string username, string password);
 
     public (bool success, object result) UpdatePassword(string username, string oldPassword,
         string newPassword);
@@ -31,14 +31,14 @@ public class AuthenticationService : IAuthenticationService
     public (bool success, string content) Register(string username, string password, int employeeId,
         string settings)
     {
-        if (_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
+        if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
 
         if (!_unitOfWork.Employees.DoesIdExist(employeeId))
             return (false, "Employee does not exist.");
 
         var accountList = _unitOfWork.Accounts.Find(account => account.Employee.Id == employeeId);
-        if (accountList.Any()) return (false, "Employee has account already.");
+        if (accountList.Any()) return (false, "Employee already has an account.");
 
         var employee = _unitOfWork.Employees.Find(employee => employee.Id == employeeId).First();
         var accountInformation = new Account
@@ -52,20 +52,23 @@ public class AuthenticationService : IAuthenticationService
         return (true, "Registered successfully.");
     }
 
-    public async Task<(bool success, string token)> Login(string username, string password)
+    public (bool success, string token) Login(string username, string password)
     {
-        var userList = _unitOfWork.Accounts.Find(account => account.Username == username);
-        if (userList.Count() == 0) return (false, "Account does not exist.");
+        var accounts = _unitOfWork.Accounts.Find(account => account.Username == username).ToList();
 
-        if (userList.First().Password != password) return (false, "Password is incorrect.");
+        if (!accounts.Any()) return (false, "Account does not exist.");
 
+        if (!_unitOfWork.Accounts.TryGetAccount(username, out Account? account, out string error))
+            return (false, error);
+        
+        if (account.Password != password) return (false, "Password is incorrect.");
         return (true, "Login successfully.");
     }
 
     public (bool success, object result) UpdatePassword(string username, string oldPassword,
         string newPassword)
     {
-        if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
+        if (!_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Account does not exist.");
 
         var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
@@ -78,7 +81,7 @@ public class AuthenticationService : IAuthenticationService
 
     public (bool success, object result) DeleteAccount(string username, string password)
     {
-        if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
+        if (!_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Account does not exist.");
 
         var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
@@ -92,7 +95,7 @@ public class AuthenticationService : IAuthenticationService
     public (bool success, object result) UpdateSettings(string username, string password,
         string settings)
     {
-        if (!_unitOfWork.Accounts.DoesAccountWithUsernameExist(username))
+        if (!_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Account does not exist.");
 
         var accountList = _unitOfWork.Accounts.Find(account => account.Username == username);
