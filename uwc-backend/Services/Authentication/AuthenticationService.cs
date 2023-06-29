@@ -1,5 +1,6 @@
 using Models;
 using Repositories;
+using Repositories.Implementations;
 
 namespace Services.Authentication;
 
@@ -22,7 +23,7 @@ public interface IAuthenticationService
 public class AuthenticationService : IAuthenticationService
 {
     private readonly UnitOfWork _unitOfWork;
-
+    
     public AuthenticationService(UnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
@@ -54,13 +55,11 @@ public class AuthenticationService : IAuthenticationService
 
     public (bool success, string token) Login(string username, string password)
     {
-        var accounts = _unitOfWork.Accounts.Find(account => account.Username == username).ToList();
-
-        if (!accounts.Any()) return (false, "Account does not exist.");
-
-        if (!_unitOfWork.Accounts.TryGetAccount(username, out Account? account, out string error))
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
+                out string error))
             return (false, error);
-        
+
+        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
         if (account.Password != password) return (false, "Password is incorrect.");
         return (true, "Login successfully.");
     }
@@ -68,10 +67,11 @@ public class AuthenticationService : IAuthenticationService
     public (bool success, object result) UpdatePassword(string username, string oldPassword,
         string newPassword)
     {
-        if (!_unitOfWork.Accounts.DoesUsernameExist(username))
-            return (false, "Account does not exist.");
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
+                out string error))
+            return (false, error);
 
-        var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
+        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
         if (account.Password != oldPassword) return (false, "Incorrect old password.");
 
         account.Password = newPassword;
@@ -81,10 +81,11 @@ public class AuthenticationService : IAuthenticationService
 
     public (bool success, object result) DeleteAccount(string username, string password)
     {
-        if (!_unitOfWork.Accounts.DoesUsernameExist(username))
-            return (false, "Account does not exist.");
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
+                out string error))
+            return (false, error);
 
-        var account = _unitOfWork.Accounts.Find(account => account.Username == username).First();
+        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
         if (account.Password != password) return (false, "Incorrect password.");
 
         _unitOfWork.Accounts.Remove(account);
@@ -95,13 +96,11 @@ public class AuthenticationService : IAuthenticationService
     public (bool success, object result) UpdateSettings(string username, string password,
         string settings)
     {
-        if (!_unitOfWork.Accounts.DoesUsernameExist(username))
-            return (false, "Account does not exist.");
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
+                out string error))
+            return (false, error);
 
-        var accountList = _unitOfWork.Accounts.Find(account => account.Username == username);
-        if (!accountList.Any()) return (false, "No matching username");
-
-        var account = accountList.First();
+        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
         if (account.Password != password) return (false, "Incorrect password.");
 
         account.Settings = settings;

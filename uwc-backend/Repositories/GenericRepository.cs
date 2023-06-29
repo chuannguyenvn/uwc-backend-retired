@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using Models;
 using Utilities;
 
@@ -36,9 +37,54 @@ public class GenericRepository<T> where T : IndexedEntity
     /// </summary>
     /// <param name="condition">The condition to evaluate.</param>
     /// <returns></returns>
-    public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
+    public IEnumerable<T> Find(Expression<Func<T, bool>> condition)
     {
-        return _context.Set<T>().Where(expression);
+        return _context.Set<T>().Where(condition);
+    }
+
+    /// <summary>
+    /// Check if the table has exactly one entity that satisfies the condition.
+    /// </summary>
+    /// <param name="condition">The condition to evaluate.</param>
+    /// <param name="resultMessage">Contains the result message, indicates the status of the query.</param>
+    /// <returns>True if there exists a single entity that satisfies the condition, else false.</returns>
+    public bool ContainsUnique(Expression<Func<T, bool>> condition, out string resultMessage)
+    {
+        resultMessage = "Success.";
+
+        if (!_context.Set<T>().Any())
+        {
+            resultMessage = "The table is empty.";
+            return false;
+        }
+
+        var possibleEntities = _context.Set<T>().Where(condition);
+        if (!possibleEntities.Any())
+        {
+            resultMessage = "Entity does not exist.";
+            return false;
+        }
+        if (possibleEntities.Count() > 1)
+        {
+            resultMessage = "There are multiple entities that satisfy the condition.";
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Get the unique entity that satisfies the condition.
+    /// </summary>
+    /// <param name="condition">The condition to evaluate.</param>
+    /// <returns>The entity if there exists exactly one that satisfies the condition, else null.</returns>
+    public T GetUnique(Expression<Func<T, bool>> condition)
+    {
+        var possibleEntities = _context.Set<T>().Where(condition);
+        if (!possibleEntities.Any()) return null!;
+        if (possibleEntities.Count() > 1) return null!;
+
+        return possibleEntities.First();
     }
 
     /// <summary>
