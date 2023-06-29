@@ -29,9 +29,9 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(AuthenticationRequest authenticationRequest)
+    public IActionResult Login(AuthenticationRequest authenticationRequest)
     {
-        var (success, result) = await _authenticationService.Login(authenticationRequest.Username,
+        var (success, result) = _authenticationService.Login(authenticationRequest.Username,
             authenticationRequest.Password);
 
         if (!success) return BadRequest(result);
