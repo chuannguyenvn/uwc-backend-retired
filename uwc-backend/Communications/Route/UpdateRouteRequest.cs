@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
 
-namespace Communications.Route;
-
-public class UpdateRouteRequest
+namespace Communications.Route
 {
-    [JsonProperty("Id")] public int Id { get; set; }
-    [JsonProperty("RouteName")] public string RouteName { get; set; }
-    [JsonProperty("TotalLength")] public double TotalLength { get; set; }
-    [JsonProperty("RouteDetails")] public string RouteDetails { get; set; }
+    public class UpdateRouteRequest
+    {
+        [JsonProperty("Id")] public int Id { get; set; }
+        [JsonProperty("RouteName")] public string RouteName { get; set; }
+        [JsonProperty("TotalLength")] public double TotalLength { get; set; }
+        [JsonProperty("RouteDetails")] public string RouteDetails { get; set; }
+    }
 }

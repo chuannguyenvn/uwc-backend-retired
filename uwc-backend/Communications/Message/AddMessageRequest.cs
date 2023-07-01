@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
 
-namespace Communications.Message;
-
-public class AddMessageRequest
+namespace Communications.Message
 {
-    [JsonProperty("Sender")] public int Sender { get; set; }
-    [JsonProperty("Receiver")] public int Receiver { get; set; }
-    [JsonProperty("TextTime")] public DateTime TextTime { get; set; }
-    [JsonProperty("TextContent")] public string TextContent { get; set; }
+    public class AddMessageRequest
+    {
+        [JsonProperty("Sender")] public int Sender { get; set; }
+        [JsonProperty("Receiver")] public int Receiver { get; set; }
+        [JsonProperty("TextTime")] public DateTime TextTime { get; set; }
+        [JsonProperty("TextContent")] public string TextContent { get; set; }
+    }
 }
