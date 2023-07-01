@@ -16,12 +16,12 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public IActionResult Register(AuthenticationRequest authenticationRequest)
+    public IActionResult Register(RegisterRequest registerRequest)
     {
-        var (success, result) = _authenticationService.Register(authenticationRequest.Username,
-            authenticationRequest.Password,
-            authenticationRequest.Employee,
-            authenticationRequest.Settings);
+        var (success, result) = _authenticationService.Register(registerRequest.Username,
+            registerRequest.Password,
+            registerRequest.Employee,
+            registerRequest.Settings);
 
         if (!success) return BadRequest(result);
 
@@ -29,10 +29,10 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login(AuthenticationRequest authenticationRequest)
+    public IActionResult Login(LoginRequest loginRequest)
     {
-        var (success, result) = _authenticationService.Login(authenticationRequest.Username,
-            authenticationRequest.Password);
+        var (success, result) = _authenticationService.Login(loginRequest.Username,
+            loginRequest.Password);
 
         if (!success) return BadRequest(result);
 
@@ -53,10 +53,10 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete("delete-account")]
-    public IActionResult DeleteAccount(AuthenticationRequest authenticationRequest)
+    public IActionResult DeleteAccount(RegisterRequest registerRequest)
     {
-        var (success, result) = _authenticationService.DeleteAccount(authenticationRequest.Username,
-            authenticationRequest.Password);
+        var (success, result) = _authenticationService.DeleteAccount(registerRequest.Username,
+            registerRequest.Password);
 
         if (!success) return BadRequest(result);
 
