@@ -1,6 +1,6 @@
+using Communications.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Services.Authentication;
-using uwc_backend.Communications;
 
 namespace Controllers;
 

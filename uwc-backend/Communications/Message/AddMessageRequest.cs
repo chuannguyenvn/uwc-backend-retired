@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace uwc_backend.Communications.Message;
+namespace Communications.Message;
 
 public class AddMessageRequest
 {

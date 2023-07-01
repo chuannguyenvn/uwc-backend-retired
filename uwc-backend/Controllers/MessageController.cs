@@ -1,7 +1,7 @@
+using Communications.Message;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Message;
-using uwc_backend.Communications.Message;
 
 namespace Controllers;
 

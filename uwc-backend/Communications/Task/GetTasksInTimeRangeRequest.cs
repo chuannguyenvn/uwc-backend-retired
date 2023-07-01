@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace uwc_backend.Communications.Task;
+namespace Communications.Task;
 
 public class GetTasksInTimeRangeRequest
 {

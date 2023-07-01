@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace uwc_backend.Communications.Mcp;
+namespace Communications.Mcp;
 
 public class UpdateMcpCurrentLoad
 {

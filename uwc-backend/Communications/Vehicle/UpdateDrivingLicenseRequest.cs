@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace uwc_backend.Communications.Vehicle;
+namespace Communications.Vehicle;
 
 public class UpdateDrivingLicenseRequest
 {
