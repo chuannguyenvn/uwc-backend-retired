@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories;
@@ -12,9 +13,13 @@ using Services.Routing;
 using Services.Task;
 using Services.UI;
 using uwc_backend.Services.Vehicle;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+var settings = new Settings();
 
+builder.Configuration.Bind("Settings", settings);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -48,6 +53,17 @@ builder.Services.AddScoped<RouteOptimizationService>();
 builder.Services.AddScoped<DesktopUICustomizationService>();
 builder.Services.AddScoped<MobileUICustomizationService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters()
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidateIssuer = false,
+        };
+    });
 #endregion
 
 var app = builder.Build();
@@ -59,6 +75,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -1,3 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using Models;
 using Repositories;
 using Repositories.Implementations;
@@ -23,10 +28,12 @@ public interface IAuthenticationService
 public class AuthenticationService : IAuthenticationService
 {
     private readonly UnitOfWork _unitOfWork;
+    private readonly Settings _settings;
     
-    public AuthenticationService(UnitOfWork unitOfWork)
+    public AuthenticationService(Settings settings, UnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
+        _settings = settings;
     }
 
     public (bool success, string content) Register(string username, string password, int employeeId,
@@ -60,8 +67,8 @@ public class AuthenticationService : IAuthenticationService
             return (false, error);
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
-        if (account.Password != password) return (false, "Password is incorrect.");
-        return (true, "Login successfully.");
+        if (account.Password != AuthenticationHelpers.ComputeHash(password, account.Salt)) return (false, "Password is incorrect.");
+        return (true, GenerateJwtToken(AssembleClaimsIdentity(account)));
     }
 
     public (bool success, object result) UpdatePassword(string username, string oldPassword,
@@ -106,5 +113,54 @@ public class AuthenticationService : IAuthenticationService
         account.Settings = settings;
         _unitOfWork.Complete();
         return (true, "Settings updated successfully.");
+    }
+    
+    private ClaimsIdentity AssembleClaimsIdentity(Account account)
+    {
+        var subject = new ClaimsIdentity(new[] {new Claim("id", account.Employee.Id.ToString())});
+        return subject;
+    }
+
+    private string GenerateJwtToken(ClaimsIdentity subject)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_settings.BearerKey);
+        var tokenDescriptor = new SecurityTokenDescriptor()
+        {
+            Subject = subject,
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+}
+
+public static class AuthenticationHelpers
+{
+    public static void ProvideSaltAndHash(this Account account)
+    {
+        var salt = GenerateSalt();
+        account.Salt = Convert.ToBase64String(salt);
+        account.Password = ComputeHash(account.Password, account.Salt);
+    }
+
+    private static byte[] GenerateSalt()
+    {
+        var rng = RandomNumberGenerator.Create();
+        var salt = new byte[24];
+        rng.GetBytes(salt);
+        return salt;
+    }
+
+    public static string ComputeHash(string password, string saltString)
+    {
+        var salt = Convert.FromBase64String(saltString);
+
+        using var hashGenerator = new Rfc2898DeriveBytes(password, salt, 10101);
+        var bytes = hashGenerator.GetBytes(24);
+        return Convert.ToBase64String(bytes);
     }
 }
