@@ -17,9 +17,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-var settings = new Settings();
 
+var settings = new Settings();
 builder.Configuration.Bind("Settings", settings);
+builder.Services.AddSingleton(settings);
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -47,7 +49,6 @@ builder.Services.AddScoped<IDrivingLicenseService, DrivingLicenseService>();
 
 builder.Services.AddScoped<CleanerReportService>();
 builder.Services.AddScoped<DriverReportService>();
-builder.Services.AddScoped<McpRepository>();
 builder.Services.AddScoped<VehicleReportService>();
 builder.Services.AddScoped<RouteOptimizationService>();
 builder.Services.AddScoped<DesktopUICustomizationService>();
@@ -64,6 +65,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
         };
     });
+
 #endregion
 
 var app = builder.Build();
