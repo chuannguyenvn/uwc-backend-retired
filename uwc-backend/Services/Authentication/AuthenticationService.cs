@@ -8,19 +8,6 @@ using Repositories;
 
 namespace Services.Authentication;
 
-public interface IAuthenticationService
-{
-    public (bool success, string content) Register(string username, string password, int employeeId, string settings);
-
-    public (bool success, string token) Login(string username, string password);
-
-    public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword);
-
-    public (bool success, object result) DeleteAccount(string username, string password);
-
-    public (bool success, object result) UpdateSettings(string username, string password, string settings);
-}
-
 public class AuthenticationService : IAuthenticationService
 {
     private readonly Settings _settings;
@@ -75,16 +62,12 @@ public class AuthenticationService : IAuthenticationService
         return (true, "Update password successfully.");
     }
 
-    public (bool success, object result) DeleteAccount(string username, string password)
+    public (bool success, object result) DeleteAccount(int id)
     {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
-            return (false, error);
-
-        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
-        if (account.Password != password) return (false, "Incorrect password.");
-
+        var account = _unitOfWork.Accounts.GetById(id);
         _unitOfWork.Accounts.Remove(account);
         _unitOfWork.Complete();
+
         return (true, "Account deleted successfully");
     }
 
@@ -103,7 +86,10 @@ public class AuthenticationService : IAuthenticationService
 
     private ClaimsIdentity AssembleClaimsIdentity(Account account)
     {
-        var subject = new ClaimsIdentity(new[] {new Claim("id", account.Employee.Id.ToString())});
+        var subject = new ClaimsIdentity(new[]
+        {
+            new Claim("id", account.Employee.Id.ToString()), new Claim("role", account.Employee.Role.ToString()),
+        });
         return subject;
     }
 

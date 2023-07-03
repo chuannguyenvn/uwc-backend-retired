@@ -50,10 +50,10 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("delete-account")]
-    public IActionResult DeleteAccount(RegisterRequest registerRequest)
+    [HttpDelete("delete-account/{mcpId}")]
+    public IActionResult DeleteAccount([FromRoute] int mcpId)
     {
-        var (success, result) = _authenticationService.DeleteAccount(registerRequest.Username, registerRequest.Password);
+        var (success, result) = _authenticationService.DeleteAccount(mcpId);
 
         if (!success) return BadRequest(result);
 
