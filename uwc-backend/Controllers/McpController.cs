@@ -75,8 +75,7 @@ public class McpController : ControllerBase
     [HttpPut("update-mcp-current-load")]
     public IActionResult UpdateMcpCurrentLoad(UpdateMcpCurrentLoad updateMcpCurrentLoad)
     {
-        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id,
-            updateMcpCurrentLoad.CurrentLoad);
+        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id, updateMcpCurrentLoad.CurrentLoad);
 
         if (!success) return BadRequest(result);
 
@@ -100,16 +99,14 @@ public class McpController : ControllerBase
     [HttpGet("sort-distance-ascendingly")]
     public List<Mcp> SortMcpByDistanceAscendingly(SortDistanceRequest sortDistanceRequest)
     {
-        var result = _mcpService.SortByDistanceAscendingly(sortDistanceRequest.Latitude,
-            sortDistanceRequest.Longitude);
+        var result = _mcpService.SortByDistanceAscendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
         return result;
     }
 
     [HttpGet("sort-distance-descendingly")]
     public List<Mcp> SortMcpByDistanceDescendingly(SortDistanceRequest sortDistanceRequest)
     {
-        var result = _mcpService.SortByDistanceDescendingly(sortDistanceRequest.Latitude,
-            sortDistanceRequest.Longitude);
+        var result = _mcpService.SortByDistanceDescendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
         return result;
     }
 }

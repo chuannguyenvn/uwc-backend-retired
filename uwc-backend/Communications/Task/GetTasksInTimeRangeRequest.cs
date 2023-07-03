@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace Communications.Task
+namespace Communications.Task;
+
+public class GetTasksInTimeRangeRequest
 {
-    public class GetTasksInTimeRangeRequest
-    {
-        [JsonProperty("StartTime")] public DateTime StartTime { get; set; }
-        [JsonProperty("EndTime")] public DateTime EndTime { get; set; }
-    }
+    [JsonProperty("StartTime")] public DateTime StartTime { get; set; }
+    [JsonProperty("EndTime")] public DateTime EndTime { get; set; }
 }

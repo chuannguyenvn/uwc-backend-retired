@@ -73,8 +73,7 @@ public class TaskController : ControllerBase
     [HttpGet("get-tasks-in-time-range")]
     public List<Task> GetTasksInTimeRange(GetTasksInTimeRangeRequest getTasksInTimeRangeRequest)
     {
-        var result = _taskService.GetTasksInTimeRange(getTasksInTimeRangeRequest.StartTime,
-            getTasksInTimeRangeRequest.EndTime);
+        var result = _taskService.GetTasksInTimeRange(getTasksInTimeRangeRequest.StartTime, getTasksInTimeRangeRequest.EndTime);
 
         return result;
     }

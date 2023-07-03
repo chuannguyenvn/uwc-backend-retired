@@ -1,11 +1,11 @@
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Models;
 using Repositories;
-using Repositories.Implementations;
 using Services.Authentication;
 using Services.Employee;
-using Services.LiveData;
 using Services.Mcp;
 using Services.Message;
 using Services.Report;
@@ -13,8 +13,6 @@ using Services.Routing;
 using Services.Task;
 using Services.UI;
 using uwc_backend.Services.Vehicle;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,12 +55,12 @@ builder.Services.AddScoped<MobileUICustomizationService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>
     {
-        o.TokenValidationParameters = new TokenValidationParameters()
+        o.TokenValidationParameters = new TokenValidationParameters
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
             ValidateIssuerSigningKey = true,
             ValidateAudience = false,
-            ValidateIssuer = false,
+            ValidateIssuer = false
         };
     });
 

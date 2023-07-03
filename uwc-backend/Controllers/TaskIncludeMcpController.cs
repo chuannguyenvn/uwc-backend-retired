@@ -19,9 +19,7 @@ public class TaskIncludeMcpController : ControllerBase
     [HttpPost("add-task-include-mcp")]
     public IActionResult AddTaskIncludeMcp(AddTaskIncludeMcpRequest addTaskIncludeMcpRequest)
     {
-        var (success, result) =
-            _taskIncludeMcpSerivce.AddTaskIncludeMcp(addTaskIncludeMcpRequest.Task,
-                addTaskIncludeMcpRequest.Mcp);
+        var (success, result) = _taskIncludeMcpSerivce.AddTaskIncludeMcp(addTaskIncludeMcpRequest.Task, addTaskIncludeMcpRequest.Mcp);
 
         if (!success) return BadRequest(result);
 

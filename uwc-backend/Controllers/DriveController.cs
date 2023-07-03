@@ -19,9 +19,7 @@ public class DriveController : ControllerBase
     [HttpPost("add-driving-history")]
     public IActionResult AddDrivingHistory(AddDriveRequest addDriveRequest)
     {
-        var (success, result) = _driveService.AddDrive(addDriveRequest.Date,
-            addDriveRequest.Driver,
-            addDriveRequest.Vehicle);
+        var (success, result) = _driveService.AddDrive(addDriveRequest.Date, addDriveRequest.Driver, addDriveRequest.Vehicle);
 
         if (!success) return BadRequest(result);
 

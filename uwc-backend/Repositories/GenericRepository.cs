@@ -1,7 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Models;
-using Utilities;
 
 namespace Repositories;
 
@@ -43,7 +41,7 @@ public class GenericRepository<T> where T : IndexedEntity
     }
 
     /// <summary>
-    /// Check if the table has exactly one entity that satisfies the condition.
+    ///     Check if the table has exactly one entity that satisfies the condition.
     /// </summary>
     /// <param name="condition">The condition to evaluate.</param>
     /// <param name="resultMessage">Contains the result message, indicates the status of the query.</param>
@@ -74,7 +72,7 @@ public class GenericRepository<T> where T : IndexedEntity
     }
 
     /// <summary>
-    /// Get the unique entity that satisfies the condition.
+    ///     Get the unique entity that satisfies the condition.
     /// </summary>
     /// <param name="condition">The condition to evaluate.</param>
     /// <returns>The entity if there exists exactly one that satisfies the condition, else null.</returns>

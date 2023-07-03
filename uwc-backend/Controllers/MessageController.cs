@@ -32,8 +32,7 @@ public class MessageController : ControllerBase
     [HttpPut("update-message-content")]
     public IActionResult UpdateMessageContent(UpdateMessageRequest updateMessageRequest)
     {
-        var (success, result) = _messageService.UpdateMessageContent(updateMessageRequest.Id,
-            updateMessageRequest.TextContent);
+        var (success, result) = _messageService.UpdateMessageContent(updateMessageRequest.Id, updateMessageRequest.TextContent);
 
         if (!success) return BadRequest(result);
 
@@ -55,17 +54,14 @@ public class MessageController : ControllerBase
     }
 
     [HttpGet("get-all-messages-between-2-users")]
-    public List<Message> GetAllMessagesBetween2Users(
-        GetMessagesOfTwoUsersRequest getMessagesOfTwoUsersRequest)
+    public List<Message> GetAllMessagesBetween2Users(GetMessagesOfTwoUsersRequest getMessagesOfTwoUsersRequest)
     {
-        var result = _messageService.GetAllMessagesOfTwoUsers(getMessagesOfTwoUsersRequest.Sender,
-            getMessagesOfTwoUsersRequest.Receiver);
+        var result = _messageService.GetAllMessagesOfTwoUsers(getMessagesOfTwoUsersRequest.Sender, getMessagesOfTwoUsersRequest.Receiver);
         return result;
     }
 
     [HttpGet("get-messages-2-users-contain-word")]
-    public List<Message> GetMessages2UsersContainWord(
-        GetMessagesContainWordRequest getMessagesContainWordRequest)
+    public List<Message> GetMessages2UsersContainWord(GetMessagesContainWordRequest getMessagesContainWordRequest)
     {
         var result = _messageService.GetMessagesContainWord(getMessagesContainWordRequest.Sender,
             getMessagesContainWordRequest.Receiver,

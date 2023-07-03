@@ -4,13 +4,12 @@ namespace Services.Employee;
 
 public interface IEmployeeInformationService
 {
-    public (bool success, object result) AddEmployee(string firstName, string lastName, int gender,
-        DateTime dateOfBirth, int role);
+    public (bool success, object result) AddEmployee(string firstName, string lastName, int gender, DateTime dateOfBirth, int role);
 
     public (bool success, object result) DeleteEmployee(int id);
 
-    public (bool success, object result) UpdateRoleEmployee(int employeeId, string firstname,
-        string lastname, int gender, DateTime dateOfBirth, int role);
+    public (bool success, object result) UpdateRoleEmployee(int employeeId, string firstname, string lastname, int gender,
+        DateTime dateOfBirth, int role);
 
     public List<Models.Employee> GetAllEmployee();
 
@@ -34,8 +33,7 @@ public class EmployeeInformationService : IEmployeeInformationService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddEmployee(string firstName, string lastName, int gender,
-        DateTime dateOfBirth, int role)
+    public (bool success, object result) AddEmployee(string firstName, string lastName, int gender, DateTime dateOfBirth, int role)
     {
         var employeeInformation = new Models.Employee
         {
@@ -61,8 +59,8 @@ public class EmployeeInformationService : IEmployeeInformationService
         return (true, "Delete employee successfully.");
     }
 
-    public (bool success, object result) UpdateRoleEmployee(int employeeId, string firstname,
-        string lastname, int gender, DateTime dateOfBirth, int role)
+    public (bool success, object result) UpdateRoleEmployee(int employeeId, string firstname, string lastname, int gender,
+        DateTime dateOfBirth, int role)
     {
         if (role < 0 || role > 2) return (false, "Invalid role");
 
@@ -106,8 +104,7 @@ public class EmployeeInformationService : IEmployeeInformationService
 
     public List<Models.Employee> GetFreeEmployees()
     {
-        var taskList = _unitOfWork.Tasks.Find(task =>
-            task.Date >= DateTime.Now && task.Date <= DateTime.Now.AddHours(24));
+        var taskList = _unitOfWork.Tasks.Find(task => task.Date >= DateTime.Now && task.Date <= DateTime.Now.AddHours(24));
         var employeeList = _unitOfWork.Employees.Find(employee =>
             employee.Role != 2 && taskList.All(task => task.Worker.Id != employee.Id));
         return employeeList.ToList();
@@ -126,8 +123,7 @@ public class EmployeeInformationService : IEmployeeInformationService
     {
         var employeeList = _unitOfWork.Employees.GetAll()
             .Where(employee => employee.Role != 0)
-            .OrderByDescending(employee =>
-                _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
+            .OrderByDescending(employee => _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
 
         return employeeList.ToList();
     }

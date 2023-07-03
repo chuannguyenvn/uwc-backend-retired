@@ -29,8 +29,7 @@ public class DriveService : IDriveService
         if (!_unitOfWork.Vehicles.DoesIdExist(vehicleId))
             return (false, "Vehicle Id does not exist.");
 
-        var driverList =
-            _unitOfWork.Employees.Find(driver => driver.Id == driverId && driver.Role == 1);
+        var driverList = _unitOfWork.Employees.Find(driver => driver.Id == driverId && driver.Role == 1);
         if (driverList.Count() == 0) return (false, "Wrong role.");
 
         var driver = driverList.First();
@@ -73,8 +72,6 @@ public class DriveService : IDriveService
     {
         var driverFullVehicleList = _unitOfWork.Drives.Find(drive =>
             drive.Vehicle.CurrentLoad - 100.0 > 0 && drive.Date.Day == DateTime.Today.Day);
-        return driverFullVehicleList.ToList()
-            .OrderByDescending(d => d.Vehicle.CurrentLoad)
-            .ToList();
+        return driverFullVehicleList.ToList().OrderByDescending(d => d.Vehicle.CurrentLoad).ToList();
     }
 }

@@ -5,13 +5,12 @@ namespace uwc_backend.Services.Vehicle;
 
 public interface IDrivingLicenseService
 {
-    public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace,
-        int ownerId, string type);
+    public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type);
 
     public List<DrivingLicense> GetDrivingLicenseDriver(int id);
 
-    public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate,
-        string issuePlace, int ownerId, string type);
+    public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace, int ownerId,
+        string type);
 
     public (bool success, object result) DeleteDrivingLicense(int id);
 
@@ -27,8 +26,7 @@ public class DrivingLicenseService : IDrivingLicenseService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace,
-        int ownerId, string type)
+    public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type)
     {
         if (!_unitOfWork.Employees.DoesIdExist(ownerId))
             return (false, "Employee Id does not exist.");
@@ -37,10 +35,7 @@ public class DrivingLicenseService : IDrivingLicenseService
 
         if (owner.Role != 1) return (false, "Employee Id is not a driver");
 
-        var drivingLicenseInformation = new DrivingLicense
-        {
-            IssueDate = issueDate, IssuePlace = issuePlace, Owner = owner, Type = type
-        };
+        var drivingLicenseInformation = new DrivingLicense {IssueDate = issueDate, IssuePlace = issuePlace, Owner = owner, Type = type};
 
         _unitOfWork.DrivingLicenses.Add(drivingLicenseInformation);
         _unitOfWork.Complete();
@@ -56,8 +51,8 @@ public class DrivingLicenseService : IDrivingLicenseService
         return drivingLicenseList.ToList();
     }
 
-    public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate,
-        string issuePlace, int ownerId, string type)
+    public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace, int ownerId,
+        string type)
     {
         if (!_unitOfWork.DrivingLicenses.DoesIdExist(id))
             return (false, "Driving license Id does not exist.");
@@ -89,8 +84,7 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public (bool success, object result) DeleteOutdatedDrivingLicense()
     {
-        var outdatedDrivingLicenseList =
-            _unitOfWork.DrivingLicenses.Find(dl => dl.IssueDate <= DateTime.Now.AddYears(-10));
+        var outdatedDrivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.IssueDate <= DateTime.Now.AddYears(-10));
 
         _unitOfWork.DrivingLicenses.RemoveRange(outdatedDrivingLicenseList);
         _unitOfWork.Complete();

@@ -5,39 +5,34 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Repositories;
-using Repositories.Implementations;
 
 namespace Services.Authentication;
 
 public interface IAuthenticationService
 {
-    public (bool success, string content) Register(string username, string password, int employeeId,
-        string settings);
+    public (bool success, string content) Register(string username, string password, int employeeId, string settings);
 
     public (bool success, string token) Login(string username, string password);
 
-    public (bool success, object result) UpdatePassword(string username, string oldPassword,
-        string newPassword);
+    public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword);
 
     public (bool success, object result) DeleteAccount(string username, string password);
 
-    public (bool success, object result) UpdateSettings(string username, string password,
-        string settings);
+    public (bool success, object result) UpdateSettings(string username, string password, string settings);
 }
 
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly UnitOfWork _unitOfWork;
     private readonly Settings _settings;
-    
+    private readonly UnitOfWork _unitOfWork;
+
     public AuthenticationService(Settings settings, UnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _settings = settings;
     }
 
-    public (bool success, string content) Register(string username, string password, int employeeId,
-        string settings)
+    public (bool success, string content) Register(string username, string password, int employeeId, string settings)
     {
         if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
@@ -49,10 +44,7 @@ public class AuthenticationService : IAuthenticationService
         if (accountList.Any()) return (false, "Employee already has an account.");
 
         var employee = _unitOfWork.Employees.Find(employee => employee.Id == employeeId).First();
-        var accountInformation = new Account
-        {
-            Username = username, Password = password, Employee = employee, Settings = settings
-        };
+        var accountInformation = new Account {Username = username, Password = password, Employee = employee, Settings = settings};
 
         _unitOfWork.Accounts.Add(accountInformation);
         _unitOfWork.Complete();
@@ -62,8 +54,7 @@ public class AuthenticationService : IAuthenticationService
 
     public (bool success, string token) Login(string username, string password)
     {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
-                out string error))
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
             return (false, error);
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
@@ -71,11 +62,9 @@ public class AuthenticationService : IAuthenticationService
         return (true, GenerateJwtToken(AssembleClaimsIdentity(account)));
     }
 
-    public (bool success, object result) UpdatePassword(string username, string oldPassword,
-        string newPassword)
+    public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword)
     {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
-                out string error))
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
             return (false, error);
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
@@ -88,8 +77,7 @@ public class AuthenticationService : IAuthenticationService
 
     public (bool success, object result) DeleteAccount(string username, string password)
     {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
-                out string error))
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
             return (false, error);
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
@@ -100,11 +88,9 @@ public class AuthenticationService : IAuthenticationService
         return (true, "Account deleted successfully");
     }
 
-    public (bool success, object result) UpdateSettings(string username, string password,
-        string settings)
+    public (bool success, object result) UpdateSettings(string username, string password, string settings)
     {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username,
-                out string error))
+        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
             return (false, error);
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
@@ -114,7 +100,7 @@ public class AuthenticationService : IAuthenticationService
         _unitOfWork.Complete();
         return (true, "Settings updated successfully.");
     }
-    
+
     private ClaimsIdentity AssembleClaimsIdentity(Account account)
     {
         var subject = new ClaimsIdentity(new[] {new Claim("id", account.Employee.Id.ToString())});
@@ -125,12 +111,11 @@ public class AuthenticationService : IAuthenticationService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_settings.BearerKey);
-        var tokenDescriptor = new SecurityTokenDescriptor()
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = subject,
             Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);

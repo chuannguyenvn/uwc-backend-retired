@@ -36,11 +36,9 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPut("update-vehicle-info")]
-    public IActionResult UpdateVehicleInformation(
-        UpdateVehicleInformationRequest updateVehicleInformationRequest)
+    public IActionResult UpdateVehicleInformation(UpdateVehicleInformationRequest updateVehicleInformationRequest)
     {
-        var (success, result) = _vehicleService.UpdateVehicleInformation(
-            updateVehicleInformationRequest.Id,
+        var (success, result) = _vehicleService.UpdateVehicleInformation(updateVehicleInformationRequest.Id,
             updateVehicleInformationRequest.Capacity,
             updateVehicleInformationRequest.CurrentLoad,
             updateVehicleInformationRequest.AverageSpeed);

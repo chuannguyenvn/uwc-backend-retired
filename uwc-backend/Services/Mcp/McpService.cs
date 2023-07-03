@@ -4,8 +4,7 @@ namespace Services.Mcp;
 
 public interface IMcpService
 {
-    public (bool success, object result) AddMcp(double capacity, double currentLoad,
-        double latitude, double longitude);
+    public (bool success, object result) AddMcp(double capacity, double currentLoad, double latitude, double longitude);
 
     public (bool success, object result) EmptyMcp(int mcpId);
 
@@ -37,16 +36,9 @@ public class McpService : IMcpService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddMcp(double capacity, double currentLoad,
-        double latitude, double longitude)
+    public (bool success, object result) AddMcp(double capacity, double currentLoad, double latitude, double longitude)
     {
-        var mcpInformation = new Models.Mcp
-        {
-            Capacity = capacity,
-            CurrentLoad = currentLoad,
-            Latitude = latitude,
-            Longitude = longitude
-        };
+        var mcpInformation = new Models.Mcp {Capacity = capacity, CurrentLoad = currentLoad, Latitude = latitude, Longitude = longitude};
 
         _unitOfWork.Mcps.Add(mcpInformation);
         _unitOfWork.Complete();
@@ -75,8 +67,7 @@ public class McpService : IMcpService
     public List<Models.Mcp> GetMcpsInRange(double latitude, double longitude, double radius)
     {
         var mcpList = _unitOfWork.Mcps.Find(mcp =>
-            Math.Pow(mcp.Longitude - longitude, 2) + Math.Pow(mcp.Latitude - latitude, 2) <=
-            Math.Pow(radius, 2));
+            Math.Pow(mcp.Longitude - longitude, 2) + Math.Pow(mcp.Latitude - latitude, 2) <= Math.Pow(radius, 2));
         return mcpList.ToList();
     }
 
@@ -121,16 +112,12 @@ public class McpService : IMcpService
     public List<Models.Mcp> SortByDistanceDescendingly(double latitude, double longitude)
     {
         var mcpList = _unitOfWork.Mcps.GetAll();
-        return mcpList.OrderByDescending(mcp =>
-                Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2))
-            .ToList();
+        return mcpList.OrderByDescending(mcp => Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2)).ToList();
     }
 
     public List<Models.Mcp> SortByDistanceAscendingly(double latitude, double longitude)
     {
         var mcpList = _unitOfWork.Mcps.GetAll();
-        return mcpList.OrderBy(mcp =>
-                Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2))
-            .ToList();
+        return mcpList.OrderBy(mcp => Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2)).ToList();
     }
 }

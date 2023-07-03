@@ -19,8 +19,7 @@ public class EmployeeInformationController : ControllerBase
     [HttpPost("add-employee")]
     public IActionResult AddEmployee(AddEmployeeRequest addEmployeeRequest)
     {
-        var (success, result) = _employeeInformationService.AddEmployee(
-            addEmployeeRequest.FirstName,
+        var (success, result) = _employeeInformationService.AddEmployee(addEmployeeRequest.FirstName,
             addEmployeeRequest.LastName,
             addEmployeeRequest.Gender,
             addEmployeeRequest.DateOfBirth,
@@ -44,8 +43,7 @@ public class EmployeeInformationController : ControllerBase
     [HttpPut("update-employee-id")]
     public IActionResult UpdateRoleEmployeeId(UpdateEmployeeRequest updateEmployeeRequest)
     {
-        var (success, result) = _employeeInformationService.UpdateRoleEmployee(
-            updateEmployeeRequest.Employee,
+        var (success, result) = _employeeInformationService.UpdateRoleEmployee(updateEmployeeRequest.Employee,
             updateEmployeeRequest.FirstName,
             updateEmployeeRequest.LastName,
             updateEmployeeRequest.Gender,

@@ -19,8 +19,7 @@ public class DrivingLicenseController : ControllerBase
     [HttpPost("add-driving-license")]
     public IActionResult AddDrivingLicense(AddDrivingLicenseRequest addDrivingLicenseRequest)
     {
-        var (success, result) = _drivingLicenseService.AddDrivingLicense(
-            addDrivingLicenseRequest.IssueDate,
+        var (success, result) = _drivingLicenseService.AddDrivingLicense(addDrivingLicenseRequest.IssueDate,
             addDrivingLicenseRequest.IssuePlace,
             addDrivingLicenseRequest.Owner,
             addDrivingLicenseRequest.Type);
@@ -38,11 +37,9 @@ public class DrivingLicenseController : ControllerBase
     }
 
     [HttpPut("update-driving-license")]
-    public IActionResult UpdateDrivingLicense(
-        UpdateDrivingLicenseRequest updateDrivingLicenseRequest)
+    public IActionResult UpdateDrivingLicense(UpdateDrivingLicenseRequest updateDrivingLicenseRequest)
     {
-        var (success, result) = _drivingLicenseService.UpdateDrivingLicenseInformation(
-            updateDrivingLicenseRequest.Id,
+        var (success, result) = _drivingLicenseService.UpdateDrivingLicenseInformation(updateDrivingLicenseRequest.Id,
             updateDrivingLicenseRequest.IssueDate,
             updateDrivingLicenseRequest.IssuePlace,
             updateDrivingLicenseRequest.Owner,

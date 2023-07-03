@@ -31,8 +31,7 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login(LoginRequest loginRequest)
     {
-        var (success, result) = _authenticationService.Login(loginRequest.Username,
-            loginRequest.Password);
+        var (success, result) = _authenticationService.Login(loginRequest.Username, loginRequest.Password);
 
         if (!success) return BadRequest(result);
 
@@ -42,8 +41,7 @@ public class AccountController : ControllerBase
     [HttpPut("update-password")]
     public IActionResult UpdatePassword(UpdatePasswordRequest updatePasswordRequest)
     {
-        var (success, result) = _authenticationService.UpdatePassword(
-            updatePasswordRequest.Username,
+        var (success, result) = _authenticationService.UpdatePassword(updatePasswordRequest.Username,
             updatePasswordRequest.OldPassword,
             updatePasswordRequest.NewPassword);
 
@@ -55,8 +53,7 @@ public class AccountController : ControllerBase
     [HttpDelete("delete-account")]
     public IActionResult DeleteAccount(RegisterRequest registerRequest)
     {
-        var (success, result) = _authenticationService.DeleteAccount(registerRequest.Username,
-            registerRequest.Password);
+        var (success, result) = _authenticationService.DeleteAccount(registerRequest.Username, registerRequest.Password);
 
         if (!success) return BadRequest(result);
 
@@ -66,8 +63,7 @@ public class AccountController : ControllerBase
     [HttpPut("update-settings")]
     public IActionResult UpdateSettings(UpdateSettingsRequest updateSettingsRequest)
     {
-        var (success, result) = _authenticationService.UpdateSettings(
-            updateSettingsRequest.Username,
+        var (success, result) = _authenticationService.UpdateSettings(updateSettingsRequest.Username,
             updateSettingsRequest.Password,
             updateSettingsRequest.Settings);
 
