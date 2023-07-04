@@ -1,8 +1,6 @@
 using Communications.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Services.AccountManagement;
 using Services.Authentication;
-using Utilities;
 
 namespace Controllers;
 
@@ -10,13 +8,11 @@ namespace Controllers;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly IAccountManagementService _accountManagementService;
     private readonly IAuthenticationService _authenticationService;
 
-    public AccountController(IAuthenticationService authenticationService, IAccountManagementService accountManagementService)
+    public AccountController(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
-        _accountManagementService = accountManagementService;
     }
 
     [HttpPost("register")]
@@ -36,27 +32,6 @@ public class AccountController : ControllerBase
     public IActionResult Login(LoginRequest loginRequest)
     {
         var (success, result) = _authenticationService.Login(loginRequest.Username, loginRequest.Password);
-
-        if (!success) return BadRequest(result);
-
-        return Ok(result);
-    }
-
-    [HttpPut("update-password")]
-    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
-    {
-        var (success, result) =
-            await _accountManagementService.UpdatePassword(User.GetLoggedInUserId(), request.OldPassword, request.NewPassword);
-
-        if (!success) return BadRequest(result);
-
-        return Ok(result);
-    }
-
-    [HttpPut("update-settings")]
-    public async Task<IActionResult> UpdateSettings(UpdateSettingsRequest request)
-    {
-        var (success, result) = await _accountManagementService.UpdateSettings(User.GetLoggedInUserId(), request.Settings);
 
         if (!success) return BadRequest(result);
 
