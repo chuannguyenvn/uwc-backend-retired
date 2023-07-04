@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Repositories;
+using Services.AccountManagement;
+using Services.Administration;
 using Services.Authentication;
 using Services.Employee;
 using Services.Mcp;
@@ -34,6 +36,8 @@ builder.Services.AddTransient<UnitOfWork>();
 
 #region Services
 
+builder.Services.AddScoped<IAccountManagementService, AccountManagementService>();
+builder.Services.AddScoped<IAdministrationService, AdministrationService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmployeeInformationService, EmployeeInformationService>();
 builder.Services.AddScoped<IMcpService, McpService>();

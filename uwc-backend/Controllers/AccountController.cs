@@ -1,6 +1,8 @@
 using Communications.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Services.AccountManagement;
 using Services.Authentication;
+using Utilities;
 
 namespace Controllers;
 
@@ -9,10 +11,12 @@ namespace Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
+    private readonly IAccountManagementService _accountManagementService;
 
-    public AccountController(IAuthenticationService authenticationService)
+    public AccountController(IAuthenticationService authenticationService, IAccountManagementService accountManagementService)
     {
         _authenticationService = authenticationService;
+        _accountManagementService = accountManagementService;
     }
 
     [HttpPost("register")]
@@ -39,21 +43,10 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("update-password")]
-    public IActionResult UpdatePassword(UpdatePasswordRequest updatePasswordRequest)
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
     {
-        var (success, result) = _authenticationService.UpdatePassword(updatePasswordRequest.Username,
-            updatePasswordRequest.OldPassword,
-            updatePasswordRequest.NewPassword);
-
-        if (!success) return BadRequest(result);
-
-        return Ok(result);
-    }
-
-    [HttpDelete("delete-account/{mcpId}")]
-    public IActionResult DeleteAccount([FromRoute] int mcpId)
-    {
-        var (success, result) = _authenticationService.DeleteAccount(mcpId);
+        var (success, result) =
+            await _accountManagementService.UpdatePassword(User.GetLoggedInUserId(), request.OldPassword, request.NewPassword);
 
         if (!success) return BadRequest(result);
 
@@ -61,11 +54,9 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("update-settings")]
-    public IActionResult UpdateSettings(UpdateSettingsRequest updateSettingsRequest)
+    public async Task<IActionResult> UpdateSettings(UpdateSettingsRequest request)
     {
-        var (success, result) = _authenticationService.UpdateSettings(updateSettingsRequest.Username,
-            updateSettingsRequest.Password,
-            updateSettingsRequest.Settings);
+        var (success, result) = await _accountManagementService.UpdateSettings(User.GetLoggedInUserId(), request.Settings);
 
         if (!success) return BadRequest(result);
 

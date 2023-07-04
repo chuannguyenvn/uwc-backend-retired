@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -49,41 +48,6 @@ public class AuthenticationService : IAuthenticationService
         return (true, GenerateJwtToken(AssembleClaimsIdentity(account)));
     }
 
-    public (bool success, object result) UpdatePassword(string username, string oldPassword, string newPassword)
-    {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
-            return (false, error);
-
-        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
-        if (account.Password != oldPassword) return (false, "Incorrect old password.");
-
-        account.Password = newPassword;
-        _unitOfWork.Complete();
-        return (true, "Update password successfully.");
-    }
-
-    public (bool success, object result) DeleteAccount(int id)
-    {
-        var account = _unitOfWork.Accounts.GetById(id);
-        _unitOfWork.Accounts.Remove(account);
-        _unitOfWork.Complete();
-
-        return (true, "Account deleted successfully");
-    }
-
-    public (bool success, object result) UpdateSettings(string username, string password, string settings)
-    {
-        if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
-            return (false, error);
-
-        var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
-        if (account.Password != password) return (false, "Incorrect password.");
-
-        account.Settings = settings;
-        _unitOfWork.Complete();
-        return (true, "Settings updated successfully.");
-    }
-
     private ClaimsIdentity AssembleClaimsIdentity(Account account)
     {
         var subject = new ClaimsIdentity(new[]
@@ -106,32 +70,5 @@ public class AuthenticationService : IAuthenticationService
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    }
-}
-
-public static class AuthenticationHelpers
-{
-    public static void ProvideSaltAndHash(this Account account)
-    {
-        var salt = GenerateSalt();
-        account.Salt = Convert.ToBase64String(salt);
-        account.Password = ComputeHash(account.Password, account.Salt);
-    }
-
-    private static byte[] GenerateSalt()
-    {
-        var rng = RandomNumberGenerator.Create();
-        var salt = new byte[24];
-        rng.GetBytes(salt);
-        return salt;
-    }
-
-    public static string ComputeHash(string password, string saltString)
-    {
-        var salt = Convert.FromBase64String(saltString);
-
-        using var hashGenerator = new Rfc2898DeriveBytes(password, salt, 10101);
-        var bytes = hashGenerator.GetBytes(24);
-        return Convert.ToBase64String(bytes);
     }
 }
