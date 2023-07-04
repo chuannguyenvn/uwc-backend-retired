@@ -1,7 +1,7 @@
 using Models;
 using Repositories;
 
-namespace uwc_backend.Services.Vehicle;
+namespace Services.Vehicle;
 
 public interface IDriveService
 {
@@ -60,7 +60,6 @@ public class DriveService : IDriveService
         return (true, "Driving history deleted successfully");
     }
 
-    // Null Exception Error or Empty List []: => Needed to be fixed
     public List<Drive> GetDriverFullVehicleSortByName()
     {
         var driverFullVehicleList = _unitOfWork.Drives.Find(drive =>

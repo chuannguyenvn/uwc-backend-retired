@@ -10,8 +10,8 @@ namespace Controllers;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly IAuthenticationService _authenticationService;
     private readonly IAccountManagementService _accountManagementService;
+    private readonly IAuthenticationService _authenticationService;
 
     public AccountController(IAuthenticationService authenticationService, IAccountManagementService accountManagementService)
     {

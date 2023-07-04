@@ -14,7 +14,7 @@ using Services.Report;
 using Services.Routing;
 using Services.Task;
 using Services.UI;
-using uwc_backend.Services.Vehicle;
+using Services.Vehicle;
 
 var builder = WebApplication.CreateBuilder(args);
 

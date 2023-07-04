@@ -15,7 +15,7 @@ public class AdministrationService : IAdministrationService
     public async Task<(bool success, string message)> DeleteAccount(int accountId)
     {
         if (!_unitOfWork.Accounts.DoesIdExist(accountId)) return (false, Prompts.ACCOUNT_NOT_EXIST);
-        
+
         var account = _unitOfWork.Accounts.GetById(accountId);
 
         _unitOfWork.Accounts.Remove(account);

@@ -1,7 +1,7 @@
 using Communications.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using uwc_backend.Services.Vehicle;
+using Services.Vehicle;
 
 namespace Controllers;
 

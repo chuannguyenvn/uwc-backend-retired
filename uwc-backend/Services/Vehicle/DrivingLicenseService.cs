@@ -1,7 +1,7 @@
 using Models;
 using Repositories;
 
-namespace uwc_backend.Services.Vehicle;
+namespace Services.Vehicle;
 
 public interface IDrivingLicenseService
 {

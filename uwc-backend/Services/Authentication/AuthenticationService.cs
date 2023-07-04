@@ -52,7 +52,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var subject = new ClaimsIdentity(new[]
         {
-            new Claim("id", account.Employee.Id.ToString()), new Claim("role", account.Employee.Role.ToString()),
+            new Claim("id", account.Employee.Id.ToString()), new Claim("role", account.Employee.Role.ToString())
         });
         return subject;
     }
