@@ -3,13 +3,6 @@ using Route = Models.Route;
 
 namespace Services.Routing;
 
-public interface IRouteService
-{
-    public (bool success, object result) AddRoute(string name, double totalLength, string routeDetails);
-
-    public (bool success, object result) UpdateRoute(int id, string name, double totalLength, string routeDetails);
-}
-
 public class RouteService : IRouteService
 {
     private readonly UnitOfWork _unitOfWork;
