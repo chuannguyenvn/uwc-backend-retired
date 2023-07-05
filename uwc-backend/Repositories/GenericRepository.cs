@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Models;
+using Utilities;
 
 namespace Repositories;
 
@@ -48,7 +49,7 @@ public class GenericRepository<T> where T : IndexedEntity
     /// <returns>True if there exists a single entity that satisfies the condition, else false.</returns>
     public bool ContainsUnique(Expression<Func<T, bool>> condition, out string resultMessage)
     {
-        resultMessage = "Success.";
+        resultMessage = Prompts.SUCCESS;
 
         if (!_context.Set<T>().Any())
         {

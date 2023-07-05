@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Repositories;
+using Utilities;
 
 namespace Services.Authentication;
 
@@ -18,13 +19,13 @@ public class AuthenticationService : IAuthenticationService
         _settings = settings;
     }
 
-    public (bool success, string content) Register(string username, string password, int employeeId, string settings)
+    public async Task<(bool success, string message)> Register(string username, string password, int employeeId, string settings)
     {
         if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
 
         if (!_unitOfWork.Employees.DoesIdExist(employeeId))
-            return (false, "Employee does not exist.");
+            return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
         var accountList = _unitOfWork.Accounts.Find(account => account.Employee.Id == employeeId);
         if (accountList.Any()) return (false, "Employee already has an account.");
@@ -33,19 +34,20 @@ public class AuthenticationService : IAuthenticationService
         var accountInformation = new Account {Username = username, Password = password, Employee = employee, Settings = settings};
 
         _unitOfWork.Accounts.Add(accountInformation);
-        _unitOfWork.Complete();
+        await _unitOfWork.CompleteAsync();
 
-        return (true, "Registered successfully.");
+        return (true, Prompts.SUCCESS);
     }
 
-    public (bool success, string token) Login(string username, string password)
+    public async Task<(bool success, string message, string token)> Login(string username, string password)
     {
         if (!_unitOfWork.Accounts.ContainsUnique(account => account.Username == username, out var error))
-            return (false, error);
+            return (false, error, "");
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
-        if (account.Password != AuthenticationHelpers.ComputeHash(password, account.Salt)) return (false, "Password is incorrect.");
-        return (true, GenerateJwtToken(AssembleClaimsIdentity(account)));
+        if (account.Password != AuthenticationHelpers.ComputeHash(password, account.Salt)) return (false, Prompts.WRONG_PASSWORD, "");
+
+        return (true, Prompts.SUCCESS, GenerateJwtToken(AssembleClaimsIdentity(account)));
     }
 
     private ClaimsIdentity AssembleClaimsIdentity(Account account)
@@ -54,6 +56,7 @@ public class AuthenticationService : IAuthenticationService
         {
             new Claim("id", account.Employee.Id.ToString()), new Claim("role", account.Employee.Role.ToString())
         });
+
         return subject;
     }
 

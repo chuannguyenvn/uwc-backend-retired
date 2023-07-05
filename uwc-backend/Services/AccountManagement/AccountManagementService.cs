@@ -27,7 +27,7 @@ public class AccountManagementService : IAccountManagementService
             return (false, Prompts.SETTINGS_UPDATE_FAIL);
         }
 
-        return (true, Prompts.PASSWORD_UPDATE_SUCCESS);
+        return (true, Prompts.SUCCESS);
     }
 
     public async Task<(bool success, string message)> UpdateSettings(int accountId, string newSettings)
@@ -44,6 +44,6 @@ public class AccountManagementService : IAccountManagementService
             return (false, Prompts.SETTINGS_UPDATE_FAIL);
         }
 
-        return (true, Prompts.SETTINGS_UPDATE_SUCCESS);
+        return (true, Prompts.SUCCESS);
     }
 }

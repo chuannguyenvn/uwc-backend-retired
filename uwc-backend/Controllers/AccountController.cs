@@ -16,25 +16,25 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest registerRequest)
+    public async Task<IActionResult> Register(RegisterRequest registerRequest)
     {
-        var (success, result) = _authenticationService.Register(registerRequest.Username,
+        var (success, message) = await _authenticationService.Register(registerRequest.Username,
             registerRequest.Password,
             registerRequest.Employee,
             registerRequest.Settings);
 
-        if (!success) return BadRequest(result);
+        if (!success) return BadRequest(message);
 
-        return Ok(result);
+        return Ok(message);
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest loginRequest)
+    public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
-        var (success, result) = _authenticationService.Login(loginRequest.Username, loginRequest.Password);
+        var (success, message, token) = await _authenticationService.Login(loginRequest.Username, loginRequest.Password);
 
-        if (!success) return BadRequest(result);
+        if (!success) return BadRequest(message);
 
-        return Ok(result);
+        return Ok(token);
     }
 }

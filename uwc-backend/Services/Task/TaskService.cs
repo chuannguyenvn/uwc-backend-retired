@@ -7,12 +7,20 @@ public interface ITaskService
     public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, int route);
 
     public List<Models.Task> GetTasksOfEmployee(int id);
+
     public (bool success, object result) DeleteTasksOfEmployee(int id);
+
     public (bool success, object result) DeleteTask(int id);
 
     public (bool success, object result) UpdateTask(int id, DateTime date, int supervisorId, int workerId, int routeId);
 
     public List<Models.Task> GetTasksInTimeRange(DateTime startTime, DateTime endTime);
+
+    public List<Models.Employee> GetFreeEmployees();
+
+    public List<Models.Employee> SortByTasksDescendingly();
+
+    public List<Models.Employee> SortByTasksAscendingly();
 }
 
 public class TaskService : ITaskService
@@ -109,5 +117,32 @@ public class TaskService : ITaskService
     {
         var taskList = _unitOfWork.Tasks.Find(task => task.Date >= startTime && task.Date <= endTime);
         return taskList.ToList();
+    }
+
+    public List<Models.Employee> GetFreeEmployees()
+    {
+        var taskList = _unitOfWork.Tasks.Find(task => task.Date >= DateTime.Now && task.Date <= DateTime.Now.AddHours(24));
+        var employeeList = _unitOfWork.Employees.Find(employee =>
+            employee.Role != 2 && taskList.All(task => task.Worker.Id != employee.Id));
+
+        return employeeList.ToList();
+    }
+
+    public List<Models.Employee> SortByTasksDescendingly()
+    {
+        var employeeList = _unitOfWork.Employees.GetAll()
+            .Where(employee => employee.Role != 0)
+            .OrderBy(employee => _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
+
+        return employeeList.ToList();
+    }
+
+    public List<Models.Employee> SortByTasksAscendingly()
+    {
+        var employeeList = _unitOfWork.Employees.GetAll()
+            .Where(employee => employee.Role != 0)
+            .OrderByDescending(employee => _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
+
+        return employeeList.ToList();
     }
 }
