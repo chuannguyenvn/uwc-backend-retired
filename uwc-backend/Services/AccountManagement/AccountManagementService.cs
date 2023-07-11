@@ -27,7 +27,7 @@ public class AccountManagementService : IAccountManagementService
             return (false, Prompts.SETTINGS_UPDATE_FAIL);
         }
 
-        return (true, Prompts.SUCCESS);
+        return (true, RequestStatus.SUCCESS);
     }
 
     public async Task<(bool success, string message)> UpdateSettings(int accountId, string newSettings)

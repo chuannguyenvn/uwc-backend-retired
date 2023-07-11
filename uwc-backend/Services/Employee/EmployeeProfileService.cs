@@ -12,7 +12,8 @@ public class EmployeeProfileService : IEmployeeProfileService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddEmployeeProfile(string firstName, string lastName, int gender, DateTime dateOfBirth, int role)
+    public async Task<(bool success, string message)> AddEmployeeProfile(string firstName, string lastName, int gender,
+        DateTime dateOfBirth, int role)
     {
         var employeeInformation = new Models.Employee
         {
@@ -24,29 +25,29 @@ public class EmployeeProfileService : IEmployeeProfileService
         };
 
         _unitOfWork.Employees.Add(employeeInformation);
-        _unitOfWork.Complete();
+        await _unitOfWork.CompleteAsync();
 
         return (true, Prompts.SUCCESS);
     }
 
-    public (bool success, object result) DeleteEmployeeProfile(int employeeId)
+    public async Task<(bool success, string message)> DeleteEmployeeProfile(int employeeId)
     {
         if (!_unitOfWork.Employees.DoesIdExist(employeeId)) return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
         _unitOfWork.Employees.RemoveById(employeeId);
-        _unitOfWork.Complete();
+        await _unitOfWork.CompleteAsync();
 
         return (true, Prompts.SUCCESS);
     }
 
-    public (bool success, object result) UpdateEmployeeProfile(int employeeId, string firstname, string lastname, int gender,
+    public async Task<(bool success, string message)> UpdateEmployeeProfile(int employeeId, string firstname, string lastname, int gender,
         DateTime dateOfBirth, int role)
     {
         if (!_unitOfWork.Employees.DoesIdExist(employeeId)) return (false, Prompts.EMPLOYEE_NOT_EXIST);
-        
+
         if (role is < 0 or > 2) return (false, Prompts.INVALID_ROLE);
         if (gender != 0 && gender != 1) return (false, Prompts.INVALID_GENDER);
-        
+
         var employeeList = _unitOfWork.Employees.Find(employee => employee.Id == employeeId);
         var employee = employeeList.First();
 
@@ -56,29 +57,29 @@ public class EmployeeProfileService : IEmployeeProfileService
         employee.DateOfBirth = dateOfBirth;
         employee.Role = role;
 
-        _unitOfWork.Complete();
-        
+        await _unitOfWork.CompleteAsync();
+
         return (true, Prompts.SUCCESS);
     }
 
-    public List<Models.Employee> GetAllEmployeeProfiles()
+    public async Task<(bool success, string message, List<Models.Employee> result)> GetAllEmployeeProfiles()
     {
-        return  _unitOfWork.Employees.GetAll().ToList();
+        return (true, Prompts.SUCCESS, _unitOfWork.Employees.GetAll().ToList());
     }
 
-    public (bool success, object result) GetEmployeeById(int id)
+    public async Task<(bool success, string message, Models.Employee result)> GetEmployeeById(int id)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(id)) return (false, Prompts.EMPLOYEE_NOT_EXIST);
+        if (!_unitOfWork.Employees.DoesIdExist(id)) return (false, Prompts.EMPLOYEE_NOT_EXIST, null);
 
         var employee = _unitOfWork.Employees.GetById(id);
 
-        return (true, employee);
+        return (true, Prompts.SUCCESS, employee);
     }
 
-    public List<Models.Employee> GetAllEmployeesWithRole(int role)
+    public async Task<(bool success, string message, List<Models.Employee> result)> GetAllEmployeesWithRole(int role)
     {
         var employeeList = _unitOfWork.Employees.Find(employee => employee.Role == role);
 
-        return employeeList.ToList();
+        return (true, Prompts.SUCCESS, employeeList.ToList());
     }
 }

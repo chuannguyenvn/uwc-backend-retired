@@ -20,9 +20,9 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpPost("add-employee")]
-    public IActionResult AddEmployee(AddEmployeeRequest addEmployeeRequest)
+    public async Task<IActionResult> AddEmployee(AddEmployeeRequest addEmployeeRequest)
     {
-        var (success, result) = _employeeProfileService.AddEmployeeProfile(addEmployeeRequest.FirstName,
+        var (success, result) = await _employeeProfileService.AddEmployeeProfile(addEmployeeRequest.FirstName,
             addEmployeeRequest.LastName,
             addEmployeeRequest.Gender,
             addEmployeeRequest.DateOfBirth,
@@ -34,9 +34,9 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpDelete("delete-employee-id/{employeeId}")]
-    public IActionResult DeleteEmployeeId([FromRoute] int employeeId)
+    public async Task<IActionResult> DeleteEmployeeId([FromRoute] int employeeId)
     {
-        var (success, result) = _employeeProfileService.DeleteEmployeeProfile(employeeId);
+        var (success, result) = await _employeeProfileService.DeleteEmployeeProfile(employeeId);
 
         if (!success) return BadRequest(result);
 
@@ -44,9 +44,9 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpPut("update-employee-id")]
-    public IActionResult UpdateRoleEmployeeId(UpdateEmployeeRequest updateEmployeeRequest)
+    public async Task<IActionResult> UpdateRoleEmployeeId(UpdateEmployeeRequest updateEmployeeRequest)
     {
-        var (success, result) = _employeeProfileService.UpdateEmployeeProfile(updateEmployeeRequest.Employee,
+        var (success, result) = await _employeeProfileService.UpdateEmployeeProfile(updateEmployeeRequest.Employee,
             updateEmployeeRequest.FirstName,
             updateEmployeeRequest.LastName,
             updateEmployeeRequest.Gender,
@@ -59,16 +59,16 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpGet("get-all-employee")]
-    public List<Employee> GetAllEmployee()
+    public async Task<IActionResult> GetAllEmployee()
     {
         var result = _employeeProfileService.GetAllEmployeeProfiles();
-        return result;
+        return Ok(result);
     }
 
     [HttpGet("get-employee-id/{employeeId}")]
-    public IActionResult GetEmployeeById([FromRoute] int employeeId)
+    public async Task<IActionResult> GetEmployeeById([FromRoute] int employeeId)
     {
-        var (success, result) = _employeeProfileService.GetEmployeeById(employeeId);
+        var (success, message, result) = await _employeeProfileService.GetEmployeeById(employeeId);
 
         if (!success) return BadRequest(result);
 
@@ -76,10 +76,10 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpGet("get-employee-by-role/{role}")]
-    public List<Employee> GetEmployeeByRole([FromRoute] int role)
+    public async Task<IActionResult> GetEmployeeByRole([FromRoute] int role)
     {
-        var result = _employeeProfileService.GetAllEmployeesWithRole(role);
-        return result;
+        var result = await _employeeProfileService.GetAllEmployeesWithRole(role);
+        return Ok(result.result);
     }
 
     [HttpGet("get-free-employees")]
