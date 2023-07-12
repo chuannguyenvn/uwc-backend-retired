@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
 
-namespace Communications.Vehicle;
-
-public class UpdateVehicleInformationRequest
+namespace Communications.Vehicle
 {
-    [JsonProperty("Id")] public int Id { get; set; }
-    [JsonProperty("Capacity")] public double Capacity { get; set; }
-    [JsonProperty("CurrentLoad")] public double CurrentLoad { get; set; }
-    [JsonProperty("AverageSpeed")] public double AverageSpeed { get; set; }
+    public class UpdateVehicleInformationRequest
+    {
+        [JsonProperty("Id")] public int Id { get; set; }
+        [JsonProperty("Capacity")] public double Capacity { get; set; }
+        [JsonProperty("CurrentLoad")] public double CurrentLoad { get; set; }
+        [JsonProperty("AverageSpeed")] public double AverageSpeed { get; set; }
+    }
 }

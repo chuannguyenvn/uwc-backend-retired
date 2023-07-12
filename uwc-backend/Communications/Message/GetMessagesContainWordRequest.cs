@@ -1,10 +1,11 @@
 using Newtonsoft.Json;
 
-namespace Communications.Message;
-
-public class GetMessagesContainWordRequest
+namespace Communications.Message
 {
-    [JsonProperty("Sender")] public int Sender { get; set; }
-    [JsonProperty("Receiver")] public int Receiver { get; set; }
-    [JsonProperty("Word")] public string Word { get; set; }
+    public class GetMessagesContainWordRequest
+    {
+        [JsonProperty("Sender")] public int Sender { get; set; }
+        [JsonProperty("Receiver")] public int Receiver { get; set; }
+        [JsonProperty("Word")] public string Word { get; set; }
+    }
 }

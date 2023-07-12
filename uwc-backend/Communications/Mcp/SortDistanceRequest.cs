@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-namespace Communications.Mcp;
-
-public class SortDistanceRequest
+namespace Communications.Mcp
 {
-    [JsonProperty("Latitude")] public double Latitude { get; set; }
-    [JsonProperty("Longitude")] public double Longitude { get; set; }
+    public class SortDistanceRequest
+    {
+        [JsonProperty("Latitude")] public double Latitude { get; set; }
+        [JsonProperty("Longitude")] public double Longitude { get; set; }
+    }
 }
