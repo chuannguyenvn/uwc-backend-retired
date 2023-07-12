@@ -39,3 +39,5 @@ Server/appsettings.Development.json
 Server/appsettings.json
 uwc-backend/obj/
 uwc-backend/bin/
+
+uwc-backend/Migrations/
