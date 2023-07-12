@@ -9,7 +9,7 @@ public static class AuthenticationHelpers
     {
         var salt = GenerateSalt();
         account.Salt = Convert.ToBase64String(salt);
-        account.Password = ComputeHash(account.Password, account.Salt);
+        account.PasswordHash = ComputeHash(account.PasswordHash, account.Salt);
     }
 
     private static byte[] GenerateSalt()

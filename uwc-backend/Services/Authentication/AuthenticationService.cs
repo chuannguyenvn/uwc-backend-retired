@@ -31,7 +31,7 @@ public class AuthenticationService : IAuthenticationService
         if (accountList.Any()) return (false, "Employee already has an account.");
 
         var employee = _unitOfWork.Employees.Find(employee => employee.Id == employeeId).First();
-        var accountInformation = new Account {Username = username, Password = password, Employee = employee, Settings = settings};
+        var accountInformation = new Account {Username = username, PasswordHash = password, Employee = employee, Settings = settings};
 
         _unitOfWork.Accounts.Add(accountInformation);
         await _unitOfWork.CompleteAsync();
@@ -45,9 +45,9 @@ public class AuthenticationService : IAuthenticationService
             return (false, error, "");
 
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
-        if (account.Password != AuthenticationHelpers.ComputeHash(password, account.Salt)) return (false, Prompts.WRONG_PASSWORD, "");
+        if (account.PasswordHash != password) return (false, Prompts.WRONG_PASSWORD, "");
 
-        return (true, Prompts.SUCCESS, GenerateJwtToken(AssembleClaimsIdentity(account)));
+        return (true, Prompts.SUCCESS, "token");
     }
 
     private ClaimsIdentity AssembleClaimsIdentity(Account account)

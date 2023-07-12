@@ -15,9 +15,9 @@ public class AccountManagementService : IAccountManagementService
     public async Task<(bool success, string message)> UpdatePassword(int accountId, string oldPassword, string newPassword)
     {
         var account = _unitOfWork.Accounts.GetById(accountId);
-        if (account.Password != oldPassword) return new ValueTuple<bool, string>(false, Prompts.WRONG_PASSWORD);
+        if (account.PasswordHash != oldPassword) return new ValueTuple<bool, string>(false, Prompts.WRONG_PASSWORD);
 
-        account.Password = newPassword;
+        account.PasswordHash = newPassword;
         try
         {
             await _unitOfWork.CompleteAsync();
