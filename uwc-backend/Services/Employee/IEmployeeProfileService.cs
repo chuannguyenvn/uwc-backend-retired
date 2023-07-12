@@ -10,9 +10,9 @@ public interface IEmployeeProfileService
     public Task<(bool success, string message)> UpdateEmployeeProfile(int employeeId, string firstname, string lastname, int gender,
         DateTime dateOfBirth, int role);
 
-    public Task<(bool success, string message, List<Models.Employee> result)> GetAllEmployeeProfiles();
+    public Task<(bool success, string message, List<Models.EmployeeProfile> result)> GetAllEmployeeProfiles();
 
-    public Task<(bool success, string message, Models.Employee result)> GetEmployeeById(int id);
+    public Task<(bool success, string message, Models.EmployeeProfile result)> GetEmployeeById(int id);
 
-    public Task<(bool success, string message, List<Models.Employee> result)> GetAllEmployeesWithRole(int role);
+    public Task<(bool success, string message, List<Models.EmployeeProfile> result)> GetAllEmployeesWithRole(int role);
 }

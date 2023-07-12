@@ -28,10 +28,10 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(ownerId))
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(ownerId))
             return (false, "Employee Id does not exist.");
 
-        var owner = _unitOfWork.Employees.Find(employee => employee.Id == ownerId).First();
+        var owner = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == ownerId).First();
 
         if (owner.Role != 1) return (false, "Employee Id is not a driver");
 
@@ -45,7 +45,7 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public List<DrivingLicense> GetDrivingLicenseDriver(int id)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(id)) return new List<DrivingLicense>();
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(id)) return new List<DrivingLicense>();
 
         var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.Owner.Id == id);
         return drivingLicenseList.ToList();
@@ -58,7 +58,7 @@ public class DrivingLicenseService : IDrivingLicenseService
             return (false, "Driving license Id does not exist.");
 
         var drivingLicense = _unitOfWork.DrivingLicenses.Find(dl => dl.Id == id).First();
-        var owner = _unitOfWork.Employees.Find(employee => employee.Id == ownerId).First();
+        var owner = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == ownerId).First();
 
         if (owner.Role != 1) return (false, "Owner is not a driver");
 

@@ -16,11 +16,11 @@ public interface ITaskService
 
     public List<Models.Task> GetTasksInTimeRange(DateTime startTime, DateTime endTime);
 
-    public List<Models.Employee> GetFreeEmployees();
+    public List<Models.EmployeeProfile> GetFreeEmployees();
 
-    public List<Models.Employee> SortByTasksDescendingly();
+    public List<Models.EmployeeProfile> SortByTasksDescendingly();
 
-    public List<Models.Employee> SortByTasksAscendingly();
+    public List<Models.EmployeeProfile> SortByTasksAscendingly();
 }
 
 public class TaskService : ITaskService
@@ -35,15 +35,15 @@ public class TaskService : ITaskService
 
     public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, int route)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(supervisor))
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(supervisor))
             return (false, "Supervisor Id does not exist");
 
-        if (!_unitOfWork.Employees.DoesIdExist(worker)) return (false, "Worker Id does not exist.");
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(worker)) return (false, "Worker Id does not exist.");
 
         if (!_unitOfWork.Routes.DoesIdExist(route)) return (false, "Route Id does not exist.");
 
-        var supervisorEmployee = _unitOfWork.Employees.Find(employee => employee.Id == supervisor).First();
-        var workerEmployee = _unitOfWork.Employees.Find(employee => employee.Id == worker).First();
+        var supervisorEmployee = _unitOfWork.SupervisorProfiles.Find(employee => employee.Id == supervisor).First();
+        var workerEmployee = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == worker).First();
         var routeTravel = _unitOfWork.Routes.Find(routing => routing.Id == route).First();
 
         if (supervisorEmployee.Role != 0) return (false, "Supervisor Id does not match");
@@ -59,7 +59,7 @@ public class TaskService : ITaskService
 
     public List<Models.Task> GetTasksOfEmployee(int id)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(id)) return new List<Models.Task>();
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(id)) return new List<Models.Task>();
 
         var result = _unitOfWork.Tasks.Find(task => task.Worker.Id == id);
         return result.OrderBy(task => task.Date).ToList();
@@ -67,7 +67,7 @@ public class TaskService : ITaskService
 
     public (bool success, object result) DeleteTasksOfEmployee(int id)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(id)) return (false, "Employee Id does not exist.");
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(id)) return (false, "Employee Id does not exist.");
 
         var taskList = _unitOfWork.Tasks.Find(task => task.Worker.Id == id);
         _unitOfWork.Tasks.RemoveRange(taskList);
@@ -91,16 +91,16 @@ public class TaskService : ITaskService
     {
         if (!_unitOfWork.Tasks.DoesIdExist(id)) return (false, "Task Id does not exist.");
 
-        if (!_unitOfWork.Employees.DoesIdExist(supervisorId))
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(supervisorId))
             return (false, "Supervisor Id does not exist.");
 
-        if (!_unitOfWork.Employees.DoesIdExist(workerId))
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(workerId))
             return (false, "Worker Id does not exist.");
 
         if (!_unitOfWork.Routes.DoesIdExist(routeId)) return (false, "Route Id does not exist.");
 
-        var supervisor = _unitOfWork.Employees.Find(supervisor => supervisor.Id == supervisorId).First();
-        var worker = _unitOfWork.Employees.Find(worker => worker.Id == workerId).First();
+        var supervisor = _unitOfWork.SupervisorProfiles.Find(supervisor => supervisor.Id == supervisorId).First();
+        var worker = _unitOfWork.EmployeesProfile.Find(worker => worker.Id == workerId).First();
         var route = _unitOfWork.Routes.Find(route => route.Id == routeId).First();
 
         var task = _unitOfWork.Tasks.Find(task => task.Id == id).First();
@@ -119,27 +119,27 @@ public class TaskService : ITaskService
         return taskList.ToList();
     }
 
-    public List<Models.Employee> GetFreeEmployees()
+    public List<Models.EmployeeProfile> GetFreeEmployees()
     {
         var taskList = _unitOfWork.Tasks.Find(task => task.Date >= DateTime.Now && task.Date <= DateTime.Now.AddHours(24));
-        var employeeList = _unitOfWork.Employees.Find(employee =>
+        var employeeList = _unitOfWork.EmployeesProfile.Find(employee =>
             employee.Role != 2 && taskList.All(task => task.Worker.Id != employee.Id));
 
         return employeeList.ToList();
     }
 
-    public List<Models.Employee> SortByTasksDescendingly()
+    public List<Models.EmployeeProfile> SortByTasksDescendingly()
     {
-        var employeeList = _unitOfWork.Employees.GetAll()
+        var employeeList = _unitOfWork.EmployeesProfile.GetAll()
             .Where(employee => employee.Role != 0)
             .OrderBy(employee => _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
 
         return employeeList.ToList();
     }
 
-    public List<Models.Employee> SortByTasksAscendingly()
+    public List<Models.EmployeeProfile> SortByTasksAscendingly()
     {
-        var employeeList = _unitOfWork.Employees.GetAll()
+        var employeeList = _unitOfWork.EmployeesProfile.GetAll()
             .Where(employee => employee.Role != 0)
             .OrderByDescending(employee => _unitOfWork.Tasks.Count(task => task.Worker.Id == employee.Id));
 

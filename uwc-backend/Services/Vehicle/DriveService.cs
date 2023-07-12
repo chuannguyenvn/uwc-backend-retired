@@ -14,13 +14,13 @@ public class DriveService : IDriveService
 
     public (bool success, object result) AddDrive(DateTime date, int driverId, int vehicleId)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(driverId))
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(driverId))
             return (false, "Employee Id does not exist.");
 
         if (!_unitOfWork.Vehicles.DoesIdExist(vehicleId))
             return (false, "Vehicle Id does not exist.");
 
-        var driverList = _unitOfWork.Employees.Find(driver => driver.Id == driverId && driver.Role == 1);
+        var driverList = _unitOfWork.EmployeesProfile.Find(driver => driver.Id == driverId && driver.Role == 1);
         if (driverList.Count() == 0) return (false, "Wrong role.");
 
         var driver = driverList.First();

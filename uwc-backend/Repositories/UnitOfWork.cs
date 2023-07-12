@@ -11,7 +11,8 @@ public class UnitOfWork : IDisposable
         _uwcDbContext = uwcDbContext;
 
         Accounts = new AccountRepository(_uwcDbContext);
-        Employees = new EmployeeRepository(_uwcDbContext);
+        SupervisorProfiles = new SupervisorProfileRepository(_uwcDbContext);
+        EmployeesProfile = new EmployeeProfileRepository(_uwcDbContext);
         Mcps = new McpRepository(_uwcDbContext);
         Tasks = new TaskRepository(_uwcDbContext);
         Messages = new MessageRepository(_uwcDbContext);
@@ -23,7 +24,8 @@ public class UnitOfWork : IDisposable
     }
 
     public AccountRepository Accounts { get; }
-    public EmployeeRepository Employees { get; }
+    public EmployeeProfileRepository EmployeesProfile { get; }
+    public SupervisorProfileRepository SupervisorProfiles { get; }
     public McpRepository Mcps { get; }
     public TaskRepository Tasks { get; }
     public MessageRepository Messages { get; }

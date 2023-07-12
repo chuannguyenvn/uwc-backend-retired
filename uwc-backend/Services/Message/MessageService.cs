@@ -13,13 +13,13 @@ public class MessageService : IMessageService
 
     public (bool success, object result) AddMessage(int sender, int receiver, DateTime textTime, string textContent)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(sender)) return (false, "Sender id does not exist.");
+        if (!_unitOfWork.Accounts.DoesIdExist(sender)) return (false, "Sender id does not exist.");
 
-        if (!_unitOfWork.Employees.DoesIdExist(receiver))
+        if (!_unitOfWork.Accounts.DoesIdExist(receiver))
             return (false, "Receiver id does not exist.");
 
-        var senderEmployee = _unitOfWork.Employees.Find(employee => employee.Id == sender).First();
-        var receiverEmployee = _unitOfWork.Employees.Find(employee => employee.Id == receiver).First();
+        var senderEmployee = _unitOfWork.Accounts.Find(employee => employee.Id == sender).First();
+        var receiverEmployee = _unitOfWork.Accounts.Find(employee => employee.Id == receiver).First();
         var messageInformation = new Models.Message
         {
             Sender = senderEmployee, Receiver = receiverEmployee, TextTime = textTime, TextContent = textContent
@@ -57,9 +57,9 @@ public class MessageService : IMessageService
 
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(senderId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(senderId)) return new List<Models.Message>();
 
-        if (!_unitOfWork.Employees.DoesIdExist(receiverId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(receiverId)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
@@ -71,9 +71,9 @@ public class MessageService : IMessageService
 
     public List<Models.Message> GetMessagesContainWord(int senderId, int receiverId, string word)
     {
-        if (!_unitOfWork.Employees.DoesIdExist(senderId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(senderId)) return new List<Models.Message>();
 
-        if (!_unitOfWork.Employees.DoesIdExist(receiverId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeesProfile.DoesIdExist(receiverId)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||

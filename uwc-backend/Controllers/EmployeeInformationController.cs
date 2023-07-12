@@ -83,21 +83,21 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpGet("get-free-employees")]
-    public List<Employee> GetFreeEmployees()
+    public List<EmployeeProfile> GetFreeEmployees()
     {
         var result = _taskService.GetFreeEmployees();
         return result;
     }
 
     [HttpGet("sort-employees-tasks-descendingly")]
-    public List<Employee> GetEmployeesByTaskDescendingly()
+    public List<EmployeeProfile> GetEmployeesByTaskDescendingly()
     {
         var result = _taskService.SortByTasksDescendingly();
         return result;
     }
 
     [HttpGet("sort-employees-tasks-ascendingly")]
-    public List<Employee> GetEmployeesByTaskAscendingly()
+    public List<EmployeeProfile> GetEmployeesByTaskAscendingly()
     {
         var result = _taskService.SortByTasksAscendingly();
         return result;

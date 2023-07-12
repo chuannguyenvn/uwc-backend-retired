@@ -1,6 +1,6 @@
-namespace Models;
+﻿namespace Models;
 
-public class Employee : IndexedEntity
+public class SupervisorProfile : IndexedEntity
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

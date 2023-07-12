@@ -11,8 +11,14 @@ public class UwcDbContext : DbContext
     {
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Message>().HasOne(message => message.Sender).WithMany().OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Message>().HasOne(message => message.Receiver).WithMany().OnDelete(DeleteBehavior.NoAction);
+    }
+
     public DbSet<Mcp> Mcps { get; set; }
-    public DbSet<Employee> Employees { get; set; }
+    public DbSet<EmployeeProfile> Employees { get; set; }
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<Task> Tasks { get; set; }
