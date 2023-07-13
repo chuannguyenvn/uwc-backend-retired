@@ -9,18 +9,18 @@ namespace Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EmployeeInformationController : ControllerBase
+public class EmployeeProfileController : ControllerBase
 {
     private readonly IEmployeeProfileService _employeeProfileService;
     private readonly ITaskService _taskService;
 
-    public EmployeeInformationController(IEmployeeProfileService employeeProfileService, ITaskService taskService)
+    public EmployeeProfileController(IEmployeeProfileService employeeProfileService, ITaskService taskService)
     {
         _employeeProfileService = employeeProfileService;
         _taskService = taskService;
     }
 
-    [HttpPost("add-employee")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddEmployee(AddEmployeeRequest addEmployeeRequest)
     {
         var (success, result) = await _employeeProfileService.AddEmployeeProfile(addEmployeeRequest.FirstName,
@@ -34,7 +34,7 @@ public class EmployeeInformationController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("delete-employee-id/{employeeId}")]
+    [HttpDelete("delete/{employeeId}")]
     public async Task<IActionResult> DeleteEmployeeId([FromRoute] int employeeId)
     {
         var (success, result) = await _employeeProfileService.DeleteEmployeeProfile(employeeId);
@@ -44,7 +44,7 @@ public class EmployeeInformationController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("update-employee-id")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateRoleEmployeeId(UpdateEmployeeRequest updateEmployeeRequest)
     {
         var (success, result) = await _employeeProfileService.UpdateEmployeeProfile(updateEmployeeRequest.Employee,
@@ -59,14 +59,14 @@ public class EmployeeInformationController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-all-employee")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAllEmployee()
     {
         var result = _employeeProfileService.GetAllEmployeeProfiles();
         return Ok(result);
     }
 
-    [HttpGet("get-employee-id/{employeeId}")]
+    [HttpGet("info/{employeeId}")]
     public async Task<IActionResult> GetEmployeeById([FromRoute] int employeeId)
     {
         var (success, message, result) = await _employeeProfileService.GetEmployeeById(employeeId);
@@ -76,31 +76,17 @@ public class EmployeeInformationController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-employee-by-role/{role}")]
-    public async Task<IActionResult> GetEmployeeByRole([FromRoute] EmployeeRole role)
+    [HttpGet("with-role/{role}")]
+    public async Task<IActionResult> GetAllEmployeesWithRole([FromRoute] EmployeeRole role)
     {
         var result = await _employeeProfileService.GetAllEmployeesWithRole(role);
         return Ok(result.result);
     }
 
-    [HttpGet("get-free-employees")]
+    [HttpGet("free")]
     public List<EmployeeProfile> GetFreeEmployees()
     {
         var result = _taskService.GetFreeEmployees();
-        return result;
-    }
-
-    [HttpGet("sort-employees-tasks-descendingly")]
-    public List<EmployeeProfile> GetEmployeesByTaskDescendingly()
-    {
-        var result = _taskService.SortByTasksDescendingly();
-        return result;
-    }
-
-    [HttpGet("sort-employees-tasks-ascendingly")]
-    public List<EmployeeProfile> GetEmployeesByTaskAscendingly()
-    {
-        var result = _taskService.SortByTasksAscendingly();
         return result;
     }
 }
