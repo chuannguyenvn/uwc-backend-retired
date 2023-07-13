@@ -12,7 +12,6 @@ public class RouteService : IRouteService
         _unitOfWork = unitOfWork;
     }
 
-
     public (bool success, object result) AddRoute(string name, double totalLength, string routeDetails)
     {
         var routeInformation = new Route {RouteName = name, TotalLength = totalLength, RouteDetails = routeDetails};

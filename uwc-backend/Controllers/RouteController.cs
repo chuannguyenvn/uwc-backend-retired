@@ -10,12 +10,12 @@ public class RouteController : ControllerBase
 {
     private readonly IRouteService _routeService;
 
-    public RouteController(IRouteService _routeService)
+    public RouteController(IRouteService routeService)
     {
-        this._routeService = _routeService;
+        _routeService = routeService;
     }
 
-    [HttpPost("add-route")]
+    [HttpPost("add")]
     public IActionResult AddRoute(AddRouteRequest addRouteRequest)
     {
         var (success, result) = _routeService.AddRoute(addRouteRequest.RouteName,
@@ -27,7 +27,7 @@ public class RouteController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("update-route")]
+    [HttpPut("update")]
     public IActionResult UpdateRoute(UpdateRouteRequest updateRouteRequest)
     {
         var (success, result) = _routeService.UpdateRoute(updateRouteRequest.Id,
