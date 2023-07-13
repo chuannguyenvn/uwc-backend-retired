@@ -23,8 +23,8 @@ public class McpService : IMcpService
 
     public (bool success, object result) EmptyMcp(int mcpId)
     {
-        var mcpList = _unitOfWork.Mcps.Find(mcp => mcp.Id == mcpId);
-        if (mcpList.Count() == 0) return (false, "Mcp does not exist.");
+        var mcpList = _unitOfWork.Mcps.Find(mcp => mcp.Id == mcpId).ToList();
+        if (!mcpList.Any()) return (false, "Mcp does not exist.");
 
         var mcp = mcpList.First();
         mcp.CurrentLoad = 0.0f;
@@ -70,29 +70,5 @@ public class McpService : IMcpService
 
         _unitOfWork.Complete();
         return (true, "Mcp current load updated successfully");
-    }
-
-    public List<Models.Mcp> SortByCurrentLoadDescendingly()
-    {
-        var mcpList = _unitOfWork.Mcps.GetAll();
-        return mcpList.OrderByDescending(mcp => mcp.CurrentLoad).ToList();
-    }
-
-    public List<Models.Mcp> SortByCurrentLoadAscendingly()
-    {
-        var mcpList = _unitOfWork.Mcps.GetAll();
-        return mcpList.OrderBy(mcp => mcp.CurrentLoad).ToList();
-    }
-
-    public List<Models.Mcp> SortByDistanceDescendingly(double latitude, double longitude)
-    {
-        var mcpList = _unitOfWork.Mcps.GetAll();
-        return mcpList.OrderByDescending(mcp => Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2)).ToList();
-    }
-
-    public List<Models.Mcp> SortByDistanceAscendingly(double latitude, double longitude)
-    {
-        var mcpList = _unitOfWork.Mcps.GetAll();
-        return mcpList.OrderBy(mcp => Math.Pow(latitude - mcp.Latitude, 2) + Math.Pow(longitude - mcp.Longitude, 2)).ToList();
     }
 }

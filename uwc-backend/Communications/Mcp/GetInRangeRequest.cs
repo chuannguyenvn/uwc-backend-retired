@@ -2,11 +2,10 @@ using Newtonsoft.Json;
 
 namespace Communications.Mcp
 {
-    public class AddMcpRequest
+    public class GetInRangeRequest
     {
-        [JsonProperty("Capacity")] public float Capacity { get; set; }
-        [JsonProperty("CurrentLoad")] public float CurrentLoad { get; set; }
         [JsonProperty("Latitude")] public double Latitude { get; set; }
         [JsonProperty("Longitude")] public double Longitude { get; set; }
+        [JsonProperty("Radius")] public double Radius { get; set; }
     }
 }

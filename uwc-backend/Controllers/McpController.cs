@@ -16,20 +16,20 @@ public class McpController : ControllerBase
         _mcpService = mcpService;
     }
 
-    [HttpPost("add-mcp")]
-    public IActionResult AddMcp(AddMcpRequest addMcpRequest)
+    [HttpPost("add")]
+    public IActionResult AddMcp(AddRequest addRequest)
     {
-        var (success, result) = _mcpService.AddMcp(addMcpRequest.Capacity,
-            addMcpRequest.CurrentLoad,
-            addMcpRequest.Latitude,
-            addMcpRequest.Longitude);
+        var (success, result) = _mcpService.AddMcp(addRequest.Capacity,
+            addRequest.CurrentLoad,
+            addRequest.Latitude,
+            addRequest.Longitude);
 
         if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
-    [HttpPut("empty-mcp/{mcpId}")]
+    [HttpPut("empty/{mcpId}")]
     public IActionResult EmptyMcp([FromRoute] int mcpId)
     {
         var (success, result) = _mcpService.EmptyMcp(mcpId);
@@ -39,30 +39,30 @@ public class McpController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-full-mcps")]
+    [HttpGet("get/full")]
     public List<Mcp> GetFullMcps()
     {
         var result = _mcpService.GetFullMcps();
         return result;
     }
 
-    [HttpGet("get-mcps-in-range")]
-    public List<Mcp> GetMcpsInRange(GetMcpsInRangeRequest getMcpsInRangeRequest)
+    [HttpGet("get/in-range")]
+    public List<Mcp> GetMcpsInRange(GetInRangeRequest getInRangeRequest)
     {
-        var result = _mcpService.GetMcpsInRange(getMcpsInRangeRequest.Latitude,
-            getMcpsInRangeRequest.Longitude,
-            getMcpsInRangeRequest.Radius);
+        var result = _mcpService.GetMcpsInRange(getInRangeRequest.Latitude,
+            getInRangeRequest.Longitude,
+            getInRangeRequest.Radius);
         return result;
     }
 
-    [HttpGet("get-all-mcps")]
+    [HttpGet("get/all")]
     public List<Mcp> GetAllMcps()
     {
         var result = _mcpService.GetAllMcps();
         return result;
     }
 
-    [HttpDelete("delete-mcp-id/{mcpId}")]
+    [HttpDelete("delete/{mcpId}")]
     public IActionResult DeleteMcp([FromRoute] int mcpId)
     {
         var (success, result) = _mcpService.DeleteMcp(mcpId);
@@ -72,41 +72,13 @@ public class McpController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("update-mcp-current-load")]
-    public IActionResult UpdateMcpCurrentLoad(UpdateMcpCurrentLoad updateMcpCurrentLoad)
+    [HttpPut("update-load")]
+    public IActionResult UpdateMcpCurrentLoad(UpdateLoadRequest updateLoadRequest)
     {
-        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateMcpCurrentLoad.Id, updateMcpCurrentLoad.CurrentLoad);
+        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateLoadRequest.Id, updateLoadRequest.CurrentLoad);
 
         if (!success) return BadRequest(result);
 
         return Ok(result);
-    }
-
-    [HttpGet("sort-current-load-ascendingly")]
-    public List<Mcp> SortMcpByCurrentLoadAscendingly()
-    {
-        var result = _mcpService.SortByCurrentLoadAscendingly();
-        return result;
-    }
-
-    [HttpGet("sort-current-load-descendingly")]
-    public List<Mcp> SortMcpByCurrentLoadDescendingly()
-    {
-        var result = _mcpService.SortByCurrentLoadDescendingly();
-        return result;
-    }
-
-    [HttpGet("sort-distance-ascendingly")]
-    public List<Mcp> SortMcpByDistanceAscendingly(SortDistanceRequest sortDistanceRequest)
-    {
-        var result = _mcpService.SortByDistanceAscendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
-        return result;
-    }
-
-    [HttpGet("sort-distance-descendingly")]
-    public List<Mcp> SortMcpByDistanceDescendingly(SortDistanceRequest sortDistanceRequest)
-    {
-        var result = _mcpService.SortByDistanceDescendingly(sortDistanceRequest.Latitude, sortDistanceRequest.Longitude);
-        return result;
     }
 }

@@ -15,12 +15,4 @@ public interface IMcpService
     public (bool success, object result) DeleteMcp(int id);
 
     public (bool success, object result) UpdateMcpCurrentLoad(int id, float currentLoad);
-
-    public List<Models.Mcp> SortByCurrentLoadDescendingly();
-
-    public List<Models.Mcp> SortByCurrentLoadAscendingly();
-
-    public List<Models.Mcp> SortByDistanceDescendingly(double latitude, double longitude);
-
-    public List<Models.Mcp> SortByDistanceAscendingly(double latitude, double longitude);
 }
