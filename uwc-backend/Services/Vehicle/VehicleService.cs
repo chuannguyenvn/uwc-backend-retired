@@ -28,7 +28,7 @@ public class VehicleService : IVehicleService
         return result.ToList();
     }
 
-    public (bool success, object result) UpdateVehicleInformation(int id, double capacity, double currentLoad, double averageSpeed)
+    public (bool success, object result) UpdateVehicle(int id, double capacity, double currentLoad, double averageSpeed)
     {
         if (!_unitOfWork.Vehicles.DoesIdExist(id)) return (false, "Vehicle Id does not exist.");
 

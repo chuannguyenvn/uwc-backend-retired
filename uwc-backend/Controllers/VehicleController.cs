@@ -16,7 +16,7 @@ public class VehicleController : ControllerBase
         _vehicleService = vehicleService;
     }
 
-    [HttpPost("add-vehicle")]
+    [HttpPost("add")]
     public IActionResult AddVehicle(AddVehicleRequest addVehicleRequest)
     {
         var (success, result) = _vehicleService.AddVehicle(addVehicleRequest.Capacity,
@@ -28,17 +28,17 @@ public class VehicleController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-all-vehicles")]
+    [HttpGet("get/all")]
     public List<Vehicle> GetAllVehicles()
     {
         var result = _vehicleService.GetAllVehicles();
         return result;
     }
 
-    [HttpPut("update-vehicle-info")]
+    [HttpPut("update")]
     public IActionResult UpdateVehicleInformation(UpdateVehicleInformationRequest updateVehicleInformationRequest)
     {
-        var (success, result) = _vehicleService.UpdateVehicleInformation(updateVehicleInformationRequest.Id,
+        var (success, result) = _vehicleService.UpdateVehicle(updateVehicleInformationRequest.Id,
             updateVehicleInformationRequest.Capacity,
             updateVehicleInformationRequest.CurrentLoad,
             updateVehicleInformationRequest.AverageSpeed);
@@ -48,7 +48,7 @@ public class VehicleController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("delete-vehicle/{vehicleId}")]
+    [HttpDelete("delete/{vehicleId}")]
     public IActionResult DeleteVehicle([FromRoute] int vehicleId)
     {
         var (success, result) = _vehicleService.DeleteVehicle(vehicleId);

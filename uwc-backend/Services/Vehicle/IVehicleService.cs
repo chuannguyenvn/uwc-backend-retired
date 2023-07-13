@@ -6,7 +6,7 @@ public interface IVehicleService
 
     public List<Models.Vehicle> GetAllVehicles();
 
-    public (bool success, object result) UpdateVehicleInformation(int id, double capacity, double currentLoad, double averageSpeed);
+    public (bool success, object result) UpdateVehicle(int id, double capacity, double currentLoad, double averageSpeed);
 
     public (bool success, object result) DeleteVehicle(int id);
 }
