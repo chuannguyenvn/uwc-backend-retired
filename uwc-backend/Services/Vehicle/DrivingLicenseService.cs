@@ -36,7 +36,7 @@ public class DrivingLicenseService : IDrivingLicenseService
 
         if (owner.Role != UserRole.Driver) return (false, "Employee Id is not a driver");
 
-        var drivingLicenseInformation = new DrivingLicense {IssueDate = issueDate, IssuePlace = issuePlace, OwnerProfile = owner, Type = type};
+        var drivingLicenseInformation = new DrivingLicense {IssueDate = issueDate, IssuePlace = issuePlace, DriverProfile = owner, Type = type};
 
         _unitOfWork.DrivingLicenses.Add(drivingLicenseInformation);
         _unitOfWork.Complete();
@@ -48,7 +48,7 @@ public class DrivingLicenseService : IDrivingLicenseService
     {
         if (!_unitOfWork.DriverProfiles.DoesIdExist(id)) return new List<DrivingLicense>();
 
-        var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.OwnerProfile.Id == id);
+        var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.DriverProfile.Id == id);
         return drivingLicenseList.ToList();
     }
 
@@ -65,7 +65,7 @@ public class DrivingLicenseService : IDrivingLicenseService
 
         drivingLicense.IssueDate = issueDate;
         drivingLicense.IssuePlace = issuePlace;
-        drivingLicense.OwnerProfile = owner;
+        drivingLicense.DriverProfile = owner;
         drivingLicense.Type = type;
 
         _unitOfWork.Complete();

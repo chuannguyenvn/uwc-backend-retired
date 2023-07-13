@@ -8,4 +8,6 @@ public class Account : IndexedEntity
 
     public UserProfile LinkedProfile { get; set; }
     public string Settings { get; set; }
+
+    public List<Message> Messages { get; set; }
 }
