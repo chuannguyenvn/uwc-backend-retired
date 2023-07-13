@@ -16,7 +16,7 @@ public class DrivingLicenseController : ControllerBase
         _drivingLicenseService = drivingLicenseService;
     }
 
-    [HttpPost("add-driving-license")]
+    [HttpPost("add")]
     public IActionResult AddDrivingLicense(AddDrivingLicenseRequest addDrivingLicenseRequest)
     {
         var (success, result) = _drivingLicenseService.AddDrivingLicense(addDrivingLicenseRequest.IssueDate,
@@ -29,17 +29,17 @@ public class DrivingLicenseController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-driving-licenses/{driverId}")]
+    [HttpGet("get/{driverId}")]
     public List<DrivingLicense> GetDrivingLicenses([FromRoute] int driverId)
     {
-        var result = _drivingLicenseService.GetDrivingLicenseDriver(driverId);
+        var result = _drivingLicenseService.GetDrivingLicenseOfDriver(driverId);
         return result;
     }
 
-    [HttpPut("update-driving-license")]
+    [HttpPut("update")]
     public IActionResult UpdateDrivingLicense(UpdateDrivingLicenseRequest updateDrivingLicenseRequest)
     {
-        var (success, result) = _drivingLicenseService.UpdateDrivingLicenseInformation(updateDrivingLicenseRequest.Id,
+        var (success, result) = _drivingLicenseService.UpdateDrivingLicense(updateDrivingLicenseRequest.Id,
             updateDrivingLicenseRequest.IssueDate,
             updateDrivingLicenseRequest.IssuePlace,
             updateDrivingLicenseRequest.Owner,
@@ -50,7 +50,7 @@ public class DrivingLicenseController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("delete-driving-license/{drivingLicenseId}")]
+    [HttpDelete("delete/{drivingLicenseId}")]
     public IActionResult DeleteDrivingLicense([FromRoute] int drivingLicenseId)
     {
         var (success, result) = _drivingLicenseService.DeleteDrivingLicense(drivingLicenseId);
@@ -63,7 +63,7 @@ public class DrivingLicenseController : ControllerBase
     [HttpDelete("delete-outdated")]
     public IActionResult DeleteOutdatedDrivingLicenses()
     {
-        var (success, result) = _drivingLicenseService.DeleteOutdatedDrivingLicense();
+        var (success, result) = _drivingLicenseService.DeleteAllOutdatedDrivingLicenses();
 
         if (!success) return BadRequest(result);
 

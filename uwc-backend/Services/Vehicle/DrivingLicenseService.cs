@@ -8,14 +8,14 @@ public interface IDrivingLicenseService
 {
     public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type);
 
-    public List<DrivingLicense> GetDrivingLicenseDriver(int id);
+    public List<DrivingLicense> GetDrivingLicenseOfDriver(int id);
 
-    public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace, int ownerId,
+    public (bool success, object result) UpdateDrivingLicense(int id, DateTime issueDate, string issuePlace, int ownerId,
         string type);
 
     public (bool success, object result) DeleteDrivingLicense(int id);
 
-    public (bool success, object result) DeleteOutdatedDrivingLicense();
+    public (bool success, object result) DeleteAllOutdatedDrivingLicenses();
 }
 
 public class DrivingLicenseService : IDrivingLicenseService
@@ -44,7 +44,7 @@ public class DrivingLicenseService : IDrivingLicenseService
         return (true, "Driving license added successfully");
     }
 
-    public List<DrivingLicense> GetDrivingLicenseDriver(int id)
+    public List<DrivingLicense> GetDrivingLicenseOfDriver(int id)
     {
         if (!_unitOfWork.EmployeeProfiles.DoesIdExist(id)) return new List<DrivingLicense>();
 
@@ -52,7 +52,7 @@ public class DrivingLicenseService : IDrivingLicenseService
         return drivingLicenseList.ToList();
     }
 
-    public (bool success, object result) UpdateDrivingLicenseInformation(int id, DateTime issueDate, string issuePlace, int ownerId,
+    public (bool success, object result) UpdateDrivingLicense(int id, DateTime issueDate, string issuePlace, int ownerId,
         string type)
     {
         if (!_unitOfWork.DrivingLicenses.DoesIdExist(id))
@@ -83,7 +83,7 @@ public class DrivingLicenseService : IDrivingLicenseService
         return (true, "Driving license deleted successfully.");
     }
 
-    public (bool success, object result) DeleteOutdatedDrivingLicense()
+    public (bool success, object result) DeleteAllOutdatedDrivingLicenses()
     {
         var outdatedDrivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.IssueDate <= DateTime.Now.AddYears(-10));
 
