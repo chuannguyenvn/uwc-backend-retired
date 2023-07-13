@@ -16,7 +16,7 @@ public class TaskController : ControllerBase
         _taskService = taskService;
     }
 
-    [HttpPost("add-task")]
+    [HttpPost("add")]
     public IActionResult AddTask(AddTaskRequest addTaskRequest)
     {
         var (success, result) = _taskService.AddTask(addTaskRequest.Date,
@@ -29,24 +29,24 @@ public class TaskController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-all-tasks/{employeeId}")]
-    public List<Task> GetTasksOfEmployee([FromRoute] int employeeId)
+    [HttpGet("get/all/{employeeId}")]
+    public List<Task> GetAllTasksOfEmployee([FromRoute] int employeeId)
     {
-        var result = _taskService.GetTasksOfEmployee(employeeId);
+        var result = _taskService.GetAllTasksOfEmployee(employeeId);
         return result;
     }
 
-    [HttpDelete("delete-all-task/{employeeId}")]
-    public IActionResult DeleteTasksOfEmployee([FromRoute] int employeeId)
+    [HttpDelete("delete/all/{employeeId}")]
+    public IActionResult DeleteAllTasksOfEmployee([FromRoute] int employeeId)
     {
-        var (success, result) = _taskService.DeleteTasksOfEmployee(employeeId);
+        var (success, result) = _taskService.DeleteAllTasksOfEmployee(employeeId);
 
         if (!success) return BadRequest(result);
 
         return Ok(result);
     }
 
-    [HttpDelete("delete-task/{taskId}")]
+    [HttpDelete("delete/{taskId}")]
     public IActionResult DeleteTask([FromRoute] int taskId)
     {
         var (success, result) = _taskService.DeleteTask(taskId);
@@ -56,7 +56,7 @@ public class TaskController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("update-task")]
+    [HttpPut("update")]
     public IActionResult UpdateTask(UpdateTaskRequest updateTaskRequest)
     {
         var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id,
@@ -68,13 +68,5 @@ public class TaskController : ControllerBase
         if (!success) return BadRequest(result);
 
         return Ok(result);
-    }
-
-    [HttpGet("get-tasks-in-time-range")]
-    public List<Task> GetTasksInTimeRange(GetTasksInTimeRangeRequest getTasksInTimeRangeRequest)
-    {
-        var result = _taskService.GetTasksInTimeRange(getTasksInTimeRangeRequest.StartTime, getTasksInTimeRangeRequest.EndTime);
-
-        return result;
     }
 }
