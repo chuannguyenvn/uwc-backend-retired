@@ -1,5 +1,3 @@
-using Repositories.Implementations;
-
 namespace Models;
 
 public class Task : IndexedEntity

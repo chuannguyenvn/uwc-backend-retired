@@ -3,7 +3,7 @@
 public static class RequestStatus
 {
     public const string SUCCESS = "Success.";
-    
+
     public static class Account
     {
         public const string ACCOUNT_NOT_EXIST = "Account does not exist.";

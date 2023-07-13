@@ -3,5 +3,5 @@
 public enum EmployeeRole
 {
     Cleaner,
-    Driver,
+    Driver
 }

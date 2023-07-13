@@ -31,7 +31,8 @@ public class AuthenticationService : IAuthenticationService
         if (accountList.Any()) return (false, "Employee already has an account.");
 
         var employee = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == employeeId).First();
-        var accountInformation = new Account {Username = username, PasswordHash = password, EmployeeProfile = employee, Settings = settings};
+        var accountInformation =
+            new Account {Username = username, PasswordHash = password, EmployeeProfile = employee, Settings = settings};
 
         _unitOfWork.Accounts.Add(accountInformation);
         await _unitOfWork.CompleteAsync();

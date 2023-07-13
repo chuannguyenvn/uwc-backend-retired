@@ -1,4 +1,5 @@
-﻿using Repositories;
+﻿using Models;
+using Repositories;
 
 namespace Services.Task;
 
@@ -16,11 +17,11 @@ public interface ITaskService
 
     public List<Models.Task> GetTasksInTimeRange(DateTime startTime, DateTime endTime);
 
-    public List<Models.EmployeeProfile> GetFreeEmployees();
+    public List<EmployeeProfile> GetFreeEmployees();
 
-    public List<Models.EmployeeProfile> SortByTasksDescendingly();
+    public List<EmployeeProfile> SortByTasksDescendingly();
 
-    public List<Models.EmployeeProfile> SortByTasksAscendingly();
+    public List<EmployeeProfile> SortByTasksAscendingly();
 }
 
 public class TaskService : ITaskService
@@ -119,7 +120,7 @@ public class TaskService : ITaskService
         return taskList.ToList();
     }
 
-    public List<Models.EmployeeProfile> GetFreeEmployees()
+    public List<EmployeeProfile> GetFreeEmployees()
     {
         var taskList = _unitOfWork.Tasks.Find(task => task.Date >= DateTime.Now && task.Date <= DateTime.Now.AddHours(24));
         var employeeList = _unitOfWork.EmployeeProfiles.Find(employee => taskList.All(task => task.Worker.Id != employee.Id));
@@ -127,7 +128,7 @@ public class TaskService : ITaskService
         return employeeList.ToList();
     }
 
-    public List<Models.EmployeeProfile> SortByTasksDescendingly()
+    public List<EmployeeProfile> SortByTasksDescendingly()
     {
         var employeeList = _unitOfWork.EmployeeProfiles.GetAll()
             .Where(employee => employee.Role != 0)
@@ -136,7 +137,7 @@ public class TaskService : ITaskService
         return employeeList.ToList();
     }
 
-    public List<Models.EmployeeProfile> SortByTasksAscendingly()
+    public List<EmployeeProfile> SortByTasksAscendingly()
     {
         var employeeList = _unitOfWork.EmployeeProfiles.GetAll()
             .Where(employee => employee.Role != 0)

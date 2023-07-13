@@ -6,7 +6,7 @@ public static class Prompts
 
     public const string INVALID_ROLE = "Invalid role.";
     public const string INVALID_GENDER = "Invalid role.";
-    
+
     public const string ACCOUNT_NOT_EXIST = "Account does not exist.";
     public const string WRONG_PASSWORD = "Wrong password.";
     public const string PASSWORD_UPDATE_FAIL = "Password update failed.";

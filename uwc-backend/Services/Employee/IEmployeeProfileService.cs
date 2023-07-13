@@ -1,4 +1,5 @@
-﻿using Models.Types;
+﻿using Models;
+using Models.Types;
 
 namespace Services.Employee;
 
@@ -12,9 +13,9 @@ public interface IEmployeeProfileService
     public Task<(bool success, string message)> UpdateEmployeeProfile(int employeeId, string firstname, string lastname, Gender gender,
         DateTime dateOfBirth, EmployeeRole employeeRole);
 
-    public Task<(bool success, string message, List<Models.EmployeeProfile> result)> GetAllEmployeeProfiles();
+    public Task<(bool success, string message, List<EmployeeProfile> result)> GetAllEmployeeProfiles();
 
-    public Task<(bool success, string message, Models.EmployeeProfile result)> GetEmployeeById(int id);
+    public Task<(bool success, string message, EmployeeProfile result)> GetEmployeeById(int id);
 
-    public Task<(bool success, string message, List<Models.EmployeeProfile> result)> GetAllEmployeesWithRole(EmployeeRole employeeRole);
+    public Task<(bool success, string message, List<EmployeeProfile> result)> GetAllEmployeesWithRole(EmployeeRole employeeRole);
 }
