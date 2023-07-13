@@ -18,7 +18,7 @@ public class SettingsController : ControllerBase
         _accountManagementService = accountManagementService;
     }
 
-    [HttpPut("update-password")]
+    [HttpPut("update/password")]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordRequest request)
     {
         var (success, result) =
@@ -29,7 +29,7 @@ public class SettingsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("update-settings")]
+    [HttpPut("update/settings")]
     public async Task<IActionResult> UpdateSettings(UpdateSettingsRequest request)
     {
         var (success, result) = await _accountManagementService.UpdateSettings(User.GetLoggedInUserId(), request.Settings);
