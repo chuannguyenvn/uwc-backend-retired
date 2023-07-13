@@ -27,7 +27,7 @@ public class DriveController : ControllerBase
     }
 
     [HttpGet("get-driving-history")]
-    public List<Drive> GetDrivingHistory()
+    public List<DrivingHistory> GetDrivingHistory()
     {
         var result = _driveService.GetAllDrives();
         return result;
@@ -44,14 +44,14 @@ public class DriveController : ControllerBase
     }
 
     [HttpGet("driver-full-vehicle-sort-by-name")]
-    public List<Drive> GetDriverWithFullVehicleSortByName()
+    public List<DrivingHistory> GetDriverWithFullVehicleSortByName()
     {
         var result = _driveService.GetDriverFullVehicleSortByName();
         return result;
     }
 
     [HttpGet("driver-full-vehicle-sort-by-current-load")]
-    public List<Drive> GetDriverWithFullVehicleSortByCurrentLoad()
+    public List<DrivingHistory> GetDriverWithFullVehicleSortByCurrentLoad()
     {
         var result = _driveService.GetDriverFullVehicleSortByCurrentLoad();
         return result;

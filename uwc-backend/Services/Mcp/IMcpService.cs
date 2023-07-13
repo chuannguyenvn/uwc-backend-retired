@@ -2,7 +2,7 @@
 
 public interface IMcpService
 {
-    public (bool success, object result) AddMcp(double capacity, double currentLoad, double latitude, double longitude);
+    public (bool success, object result) AddMcp(float capacity, float currentLoad, double latitude, double longitude);
 
     public (bool success, object result) EmptyMcp(int mcpId);
 
@@ -14,7 +14,7 @@ public interface IMcpService
 
     public (bool success, object result) DeleteMcp(int id);
 
-    public (bool success, object result) UpdateMcpCurrentLoad(int id, double currentLoad);
+    public (bool success, object result) UpdateMcpCurrentLoad(int id, float currentLoad);
 
     public List<Models.Mcp> SortByCurrentLoadDescendingly();
 

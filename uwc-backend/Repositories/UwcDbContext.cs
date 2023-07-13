@@ -25,6 +25,6 @@ public class UwcDbContext : DbContext
     public DbSet<Route> Routes { get; set; }
     public DbSet<TaskIncludeMcp> TaskIncludeMcps { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<Drive> Drives { get; set; }
+    public DbSet<DrivingHistory> Drives { get; set; }
     public DbSet<DrivingLicense> DrivingLicenses { get; set; }
 }

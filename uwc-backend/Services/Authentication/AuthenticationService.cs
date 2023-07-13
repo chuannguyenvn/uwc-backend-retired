@@ -24,13 +24,13 @@ public class AuthenticationService : IAuthenticationService
         if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
 
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(employeeId))
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(employeeId))
             return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
         var accountList = _unitOfWork.Accounts.Find(account => account.EmployeeProfile.Id == employeeId);
         if (accountList.Any()) return (false, "Employee already has an account.");
 
-        var employee = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == employeeId).First();
+        var employee = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == employeeId).First();
         var accountInformation = new Account {Username = username, PasswordHash = password, EmployeeProfile = employee, Settings = settings};
 
         _unitOfWork.Accounts.Add(accountInformation);

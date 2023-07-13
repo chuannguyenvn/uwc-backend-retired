@@ -1,4 +1,5 @@
 using Models;
+using Models.Types;
 using Repositories;
 
 namespace Services.Vehicle;
@@ -28,12 +29,12 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type)
     {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(ownerId))
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(ownerId))
             return (false, "Employee Id does not exist.");
 
-        var owner = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == ownerId).First();
+        var owner = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == ownerId).First();
 
-        if (owner.Role != 1) return (false, "Employee Id is not a driver");
+        if (owner.Role != EmployeeRole.Driver) return (false, "Employee Id is not a driver");
 
         var drivingLicenseInformation = new DrivingLicense {IssueDate = issueDate, IssuePlace = issuePlace, Owner = owner, Type = type};
 
@@ -45,7 +46,7 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public List<DrivingLicense> GetDrivingLicenseDriver(int id)
     {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(id)) return new List<DrivingLicense>();
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(id)) return new List<DrivingLicense>();
 
         var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.Owner.Id == id);
         return drivingLicenseList.ToList();
@@ -58,9 +59,9 @@ public class DrivingLicenseService : IDrivingLicenseService
             return (false, "Driving license Id does not exist.");
 
         var drivingLicense = _unitOfWork.DrivingLicenses.Find(dl => dl.Id == id).First();
-        var owner = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == ownerId).First();
+        var owner = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == ownerId).First();
 
-        if (owner.Role != 1) return (false, "Owner is not a driver");
+        if (owner.Role != EmployeeRole.Driver) return (false, "Owner is not a driver");
 
         drivingLicense.IssueDate = issueDate;
         drivingLicense.IssuePlace = issuePlace;

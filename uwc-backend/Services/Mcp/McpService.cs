@@ -11,7 +11,7 @@ public class McpService : IMcpService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddMcp(double capacity, double currentLoad, double latitude, double longitude)
+    public (bool success, object result) AddMcp(float capacity, float currentLoad, double latitude, double longitude)
     {
         var mcpInformation = new Models.Mcp {Capacity = capacity, CurrentLoad = currentLoad, Latitude = latitude, Longitude = longitude};
 
@@ -61,7 +61,7 @@ public class McpService : IMcpService
         return (true, "Mcp deleted successfully.");
     }
 
-    public (bool success, object result) UpdateMcpCurrentLoad(int id, double currentLoad)
+    public (bool success, object result) UpdateMcpCurrentLoad(int id, float currentLoad)
     {
         if (!_unitOfWork.Mcps.DoesIdExist(id)) return (false, "Mcp Id does not exist.");
 

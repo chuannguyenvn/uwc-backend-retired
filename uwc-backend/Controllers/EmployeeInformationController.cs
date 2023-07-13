@@ -1,6 +1,7 @@
 using Communications.Employee;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Types;
 using Services.Employee;
 using Services.Task;
 
@@ -76,7 +77,7 @@ public class EmployeeInformationController : ControllerBase
     }
 
     [HttpGet("get-employee-by-role/{role}")]
-    public async Task<IActionResult> GetEmployeeByRole([FromRoute] int role)
+    public async Task<IActionResult> GetEmployeeByRole([FromRoute] EmployeeRole role)
     {
         var result = await _employeeProfileService.GetAllEmployeesWithRole(role);
         return Ok(result.result);

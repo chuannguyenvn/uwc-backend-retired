@@ -57,9 +57,9 @@ public class MessageService : IMessageService
 
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
     {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(senderId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
 
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(receiverId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
@@ -71,9 +71,9 @@ public class MessageService : IMessageService
 
     public List<Models.Message> GetMessagesContainWord(int senderId, int receiverId, string word)
     {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(senderId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
 
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(receiverId)) return new List<Models.Message>();
+        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
             (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||

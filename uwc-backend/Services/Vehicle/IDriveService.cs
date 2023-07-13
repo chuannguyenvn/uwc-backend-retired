@@ -5,8 +5,8 @@ namespace Services.Vehicle;
 public interface IDriveService
 {
     public (bool success, object result) AddDrive(DateTime date, int driverId, int vehicleId);
-    public List<Drive> GetAllDrives();
+    public List<DrivingHistory> GetAllDrives();
     public (bool success, object result) DeleteDrive(int id);
-    public List<Drive> GetDriverFullVehicleSortByName();
-    public List<Drive> GetDriverFullVehicleSortByCurrentLoad();
+    public List<DrivingHistory> GetDriverFullVehicleSortByName();
+    public List<DrivingHistory> GetDriverFullVehicleSortByCurrentLoad();
 }

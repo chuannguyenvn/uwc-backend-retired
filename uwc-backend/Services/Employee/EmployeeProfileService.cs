@@ -1,85 +1,89 @@
+using Models;
 using Repositories;
 using Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Models.Types;
 
-namespace Services.Employee;
-
-public class EmployeeProfileService : IEmployeeProfileService
+namespace Services.Employee
 {
-    private readonly UnitOfWork _unitOfWork;
-
-    public EmployeeProfileService(UnitOfWork unitOfWork)
+    public class EmployeeProfileService : IEmployeeProfileService
     {
-        _unitOfWork = unitOfWork;
-    }
+        private readonly UnitOfWork _unitOfWork;
 
-    public async Task<(bool success, string message)> AddEmployeeProfile(string firstName, string lastName, int gender,
-        DateTime dateOfBirth, int role)
-    {
-        var employeeInformation = new Models.EmployeeProfile
+        public EmployeeProfileService(UnitOfWork unitOfWork)
         {
-            FirstName = firstName,
-            LastName = lastName,
-            Gender = gender,
-            DateOfBirth = dateOfBirth,
-            Role = role
-        };
+            _unitOfWork = unitOfWork;
+        }
 
-        _unitOfWork.EmployeesProfile.Add(employeeInformation);
-        await _unitOfWork.CompleteAsync();
+        public async Task<(bool success, string message)> AddEmployeeProfile(string firstName, string lastName, Gender gender,
+            DateTime dateOfBirth, EmployeeRole role)
+        {
+            var employeeInformation = new EmployeeProfile
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Gender = gender,
+                DateOfBirth = dateOfBirth,
+                Role = role
+            };
 
-        return (true, Prompts.SUCCESS);
-    }
+            _unitOfWork.EmployeeProfiles.Add(employeeInformation);
+            await _unitOfWork.CompleteAsync();
 
-    public async Task<(bool success, string message)> DeleteEmployeeProfile(int employeeId)
-    {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(employeeId)) return (false, Prompts.EMPLOYEE_NOT_EXIST);
+            return (true, Prompts.SUCCESS);
+        }
 
-        _unitOfWork.EmployeesProfile.RemoveById(employeeId);
-        await _unitOfWork.CompleteAsync();
+        public async Task<(bool success, string message)> DeleteEmployeeProfile(int employeeId)
+        {
+            var employee = _unitOfWork.EmployeeProfiles.GetById(employeeId);
+            if (employee == null)
+                return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
-        return (true, Prompts.SUCCESS);
-    }
+            _unitOfWork.EmployeeProfiles.Remove(employee);
+            await _unitOfWork.CompleteAsync();
 
-    public async Task<(bool success, string message)> UpdateEmployeeProfile(int employeeId, string firstname, string lastname, int gender,
-        DateTime dateOfBirth, int role)
-    {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(employeeId)) return (false, Prompts.EMPLOYEE_NOT_EXIST);
+            return (true, Prompts.SUCCESS);
+        }
 
-        if (role is < 0 or > 2) return (false, Prompts.INVALID_ROLE);
-        if (gender != 0 && gender != 1) return (false, Prompts.INVALID_GENDER);
+        public async Task<(bool success, string message)> UpdateEmployeeProfile(int employeeId, string firstName, string lastName,
+            Gender gender, DateTime dateOfBirth, EmployeeRole role)
+        {
+            var employee = _unitOfWork.EmployeeProfiles.GetById(employeeId);
+            if (employee == null) return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
-        var employeeList = _unitOfWork.EmployeesProfile.Find(employee => employee.Id == employeeId);
-        var employee = employeeList.First();
+            employee.FirstName = firstName;
+            employee.LastName = lastName;
+            employee.Gender = gender;
+            employee.DateOfBirth = dateOfBirth;
+            employee.Role = role;
 
-        employee.FirstName = firstname;
-        employee.LastName = lastname;
-        employee.Gender = gender;
-        employee.DateOfBirth = dateOfBirth;
-        employee.Role = role;
+            await _unitOfWork.CompleteAsync();
 
-        await _unitOfWork.CompleteAsync();
+            return (true, Prompts.SUCCESS);
+        }
 
-        return (true, Prompts.SUCCESS);
-    }
+        public async Task<(bool success, string message, List<EmployeeProfile> result)> GetAllEmployeeProfiles()
+        {
+            var employees = _unitOfWork.EmployeeProfiles.GetAll();
+            
+            return (true, Prompts.SUCCESS, employees.ToList());
+        }
 
-    public async Task<(bool success, string message, List<Models.EmployeeProfile> result)> GetAllEmployeeProfiles()
-    {
-        return (true, Prompts.SUCCESS, _unitOfWork.EmployeesProfile.GetAll().ToList());
-    }
+        public async Task<(bool success, string message, EmployeeProfile result)> GetEmployeeById(int id)
+        {
+            if (!_unitOfWork.EmployeeProfiles.DoesIdExist(id)) return (false, Prompts.EMPLOYEE_NOT_EXIST, null);
+            var employee = _unitOfWork.EmployeeProfiles.GetById(id);
+            
+            return (true, Prompts.SUCCESS, employee);
+        }
 
-    public async Task<(bool success, string message, Models.EmployeeProfile result)> GetEmployeeById(int id)
-    {
-        if (!_unitOfWork.EmployeesProfile.DoesIdExist(id)) return (false, Prompts.EMPLOYEE_NOT_EXIST, null);
-
-        var employee = _unitOfWork.EmployeesProfile.GetById(id);
-
-        return (true, Prompts.SUCCESS, employee);
-    }
-
-    public async Task<(bool success, string message, List<Models.EmployeeProfile> result)> GetAllEmployeesWithRole(int role)
-    {
-        var employeeList = _unitOfWork.EmployeesProfile.Find(employee => employee.Role == role);
-
-        return (true, Prompts.SUCCESS, employeeList.ToList());
+        public async Task<(bool success, string message, List<EmployeeProfile> result)> GetAllEmployeesWithRole(EmployeeRole role)
+        {
+            var employees = _unitOfWork.EmployeeProfiles.Find(profile => profile.Role == role);
+            return (true, Prompts.SUCCESS, employees.ToList());
+        }
     }
 }
