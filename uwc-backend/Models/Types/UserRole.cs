@@ -1,7 +1,8 @@
 ﻿namespace Models.Types;
 
-public enum EmployeeRole
+public enum UserRole
 {
+    Supervisor,
     Cleaner,
     Driver
 }

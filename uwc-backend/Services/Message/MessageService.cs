@@ -22,7 +22,7 @@ public class MessageService : IMessageService
         var receiverEmployee = _unitOfWork.Accounts.Find(employee => employee.Id == receiver).First();
         var messageInformation = new Models.Message
         {
-            Sender = senderEmployee, Receiver = receiverEmployee, TextTime = textTime, TextContent = textContent
+            SenderAccount = senderEmployee, ReceiverAccount = receiverEmployee, TextTime = textTime, TextContent = textContent
         };
 
         _unitOfWork.Messages.Add(messageInformation);
@@ -32,13 +32,13 @@ public class MessageService : IMessageService
 
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
     {
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
+        if (!_unitOfWork.DriverProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
 
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
+        if (!_unitOfWork.DriverProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
-            (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
-            (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
+            (message.SenderAccount.Id == senderId && message.ReceiverAccount.Id == receiverId) ||
+            (message.SenderAccount.Id == receiverId && message.ReceiverAccount.Id == senderId));
 
         var result = messageList.OrderBy(message => message.TextTime).ToList();
         return result;

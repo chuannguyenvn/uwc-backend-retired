@@ -1,5 +1,6 @@
 using Communications.Task;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Services.Task;
 using Task = Models.Task;
 
@@ -68,5 +69,12 @@ public class TaskController : ControllerBase
         if (!success) return BadRequest(result);
 
         return Ok(result);
+    }
+    
+    [HttpGet("free")]
+    public List<UserProfile> GetFreeEmployees()
+    {
+        var result = _taskService.GetFreeEmployees();
+        return result;
     }
 }

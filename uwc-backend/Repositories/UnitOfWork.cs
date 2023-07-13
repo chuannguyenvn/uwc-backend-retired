@@ -12,7 +12,7 @@ public class UnitOfWork : IDisposable
 
         Accounts = new AccountRepository(_uwcDbContext);
         SupervisorProfiles = new SupervisorProfileRepository(_uwcDbContext);
-        EmployeeProfiles = new EmployeeProfileRepository(_uwcDbContext);
+        DriverProfiles = new DriverProfileRepository(_uwcDbContext);
         Mcps = new McpRepository(_uwcDbContext);
         Tasks = new TaskRepository(_uwcDbContext);
         Messages = new MessageRepository(_uwcDbContext);
@@ -20,11 +20,12 @@ public class UnitOfWork : IDisposable
         TaskIncludeMcps = new TaskIncludeMcpRepository(_uwcDbContext);
         Vehicles = new VehicleRepository(_uwcDbContext);
         DrivingLicenses = new DrivingLicenseRepository(_uwcDbContext);
-        Drives = new DriveRepository(_uwcDbContext);
+        DrivingHistories = new DrivingHistoryRepository(_uwcDbContext);
     }
 
     public AccountRepository Accounts { get; }
-    public EmployeeProfileRepository EmployeeProfiles { get; }
+    public DriverProfileRepository DriverProfiles { get; }
+    public CleanerProfileRepository CleanerProfiles { get; }
     public SupervisorProfileRepository SupervisorProfiles { get; }
     public McpRepository Mcps { get; }
     public TaskRepository Tasks { get; }
@@ -32,7 +33,7 @@ public class UnitOfWork : IDisposable
     public RouteRepository Routes { get; }
     public TaskIncludeMcpRepository TaskIncludeMcps { get; }
     public VehicleRepository Vehicles { get; }
-    public DriveRepository Drives { get; }
+    public DrivingHistoryRepository DrivingHistories { get; }
     public DrivingLicenseRepository DrivingLicenses { get; }
 
     public void Dispose()

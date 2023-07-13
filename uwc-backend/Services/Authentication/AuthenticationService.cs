@@ -24,15 +24,15 @@ public class AuthenticationService : IAuthenticationService
         if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
 
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(employeeId))
+        if (!_unitOfWork.DriverProfiles.DoesIdExist(employeeId))
             return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
-        var accountList = _unitOfWork.Accounts.Find(account => account.EmployeeProfile.Id == employeeId);
+        var accountList = _unitOfWork.Accounts.Find(account => account.LinkedProfile.Id == employeeId);
         if (accountList.Any()) return (false, "Employee already has an account.");
 
-        var employee = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == employeeId).First();
+        var employee = _unitOfWork.DriverProfiles.Find(employee => employee.Id == employeeId).First();
         var accountInformation =
-            new Account {Username = username, PasswordHash = password, EmployeeProfile = employee, Settings = settings};
+            new Account {Username = username, PasswordHash = password, LinkedProfile = employee, Settings = settings};
 
         _unitOfWork.Accounts.Add(accountInformation);
         await _unitOfWork.CompleteAsync();
@@ -55,7 +55,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var subject = new ClaimsIdentity(new[]
         {
-            new Claim("id", account.EmployeeProfile.Id.ToString()), new Claim("role", account.EmployeeProfile.Role.ToString())
+            new Claim("id", account.LinkedProfile.Id.ToString()), new Claim("role", account.LinkedProfile.Role.ToString())
         });
 
         return subject;

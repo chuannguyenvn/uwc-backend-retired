@@ -2,7 +2,7 @@ namespace Models;
 
 public class DrivingHistory : IndexedEntity
 {
+    public UserProfile DriverProfile { get; set; }
     public DateTime Timestamp { get; set; }
-    public EmployeeProfile Driver { get; set; }
-    public Vehicle Vehicle { get; set; }
+    public Vehicle VehicleUsed { get; set; }
 }

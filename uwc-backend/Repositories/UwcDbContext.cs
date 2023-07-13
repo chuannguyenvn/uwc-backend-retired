@@ -12,19 +12,21 @@ public class UwcDbContext : DbContext
     }
 
     public DbSet<Mcp> Mcps { get; set; }
-    public DbSet<EmployeeProfile> Employees { get; set; }
+    public DbSet<DriverProfile> DriverProfiles { get; set; }
+    public DbSet<CleanerProfile> CleanerProfiles { get; set; }
+    public DbSet<SupervisorProfile> SupervisorProfiles { get; set; }
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<Task> Tasks { get; set; }
     public DbSet<Route> Routes { get; set; }
     public DbSet<TaskIncludeMcp> TaskIncludeMcps { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<DrivingHistory> Drives { get; set; }
+    public DbSet<DrivingHistory> DrivingHistories { get; set; }
     public DbSet<DrivingLicense> DrivingLicenses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Message>().HasOne(message => message.Sender).WithMany().OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<Message>().HasOne(message => message.Receiver).WithMany().OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Message>().HasOne(message => message.SenderAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Message>().HasOne(message => message.ReceiverAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -6,6 +6,6 @@ public class Account : IndexedEntity
     public string PasswordHash { get; set; }
     public string Salt { get; set; }
 
-    public EmployeeProfile EmployeeProfile { get; set; }
+    public UserProfile LinkedProfile { get; set; }
     public string Settings { get; set; }
 }

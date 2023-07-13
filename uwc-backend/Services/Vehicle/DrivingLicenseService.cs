@@ -29,14 +29,14 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public (bool success, object result) AddDrivingLicense(DateTime issueDate, string issuePlace, int ownerId, string type)
     {
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(ownerId))
+        if (!_unitOfWork.DriverProfiles.DoesIdExist(ownerId))
             return (false, "Employee Id does not exist.");
 
-        var owner = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == ownerId).First();
+        var owner = _unitOfWork.DriverProfiles.Find(employee => employee.Id == ownerId).First();
 
-        if (owner.Role != EmployeeRole.Driver) return (false, "Employee Id is not a driver");
+        if (owner.Role != UserRole.Driver) return (false, "Employee Id is not a driver");
 
-        var drivingLicenseInformation = new DrivingLicense {IssueDate = issueDate, IssuePlace = issuePlace, Owner = owner, Type = type};
+        var drivingLicenseInformation = new DrivingLicense {IssueDate = issueDate, IssuePlace = issuePlace, OwnerProfile = owner, Type = type};
 
         _unitOfWork.DrivingLicenses.Add(drivingLicenseInformation);
         _unitOfWork.Complete();
@@ -46,9 +46,9 @@ public class DrivingLicenseService : IDrivingLicenseService
 
     public List<DrivingLicense> GetDrivingLicenseOfDriver(int id)
     {
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(id)) return new List<DrivingLicense>();
+        if (!_unitOfWork.DriverProfiles.DoesIdExist(id)) return new List<DrivingLicense>();
 
-        var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.Owner.Id == id);
+        var drivingLicenseList = _unitOfWork.DrivingLicenses.Find(dl => dl.OwnerProfile.Id == id);
         return drivingLicenseList.ToList();
     }
 
@@ -59,13 +59,13 @@ public class DrivingLicenseService : IDrivingLicenseService
             return (false, "Driving license Id does not exist.");
 
         var drivingLicense = _unitOfWork.DrivingLicenses.Find(dl => dl.Id == id).First();
-        var owner = _unitOfWork.EmployeeProfiles.Find(employee => employee.Id == ownerId).First();
+        var owner = _unitOfWork.DriverProfiles.Find(employee => employee.Id == ownerId).First();
 
-        if (owner.Role != EmployeeRole.Driver) return (false, "Owner is not a driver");
+        if (owner.Role != UserRole.Driver) return (false, "Owner is not a driver");
 
         drivingLicense.IssueDate = issueDate;
         drivingLicense.IssuePlace = issuePlace;
-        drivingLicense.Owner = owner;
+        drivingLicense.OwnerProfile = owner;
         drivingLicense.Type = type;
 
         _unitOfWork.Complete();
