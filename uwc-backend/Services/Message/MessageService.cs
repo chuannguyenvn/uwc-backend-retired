@@ -30,31 +30,6 @@ public class MessageService : IMessageService
         return (true, "Add message successfully.");
     }
 
-    public (bool success, object result) UpdateMessageContent(int id, string textContent)
-    {
-        if (!_unitOfWork.Messages.DoesIdExist(id)) return (false, "Message Id does not exist.");
-
-        var message = _unitOfWork.Messages.Find(message => message.Id == id).First();
-        message.TextContent = textContent;
-        _unitOfWork.Complete();
-
-        return (true, "Message content updated successfully");
-    }
-
-    public List<Models.Message> GetMessagesIn24Hour()
-    {
-        var message = _unitOfWork.Messages.Find(text => text.TextTime >= DateTime.Today.AddDays(-1) && text.TextTime <= DateTime.Now)
-            .ToList();
-
-        return message;
-    }
-
-    public List<Models.Message> GetAllMessages()
-    {
-        var messageList = _unitOfWork.Messages.GetAll();
-        return messageList.ToList();
-    }
-
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
     {
         if (!_unitOfWork.EmployeeProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
@@ -69,16 +44,4 @@ public class MessageService : IMessageService
         return result;
     }
 
-    public List<Models.Message> GetMessagesContainWord(int senderId, int receiverId, string word)
-    {
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
-
-        if (!_unitOfWork.EmployeeProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
-
-        var messageList = _unitOfWork.Messages.Find(message =>
-            (message.Sender.Id == senderId && message.Receiver.Id == receiverId) ||
-            (message.Sender.Id == receiverId && message.Receiver.Id == senderId));
-
-        return messageList.ToList().OrderBy(message => message.TextTime).ToList();
-    }
 }

@@ -2,6 +2,7 @@ using Communications.Message;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Message;
+using Utilities;
 
 namespace Controllers;
 
@@ -16,7 +17,7 @@ public class MessageController : ControllerBase
         _messageService = messageService;
     }
 
-    [HttpPost("add-message")]
+    [HttpPost("add")]
     public IActionResult AddMessage(AddMessageRequest addMessageRequest)
     {
         var (success, result) = _messageService.AddMessage(addMessageRequest.Sender,
@@ -29,44 +30,10 @@ public class MessageController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("update-message-content")]
-    public IActionResult UpdateMessageContent(UpdateMessageRequest updateMessageRequest)
+    [HttpGet("inbox/{userId}")]
+    public List<Message> GetAllMessagesWith([FromRoute] int userId)
     {
-        var (success, result) = _messageService.UpdateMessageContent(updateMessageRequest.Id, updateMessageRequest.TextContent);
-
-        if (!success) return BadRequest(result);
-
-        return Ok(result);
-    }
-
-    [HttpGet("get-message-in-24-hour")]
-    public List<Message> GetMessageIn24Hour()
-    {
-        var result = _messageService.GetMessagesIn24Hour();
-        return result;
-    }
-
-    [HttpGet("get-all-messages")]
-    public List<Message> GetAllMessages()
-    {
-        var result = _messageService.GetAllMessages();
-        return result;
-    }
-
-    [HttpGet("get-all-messages-between-2-users")]
-    public List<Message> GetAllMessagesBetween2Users(GetMessagesOfTwoUsersRequest getMessagesOfTwoUsersRequest)
-    {
-        var result = _messageService.GetAllMessagesOfTwoUsers(getMessagesOfTwoUsersRequest.Sender, getMessagesOfTwoUsersRequest.Receiver);
-        return result;
-    }
-
-    [HttpGet("get-messages-2-users-contain-word")]
-    public List<Message> GetMessages2UsersContainWord(GetMessagesContainWordRequest getMessagesContainWordRequest)
-    {
-        var result = _messageService.GetMessagesContainWord(getMessagesContainWordRequest.Sender,
-            getMessagesContainWordRequest.Receiver,
-            getMessagesContainWordRequest.Word);
-
+        var result = _messageService.GetAllMessagesOfTwoUsers(User.GetLoggedInUserId(), userId);
         return result;
     }
 }
