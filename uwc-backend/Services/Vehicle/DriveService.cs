@@ -13,7 +13,7 @@ public class DriveService : IDriveService
         _unitOfWork = unitOfWork;
     }
 
-    public (bool success, object result) AddDrive(DateTime date, int driverId, int vehicleId)
+    public (bool success, object result) AddDrivingHistory(DateTime date, int driverId, int vehicleId)
     {
         if (!_unitOfWork.EmployeeProfiles.DoesIdExist(driverId))
             return (false, "Employee Id does not exist.");
@@ -21,8 +21,8 @@ public class DriveService : IDriveService
         if (!_unitOfWork.Vehicles.DoesIdExist(vehicleId))
             return (false, "Vehicle Id does not exist.");
 
-        var driverList = _unitOfWork.EmployeeProfiles.Find(driver => driver.Id == driverId && driver.Role == EmployeeRole.Driver);
-        if (driverList.Count() == 0) return (false, "Wrong role.");
+        var driverList = _unitOfWork.EmployeeProfiles.Find(driver => driver.Id == driverId && driver.Role == EmployeeRole.Driver).ToList();
+        if (!driverList.Any()) return (false, "Wrong role.");
 
         var driver = driverList.First();
         var vehicle = _unitOfWork.Vehicles.Find(vehicle => vehicle.Id == vehicleId).First();
@@ -34,13 +34,13 @@ public class DriveService : IDriveService
         return (true, "Add driving history successfully.");
     }
 
-    public List<DrivingHistory> GetAllDrives()
+    public List<DrivingHistory> GetAllDrivingHistory()
     {
         var drivingList = _unitOfWork.Drives.GetAll();
         return drivingList.ToList();
     }
 
-    public (bool success, object result) DeleteDrive(int id)
+    public (bool success, object result) DeleteDrivingHistory(int id)
     {
         if (!_unitOfWork.Drives.DoesIdExist(id))
             return (false, "Driving history Id does not exist.");
@@ -50,19 +50,5 @@ public class DriveService : IDriveService
         _unitOfWork.Drives.Remove(drivingHistory);
         _unitOfWork.Complete();
         return (true, "Driving history deleted successfully");
-    }
-
-    public List<DrivingHistory> GetDriverFullVehicleSortByName()
-    {
-        var driverFullVehicleList = _unitOfWork.Drives.Find(drive =>
-            drive.Vehicle.CurrentLoad - 100.0 > 0 && drive.Timestamp.Day == DateTime.Today.Day);
-        return driverFullVehicleList.ToList().OrderBy(d => d.Driver.LastName).ToList();
-    }
-
-    public List<DrivingHistory> GetDriverFullVehicleSortByCurrentLoad()
-    {
-        var driverFullVehicleList = _unitOfWork.Drives.Find(drive =>
-            drive.Vehicle.CurrentLoad - 100.0 > 0 && drive.Timestamp.Day == DateTime.Today.Day);
-        return driverFullVehicleList.ToList().OrderByDescending(d => d.Vehicle.CurrentLoad).ToList();
     }
 }
