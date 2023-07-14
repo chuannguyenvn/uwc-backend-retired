@@ -114,6 +114,36 @@ public class DataSeeder
         }
     }
 
+    public void SeedDrivingHistories()
+    {
+        Random random = new Random();
+
+        foreach (var driverProfile in _uwcDbContext.DriverProfiles.ToList())
+        {
+            int historyCount = random.Next(1, 11);
+
+            for (int i = 0; i < historyCount; i++)
+            {
+                var drivingHistory = new DrivingHistory
+                {
+                    DriverProfile = driverProfile,
+                    Timestamp = DataSeederHelper.GenerateRandomDate(2015, 2023),
+                    VehicleUsed = GetRandomVehicle()
+                };
+
+                _uwcDbContext.DrivingHistories.Add(drivingHistory);
+            }
+        }
+    }
+
+    private Vehicle GetRandomVehicle()
+    {
+        Random random = new Random();
+        int vehicleCount = _uwcDbContext.Vehicles.Count();
+        int randomIndex = random.Next(vehicleCount);
+        return _uwcDbContext.Vehicles.Skip(randomIndex).FirstOrDefault();
+    }
+
     public void SeedDrivingLicenses()
     {
         foreach (var driverProfile in _uwcDbContext.DriverProfiles)
@@ -135,6 +165,25 @@ public class DataSeeder
         }
     }
 
+    public void SeedMcps()
+    {
+        Random random = new Random();
+
+        for (int i = 0; i < 30; i++)
+        {
+            float capacity = random.Next(500, 1000);
+            float currentLoad = random.Next(0, (int)capacity);
+            (double latitude, double longitude) = DataSeederHelper.GenerateRandomCoordinates(DataSeederHelper.MinLatitude,
+                DataSeederHelper.MaxLatitude,
+                DataSeederHelper.MinLongitude,
+                DataSeederHelper.MaxLongitude);
+
+            var mcp = new Mcp {Capacity = capacity, CurrentLoad = currentLoad, Latitude = latitude, Longitude = longitude};
+
+            _uwcDbContext.Mcps.Add(mcp);
+        }
+    }
+    
     public void SeedVehicles()
     {
         string[] licensePlates = DataSeederHelper.GenerateLicensePlates(30);

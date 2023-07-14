@@ -77,6 +77,11 @@
         "Crank"
     };
 
+    public static readonly float MinLatitude = 10.7f;
+    public static readonly float MaxLatitude = 10.8f;
+    public static readonly float MinLongitude = 106.6f;
+    public static readonly float MaxLongitude = 106.7f;
+
     private static readonly Random Random = new();
 
     public static DateTime GenerateRandomDate(int startYear, int endYear)
@@ -130,4 +135,13 @@
         const string numbers = "0123456789";
         return new string(Enumerable.Repeat(numbers, count).Select(s => s[Random.Next(s.Length)]).ToArray());
     }
+    
+    public static (double latitude, double longitude) GenerateRandomCoordinates(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude)
+    {
+        Random random = new Random();
+        double latitude = random.NextDouble() * (maxLatitude - minLatitude) + minLatitude;
+        double longitude = random.NextDouble() * (maxLongitude - minLongitude) + minLongitude;
+        return (latitude, longitude);
+    }
+
 }
