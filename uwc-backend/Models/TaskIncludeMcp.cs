@@ -1,7 +1,8 @@
-namespace Models;
-
-public class TaskIncludeMcp : IndexedEntity
+namespace Models
 {
-    public Task Task { get; set; }
-    public Mcp Mcp { get; set; }
+    public class TaskIncludeMcp : IndexedEntity
+    {
+        public Task Task { get; set; }
+        public Mcp Mcp { get; set; }
+    }
 }

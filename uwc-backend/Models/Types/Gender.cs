@@ -1,8 +1,9 @@
-﻿namespace Models.Types;
-
-public enum Gender
+﻿namespace Models.Types
 {
-    Male,
-    Female,
-    Other
+    public enum Gender
+    {
+        Male,
+        Female,
+        Other
+    }
 }
