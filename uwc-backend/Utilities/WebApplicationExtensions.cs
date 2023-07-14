@@ -17,13 +17,14 @@ public static class WebApplicationExtensions
         dataSeeder.SeedDriverProfiles();
         dataSeeder.SeedCleanerProfiles();
         dataSeeder.SeedAccounts();
-        dataSeeder.SeedDrivingHistories();
+        // dataSeeder.SeedDrivingHistories();
         dataSeeder.SeedDrivingLicenses();
-        dataSeeder.SeedMcps();
+        // dataSeeder.SeedMcps();
         dataSeeder.SeedVehicles();
-        dataSeeder.SeedTasks();
-        dataSeeder.SeedRoutes();
-        dataSeeder.SeedMessages();
+        // dataSeeder.SeedTasks();
+        // dataSeeder.SeedRoutes();
+        // dataSeeder.SeedMessages();
+        dataSeeder.FinishSeeding();
 
         return webApplication;
     }
