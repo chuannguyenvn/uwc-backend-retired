@@ -21,7 +21,7 @@ public class DrivingLicenseController : ControllerBase
     {
         var (success, result) = _drivingLicenseService.AddDrivingLicense(addDrivingLicenseRequest.IssueDate,
             addDrivingLicenseRequest.IssuePlace,
-            addDrivingLicenseRequest.Owner,
+            addDrivingLicenseRequest.OwnerDriverId,
             addDrivingLicenseRequest.Type);
 
         if (!success) return BadRequest(result);
@@ -42,7 +42,7 @@ public class DrivingLicenseController : ControllerBase
         var (success, result) = _drivingLicenseService.UpdateDrivingLicense(updateDrivingLicenseRequest.Id,
             updateDrivingLicenseRequest.IssueDate,
             updateDrivingLicenseRequest.IssuePlace,
-            updateDrivingLicenseRequest.Owner,
+            updateDrivingLicenseRequest.OwnerDriverId,
             updateDrivingLicenseRequest.Type);
 
         if (!success) return BadRequest(result);

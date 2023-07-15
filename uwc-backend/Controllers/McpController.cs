@@ -17,12 +17,12 @@ public class McpController : ControllerBase
     }
 
     [HttpPost("add")]
-    public IActionResult AddMcp(AddRequest addRequest)
+    public IActionResult AddMcp(AddMcpRequest addMcpRequest)
     {
-        var (success, result) = _mcpService.AddMcp(addRequest.Capacity,
-            addRequest.CurrentLoad,
-            addRequest.Latitude,
-            addRequest.Longitude);
+        var (success, result) = _mcpService.AddMcp(addMcpRequest.Capacity,
+            addMcpRequest.CurrentLoad,
+            addMcpRequest.Latitude,
+            addMcpRequest.Longitude);
 
         if (!success) return BadRequest(result);
 
@@ -47,11 +47,11 @@ public class McpController : ControllerBase
     }
 
     [HttpGet("get/in-range")]
-    public List<Mcp> GetMcpsInRange(GetInRangeRequest getInRangeRequest)
+    public List<Mcp> GetMcpsInRange(GetMcpsInRangeRequest getMcpsInRangeRequest)
     {
-        var result = _mcpService.GetMcpsInRange(getInRangeRequest.Latitude,
-            getInRangeRequest.Longitude,
-            getInRangeRequest.Radius);
+        var result = _mcpService.GetMcpsInRange(getMcpsInRangeRequest.Latitude,
+            getMcpsInRangeRequest.Longitude,
+            getMcpsInRangeRequest.Radius);
         return result;
     }
 
@@ -73,9 +73,9 @@ public class McpController : ControllerBase
     }
 
     [HttpPut("update-load")]
-    public IActionResult UpdateMcpCurrentLoad(UpdateLoadRequest updateLoadRequest)
+    public IActionResult UpdateMcpCurrentLoad(UpdateMcpLoadRequest updateMcpLoadRequest)
     {
-        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateLoadRequest.Id, updateLoadRequest.CurrentLoad);
+        var (success, result) = _mcpService.UpdateMcpCurrentLoad(updateMcpLoadRequest.Id, updateMcpLoadRequest.CurrentLoad);
 
         if (!success) return BadRequest(result);
 

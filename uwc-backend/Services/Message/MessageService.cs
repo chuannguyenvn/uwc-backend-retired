@@ -33,7 +33,6 @@ public class MessageService : IMessageService
     public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
     {
         if (!_unitOfWork.DriverProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
-
         if (!_unitOfWork.DriverProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
@@ -44,4 +43,23 @@ public class MessageService : IMessageService
         return result;
     }
 
+    public Dictionary<int, Models.Message> GetLatestMessagesOf(int userId)
+    {
+        if (!_unitOfWork.DriverProfiles.DoesIdExist(userId)) return new Dictionary<int, Models.Message>();
+
+        var result = new Dictionary<int, Models.Message>();
+        foreach (var account in _unitOfWork.Accounts.GetAll().ToList())
+        {
+            if (!_unitOfWork.Messages.GetAll()
+                    .Any(message => message.SenderAccountId == userId || message.ReceiverAccountId == userId)) continue;
+
+            result.Add(account.Id,
+                _unitOfWork.Messages.GetAll()
+                    .Where(message => message.SenderAccountId == userId || message.ReceiverAccountId == userId)
+                    .OrderByDescending(message => message.TextTime)
+                    .First());
+        }
+
+        return result;
+    }
 }

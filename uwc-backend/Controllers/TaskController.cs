@@ -21,9 +21,9 @@ public class TaskController : ControllerBase
     public IActionResult AddTask(AddTaskRequest addTaskRequest)
     {
         var (success, result) = _taskService.AddTask(addTaskRequest.Date,
-            addTaskRequest.Supervisor,
-            addTaskRequest.Worker,
-            addTaskRequest.Route);
+            addTaskRequest.SupervisorId,
+            addTaskRequest.WorkerId,
+            addTaskRequest.RouteId);
 
         if (!success) return BadRequest(result);
 
@@ -62,9 +62,9 @@ public class TaskController : ControllerBase
     {
         var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id,
             updateTaskRequest.Date,
-            updateTaskRequest.Supervisor,
-            updateTaskRequest.Worker,
-            updateTaskRequest.Route);
+            updateTaskRequest.SupervisorId,
+            updateTaskRequest.WorkerId,
+            updateTaskRequest.RouteId);
 
         if (!success) return BadRequest(result);
 

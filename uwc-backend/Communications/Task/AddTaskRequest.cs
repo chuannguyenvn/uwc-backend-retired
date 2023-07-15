@@ -5,8 +5,8 @@ namespace Communications.Task
     public class AddTaskRequest
     {
         [JsonProperty("Date")] public DateTime Date { get; set; }
-        [JsonProperty("Supervisor")] public int Supervisor { get; set; }
-        [JsonProperty("Worker")] public int Worker { get; set; }
-        [JsonProperty("Route")] public int Route { get; set; }
+        [JsonProperty("Supervisor")] public int SupervisorId { get; set; }
+        [JsonProperty("Worker")] public int WorkerId { get; set; }
+        [JsonProperty("Route")] public int RouteId { get; set; }
     }
 }

@@ -36,4 +36,11 @@ public class MessageController : ControllerBase
         var result = _messageService.GetAllMessagesOfTwoUsers(User.GetLoggedInUserId(), userId);
         return result;
     }
+
+    [HttpGet("inbox/latest")]
+    public Dictionary<int, Message> GetLatestMessages()
+    {
+        var result = _messageService.GetLatestMessagesOf(User.GetLoggedInUserId());
+        return result;
+    }
 }

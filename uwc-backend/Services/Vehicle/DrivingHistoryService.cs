@@ -4,11 +4,11 @@ using Repositories;
 
 namespace Services.Vehicle;
 
-public class DriveService : IDriveService
+public class DrivingHistoryService : IDrivingHistoryService
 {
     private readonly UnitOfWork _unitOfWork;
 
-    public DriveService(UnitOfWork unitOfWork)
+    public DrivingHistoryService(UnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

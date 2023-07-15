@@ -7,19 +7,21 @@ namespace Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class DriveController : ControllerBase
+public class DrivingHistoryController : ControllerBase
 {
-    private readonly IDriveService _driveService;
+    private readonly IDrivingHistoryService _drivingHistoryService;
 
-    public DriveController(IDriveService driveService)
+    public DrivingHistoryController(IDrivingHistoryService drivingHistoryService)
     {
-        _driveService = driveService;
+        _drivingHistoryService = drivingHistoryService;
     }
 
     [HttpPost("add")]
-    public IActionResult AddDrivingHistory(AddDriveRequest addDriveRequest)
+    public IActionResult AddDrivingHistory(AddDrivingHistoryRequest addDrivingHistoryRequest)
     {
-        var (success, result) = _driveService.AddDrivingHistory(addDriveRequest.Date, addDriveRequest.Driver, addDriveRequest.Vehicle);
+        var (success, result) = _drivingHistoryService.AddDrivingHistory(addDrivingHistoryRequest.Date,
+            addDrivingHistoryRequest.Driver,
+            addDrivingHistoryRequest.Vehicle);
 
         if (!success) return BadRequest(result);
 
@@ -29,14 +31,14 @@ public class DriveController : ControllerBase
     [HttpGet("all")]
     public List<DrivingHistory> GetAllDrivingHistory()
     {
-        var result = _driveService.GetAllDrivingHistory();
+        var result = _drivingHistoryService.GetAllDrivingHistory();
         return result;
     }
 
-    [HttpDelete("delete/{driveId}")]
-    public IActionResult DeleteDrivingHistory([FromRoute] int driveId)
+    [HttpDelete("delete/{drivingHistoryId}")]
+    public IActionResult DeleteDrivingHistory([FromRoute] int drivingHistoryId)
     {
-        var (success, result) = _driveService.DeleteDrivingHistory(driveId);
+        var (success, result) = _drivingHistoryService.DeleteDrivingHistory(drivingHistoryId);
 
         if (!success) return BadRequest(result);
 

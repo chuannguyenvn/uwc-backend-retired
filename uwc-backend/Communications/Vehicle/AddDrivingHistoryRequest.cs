@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Communications.Vehicle
 {
-    public class AddDriveRequest
+    public class AddDrivingHistoryRequest
     {
         [JsonProperty("Date")] public DateTime Date { get; set; }
         [JsonProperty("Driver")] public int Driver { get; set; }

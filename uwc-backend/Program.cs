@@ -46,7 +46,7 @@ builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskIncludeMcpSerivce, TaskIncludeMcpService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
-builder.Services.AddScoped<IDriveService, DriveService>();
+builder.Services.AddScoped<IDrivingHistoryService, DrivingHistoryService>();
 builder.Services.AddScoped<IDrivingLicenseService, DrivingLicenseService>();
 
 builder.Services.AddScoped<CleanerReportService>();
