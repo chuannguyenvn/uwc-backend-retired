@@ -20,8 +20,7 @@ public class AccountController : ControllerBase
     {
         var (success, message) = await _authenticationService.Register(registerRequest.Username,
             registerRequest.Password,
-            registerRequest.Employee,
-            registerRequest.Settings);
+            registerRequest.Employee);
 
         if (!success) return BadRequest(message);
 

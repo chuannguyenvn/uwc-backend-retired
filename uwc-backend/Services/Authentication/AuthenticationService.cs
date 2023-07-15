@@ -19,7 +19,7 @@ public class AuthenticationService : IAuthenticationService
         _settings = settings;
     }
 
-    public async Task<(bool success, string message)> Register(string username, string password, int employeeId, string settings)
+    public async Task<(bool success, string message)> Register(string username, string password, int employeeId)
     {
         if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
@@ -31,8 +31,7 @@ public class AuthenticationService : IAuthenticationService
         if (accountList.Any()) return (false, "Employee already has an account.");
 
         var employee = _unitOfWork.DriverProfiles.Find(employee => employee.Id == employeeId).First();
-        var accountInformation =
-            new Account {Username = username, PasswordHash = password, LinkedProfile = employee, Settings = settings};
+        var accountInformation = new Account {Username = username, PasswordHash = password, LinkedProfile = employee, Settings = ""};
 
         _unitOfWork.Accounts.Add(accountInformation);
         await _unitOfWork.CompleteAsync();
