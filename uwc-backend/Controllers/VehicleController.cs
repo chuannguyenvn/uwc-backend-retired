@@ -1,6 +1,8 @@
 using Communications.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Newtonsoft.Json;
+using Services.LiveData;
 using Services.Vehicle;
 
 namespace Controllers;
@@ -10,10 +12,12 @@ namespace Controllers;
 public class VehicleController : ControllerBase
 {
     private readonly IVehicleService _vehicleService;
+    private readonly VehicleLocationService _vehicleLocationService;
 
-    public VehicleController(IVehicleService vehicleService)
+    public VehicleController(IVehicleService vehicleService, VehicleLocationService vehicleLocationService)
     {
         _vehicleService = vehicleService;
+        _vehicleLocationService = vehicleLocationService;
     }
 
     [HttpPost("add")]
@@ -56,5 +60,22 @@ public class VehicleController : ControllerBase
         if (!success) return BadRequest(result);
 
         return Ok(result);
+    }
+
+    [HttpPut("update-location/{vehicleId}")]
+    public IActionResult UpdateVehicleLocation([FromRoute] int vehicleId, UpdateVehicleLocationRequest request)
+    {
+        var success = _vehicleLocationService.UpdateVehicleLocation(vehicleId, request.Coordinate);
+
+        if (!success) return BadRequest();
+
+        return Ok();
+    }
+
+    [HttpGet("get/all/location")]
+    public IActionResult GetAllVehicleLocations()
+    {
+        var (success, result) = _vehicleLocationService.GetAllVehicleLocations();
+        return Ok(JsonConvert.SerializeObject(result));
     }
 }

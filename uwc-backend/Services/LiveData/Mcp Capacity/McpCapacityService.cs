@@ -1,4 +1,5 @@
 ﻿using Repositories;
+using Utilities;
 
 namespace Services.LiveData;
 
@@ -27,11 +28,9 @@ public class McpCapacityService : IHostedService, IDisposable
 
     private void RetrieveMcps()
     {
-        using (IServiceScope scope = _serviceProvider.CreateScope())
-        {
-            var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
-            _allMcps = unitOfWork.Mcps.GetAll().ToList();
-        }
+        using IServiceScope scope = _serviceProvider.CreateScope();
+        var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
+        _allMcps = unitOfWork.Mcps.GetAll().ToList();
     }
 
     private void FillMcps(object? state)
@@ -78,5 +77,15 @@ public class McpCapacityService : IHostedService, IDisposable
     {
         _allMcps.First(mcp => mcp.Id == mcpId).CurrentLoad = 0;
         return (true, "Success.");
+    }
+
+    public Models.Mcp GetMostFullMcp()
+    {
+        return _allMcps.MaxBy(mcp => mcp.CurrentLoad);
+    }
+
+    public Models.Mcp GetRandomMcp()
+    {
+        return _allMcps.GetRandomElement();
     }
 }
