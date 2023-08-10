@@ -55,8 +55,11 @@ builder.Services.AddScoped<RouteOptimizationService>();
 builder.Services.AddScoped<DesktopUICustomizationService>();
 builder.Services.AddScoped<MobileUICustomizationService>();
 
-builder.Services.AddHostedService<McpCapacityService>();
-builder.Services.AddHostedService<VehicleLocationService>();
+builder.Services.AddSingleton<McpCapacityService>();
+builder.Services.AddHostedService<McpCapacityService>(provider => provider.GetService<McpCapacityService>());
+
+builder.Services.AddSingleton<VehicleLocationService>();
+builder.Services.AddHostedService<VehicleLocationService>(provider => provider.GetService<VehicleLocationService>());
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>

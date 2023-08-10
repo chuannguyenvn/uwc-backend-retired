@@ -1,6 +1,7 @@
 using Communications.Mcp;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.LiveData;
 using Services.Mcp;
 
 namespace Controllers;
@@ -10,10 +11,12 @@ namespace Controllers;
 public class McpController : ControllerBase
 {
     private readonly IMcpService _mcpService;
+    private readonly McpCapacityService _mcpCapacityService;
 
-    public McpController(IMcpService mcpService)
+    public McpController(IMcpService mcpService, McpCapacityService mcpCapacityService)
     {
         _mcpService = mcpService;
+        _mcpCapacityService = mcpCapacityService;
     }
 
     [HttpPost("add")]
@@ -32,7 +35,7 @@ public class McpController : ControllerBase
     [HttpPut("empty/{mcpId}")]
     public IActionResult EmptyMcp([FromRoute] int mcpId)
     {
-        var (success, result) = _mcpService.EmptyMcp(mcpId);
+        var (success, result) = _mcpCapacityService.EmptyMcp(mcpId);
 
         if (!success) return BadRequest(result);
 

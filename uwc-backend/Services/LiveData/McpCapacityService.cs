@@ -73,4 +73,10 @@ public class McpCapacityService : IHostedService, IDisposable
         _fillTimer?.Dispose();
         _databasePersistTimer?.Dispose();
     }
+
+    public (bool success, object result) EmptyMcp(int mcpId)
+    {
+        _allMcps.First(mcp => mcp.Id == mcpId).CurrentLoad = 0;
+        return (true, "Success.");
+    }
 }
