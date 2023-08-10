@@ -5,24 +5,44 @@ namespace Services.LiveData;
 public class McpCapacityService : IHostedService, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
-    private List<Models.Mcp> _allMcps = new();
+    private List<Models.Mcp> _allMcps;
     private Timer? _fillTimer;
     private Timer? _databasePersistTimer;
+    private readonly Random _random = new();
 
     public McpCapacityService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
-    public Task StartAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        _fillTimer = new Timer(FillMcps, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        RetrieveMcps();
+
+        _fillTimer = new Timer(FillMcps, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
         _databasePersistTimer = new Timer(PersistMcpStates, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+
         return Task.CompletedTask;
+    }
+
+    private void RetrieveMcps()
+    {
+        using (IServiceScope scope = _serviceProvider.CreateScope())
+        {
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
+            _allMcps = unitOfWork.Mcps.GetAll().ToList();
+        }
     }
 
     private void FillMcps(object? state)
     {
+        foreach (var mcp in _allMcps)
+        {
+            if (mcp.CurrentLoad / mcp.Capacity > 1.2f) return;
+            mcp.CurrentLoad += _random.Next(3, 20);
+        }
+
+        Console.WriteLine("Filled.");
     }
 
     private void PersistMcpStates(object? state)
@@ -31,16 +51,19 @@ public class McpCapacityService : IHostedService, IDisposable
         {
             var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
 
-            foreach (var mcp in _allMcps)
+            var mcps = unitOfWork.Mcps.GetAll().ToList();
+            for (int i = 0; i < mcps.Count; i++)
             {
-                unitOfWork.Mcps.GetById(mcp.Id).CurrentLoad = mcp.CurrentLoad;
+                mcps[i].CurrentLoad = _allMcps[i].CurrentLoad;
             }
 
             unitOfWork.Complete();
         }
+
+        Console.WriteLine("Persisted.");
     }
 
-    public Task StopAsync(CancellationToken stoppingToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
@@ -48,5 +71,6 @@ public class McpCapacityService : IHostedService, IDisposable
     public void Dispose()
     {
         _fillTimer?.Dispose();
+        _databasePersistTimer?.Dispose();
     }
 }

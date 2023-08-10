@@ -164,23 +164,67 @@ public class DataSeeder
 
     public void SeedMcps()
     {
-        Random random = new Random();
-
-        for (int i = 0; i < 30; i++)
+        var realDataList = new List<Mcp>
         {
-            float capacity = random.Next(500, 1000);
-            float currentLoad = random.Next(0, (int)capacity);
-            (double latitude, double longitude) = DataSeederHelper.GenerateRandomCoordinates(DataSeederHelper.MinLatitude,
-                DataSeederHelper.MaxLatitude,
-                DataSeederHelper.MinLongitude,
-                DataSeederHelper.MaxLongitude);
+            new() {Capacity = 127, Latitude = 10.7647293589828, Longitude = 106.663266154958, Address = "580 Bà Hạt, P.6, Q.10, TPHCM"},
+            new()
+            {
+                Capacity = 82,
+                Latitude = 10.7675037535589,
+                Longitude = 106.667284093661,
+                Address = "500 Nguyễn Tri Phương, P.9, Q.10, TPHCM"
+            },
+            new() {Capacity = 142, Latitude = 10.7629567124463, Longitude = 106.656977523526, Address = "968 3 Tháng 2, P.15, Q.11, TPHCM"},
+            new()
+            {
+                Capacity = 98,
+                Latitude = 10.7815403101810,
+                Longitude = 106.655190599178,
+                Address = "389 Lý Thường Kiệt, P.8, Q.Tân Bình, TPHCM"
+            },
+            new()
+            {
+                Capacity = 162,
+                Latitude = 10.7771799685277,
+                Longitude = 106.660531841364,
+                Address = "334 Tô Hiến Thành, P.14, Q.10, TPHCM"
+            },
+            new() {Capacity = 128, Latitude = 10.7712254318066, Longitude = 106.665784313171, Address = "54 Thành Thái, P.10, Q.10, TPHCM"},
+            new()
+            {
+                Capacity = 89,
+                Latitude = 10.7668398628915,
+                Longitude = 106.659288627832,
+                Address = "300 Lý Thường Kiệt, P.14, Q.10, TPHCM"
+            },
+            new()
+            {
+                Capacity = 120,
+                Latitude = 10.752208718089143,
+                Longitude = 106.64971397274442,
+                Address = "96 Phạm Đình Hổ, P.2, Q.6, TPHCM"
+            },
+            new() {Capacity = 200, Latitude = 10.786135, Longitude = 106.651209, Address = "1150 Lạc Long Quân, P.8, Q.Tân Bình, TPHCM"},
+            new() {Capacity = 201, Latitude = 10.782575, Longitude = 106.660679, Address = "153 Bắc Hải, P.15, Q.10, TPHCM"},
+            new() {Capacity = 195, Latitude = 10.775672, Longitude = 106.667233, Address = "533 Sư Vạn Hạnh, P.12, Q.10, TPHCM"},
+            new() {Capacity = 141, Latitude = 10.776559, Longitude = 106.663600, Address = "218 Thành Thái, P.15, Q.10, TPHCM"},
+            new() {Capacity = 137, Latitude = 10.771117, Longitude = 106.652352, Address = "84 Nguyễn Thị Nhỏ, P.9, Q.Tân Bình, TPHCM"},
+            new() {Capacity = 183, Latitude = 10.7807, Longitude = 106.676, Address = "276 Cách Mạng Tháng Tám, P.15, Q.3, TPHCM"},
+            new() {Capacity = 140, Latitude = 10.7612, Longitude = 106.661, Address = "93 Lý Thường Kiệt, P.7, Q.10, TPHCM"}
+        };
 
-            var mcp = new Mcp {Capacity = capacity, CurrentLoad = currentLoad, Latitude = latitude, Longitude = longitude};
+        foreach (var realData in realDataList)
+        {
+            var mcp = new Mcp
+            {
+                Capacity = realData.Capacity, Latitude = realData.Latitude, Longitude = realData.Longitude, Address = realData.Address
+            };
 
             _uwcDbContext.Mcps.Add(mcp);
         }
     }
-    
+
+
     public void SeedVehicles()
     {
         string[] licensePlates = DataSeederHelper.GenerateLicensePlates(30);

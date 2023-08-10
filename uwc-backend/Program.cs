@@ -7,6 +7,7 @@ using Repositories;
 using Services.AccountManagement;
 using Services.Administration;
 using Services.Authentication;
+using Services.LiveData;
 using Services.Mcp;
 using Services.Message;
 using Services.Profile;
@@ -53,6 +54,9 @@ builder.Services.AddScoped<VehicleReportService>();
 builder.Services.AddScoped<RouteOptimizationService>();
 builder.Services.AddScoped<DesktopUICustomizationService>();
 builder.Services.AddScoped<MobileUICustomizationService>();
+
+builder.Services.AddHostedService<McpCapacityService>();
+builder.Services.AddHostedService<VehicleLocationService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>
