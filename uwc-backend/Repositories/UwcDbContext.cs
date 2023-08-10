@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
-using Route = Models.Route;
-using Task = Models.Task;
 
 namespace Repositories;
 
@@ -23,10 +21,8 @@ public class UwcDbContext : DbContext
     public DbSet<Mcp> Mcps { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
 
-    public DbSet<Task> Tasks { get; set; }
-    public DbSet<Route> Routes { get; set; }
+    public DbSet<TaskEntry> Tasks { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<TaskIncludeMcp> TaskIncludeMcps { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,7 +31,7 @@ public class UwcDbContext : DbContext
         modelBuilder.Entity<Message>().HasOne(message => message.SenderAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<Message>().HasOne(message => message.ReceiverAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<Task>().HasOne(task => task.Supervisor).WithMany().OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<Task>().HasOne(task => task.Worker).WithMany().OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<TaskEntry>().HasOne(task => task.Supervisor).WithMany().OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<TaskEntry>().HasOne(task => task.Worker).WithMany().OnDelete(DeleteBehavior.NoAction);
     }
 }

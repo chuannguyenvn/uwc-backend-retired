@@ -1,9 +1,6 @@
 ﻿using Models;
 using Models.Types;
 using Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 public class DataSeeder
 {

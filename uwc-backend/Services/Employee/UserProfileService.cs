@@ -17,7 +17,7 @@ public class UserProfileService : IUserProfileService
     public async Task<(bool success, string message)> AddSupervisorProfile(string firstName, string lastName, Gender gender,
         DateTime dateOfBirth)
     {
-        var supervisorProfile = new SupervisorProfile()
+        var supervisorProfile = new SupervisorProfile
         {
             FirstName = firstName,
             LastName = lastName,
@@ -35,7 +35,7 @@ public class UserProfileService : IUserProfileService
     public async Task<(bool success, string message)> AddCleanerProfile(string firstName, string lastName, Gender gender,
         DateTime dateOfBirth)
     {
-        var cleanerProfile = new CleanerProfile()
+        var cleanerProfile = new CleanerProfile
         {
             FirstName = firstName,
             LastName = lastName,
@@ -53,7 +53,7 @@ public class UserProfileService : IUserProfileService
     public async Task<(bool success, string message)> AddDriverProfile(string firstName, string lastName, Gender gender,
         DateTime dateOfBirth)
     {
-        var driverProfile = new DriverProfile()
+        var driverProfile = new DriverProfile
         {
             FirstName = firstName,
             LastName = lastName,

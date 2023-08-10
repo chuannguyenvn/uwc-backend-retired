@@ -1,6 +1,4 @@
-﻿using Models;
-using Models.Types;
-using Repositories;
+﻿using Repositories;
 
 public static class WebApplicationExtensions
 {

@@ -1,8 +1,7 @@
 using Communications.Task;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Services.Task;
-using Task = Models.Task;
+using Services.TaskEntry;
 
 namespace Controllers;
 
@@ -10,17 +9,17 @@ namespace Controllers;
 [Route("[controller]")]
 public class TaskController : ControllerBase
 {
-    private readonly ITaskService _taskService;
+    private readonly IWorkService _workService;
 
-    public TaskController(ITaskService taskService)
+    public TaskController(IWorkService workService)
     {
-        _taskService = taskService;
+        _workService = workService;
     }
 
     [HttpPost("add")]
     public IActionResult AddTask(AddTaskRequest addTaskRequest)
     {
-        var (success, result) = _taskService.AddTask(addTaskRequest.Date,
+        var (success, result) = _workService.AddTask(addTaskRequest.Date,
             addTaskRequest.SupervisorId,
             addTaskRequest.WorkerId,
             addTaskRequest.RouteId);
@@ -31,16 +30,16 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet("get/all/{employeeId}")]
-    public List<Task> GetAllTasksOfEmployee([FromRoute] int employeeId)
+    public List<TaskEntry> GetAllTasksOfEmployee([FromRoute] int employeeId)
     {
-        var result = _taskService.GetAllTasksOfEmployee(employeeId);
+        var result = _workService.GetAllTasksOfEmployee(employeeId);
         return result;
     }
 
     [HttpDelete("delete/all/{employeeId}")]
     public IActionResult DeleteAllTasksOfEmployee([FromRoute] int employeeId)
     {
-        var (success, result) = _taskService.DeleteAllTasksOfEmployee(employeeId);
+        var (success, result) = _workService.DeleteAllTasksOfEmployee(employeeId);
 
         if (!success) return BadRequest(result);
 
@@ -50,7 +49,7 @@ public class TaskController : ControllerBase
     [HttpDelete("delete/{taskId}")]
     public IActionResult DeleteTask([FromRoute] int taskId)
     {
-        var (success, result) = _taskService.DeleteTask(taskId);
+        var (success, result) = _workService.DeleteTask(taskId);
 
         if (!success) return BadRequest(result);
 
@@ -60,7 +59,7 @@ public class TaskController : ControllerBase
     [HttpPut("update")]
     public IActionResult UpdateTask(UpdateTaskRequest updateTaskRequest)
     {
-        var (success, result) = _taskService.UpdateTask(updateTaskRequest.Id,
+        var (success, result) = _workService.UpdateTask(updateTaskRequest.Id,
             updateTaskRequest.Date,
             updateTaskRequest.SupervisorId,
             updateTaskRequest.WorkerId,
@@ -74,7 +73,7 @@ public class TaskController : ControllerBase
     [HttpGet("free")]
     public List<UserProfile> GetFreeEmployees()
     {
-        var result = _taskService.GetFreeEmployees();
+        var result = _workService.GetFreeEmployees();
         return result;
     }
 }

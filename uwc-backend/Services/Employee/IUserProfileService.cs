@@ -16,9 +16,9 @@ public interface IUserProfileService
     public Task<(bool success, string message)> UpdateUserProfile(int employeeId, string firstname, string lastname, Gender gender,
         DateTime dateOfBirth, UserRole userRole);
 
-    public Task<(bool success, string message, List<Models.UserProfile> result)> GetAllUserProfiles();
+    public Task<(bool success, string message, List<UserProfile> result)> GetAllUserProfiles();
 
-    public Task<(bool success, string message, Models.UserProfile result)> GetUserProfileById(int id);
+    public Task<(bool success, string message, UserProfile result)> GetUserProfileById(int id);
 
-    public Task<(bool success, string message, List<Models.UserProfile> result)> GetAllEmployeesWithRole(UserRole userRole);
+    public Task<(bool success, string message, List<UserProfile> result)> GetAllEmployeesWithRole(UserRole userRole);
 }

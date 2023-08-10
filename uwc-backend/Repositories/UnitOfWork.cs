@@ -14,10 +14,8 @@ public class UnitOfWork : IDisposable
         SupervisorProfiles = new SupervisorProfileRepository(_uwcDbContext);
         DriverProfiles = new DriverProfileRepository(_uwcDbContext);
         Mcps = new McpRepository(_uwcDbContext);
-        Tasks = new TaskRepository(_uwcDbContext);
+        TaskEntries = new TaskEntryRepository(_uwcDbContext);
         Messages = new MessageRepository(_uwcDbContext);
-        Routes = new RouteRepository(_uwcDbContext);
-        TaskIncludeMcps = new TaskIncludeMcpRepository(_uwcDbContext);
         Vehicles = new VehicleRepository(_uwcDbContext);
         DrivingLicenses = new DrivingLicenseRepository(_uwcDbContext);
         DrivingHistories = new DrivingHistoryRepository(_uwcDbContext);
@@ -28,10 +26,8 @@ public class UnitOfWork : IDisposable
     public CleanerProfileRepository CleanerProfiles { get; }
     public SupervisorProfileRepository SupervisorProfiles { get; }
     public McpRepository Mcps { get; }
-    public TaskRepository Tasks { get; }
+    public TaskEntryRepository TaskEntries { get; }
     public MessageRepository Messages { get; }
-    public RouteRepository Routes { get; }
-    public TaskIncludeMcpRepository TaskIncludeMcps { get; }
     public VehicleRepository Vehicles { get; }
     public DrivingHistoryRepository DrivingHistories { get; }
     public DrivingLicenseRepository DrivingLicenses { get; }

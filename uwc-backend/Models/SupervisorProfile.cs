@@ -1,6 +1,4 @@
-﻿using Models.Types;
-
-namespace Models
+﻿namespace Models
 {
     public class SupervisorProfile : UserProfile
     {

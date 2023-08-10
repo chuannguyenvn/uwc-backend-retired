@@ -1,21 +1,52 @@
 ﻿using Repositories;
-using Utilities;
 
 namespace Services.LiveData;
 
-public class McpCapacityService
+public class McpCapacityService : IHostedService, IDisposable
 {
-    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IServiceProvider _serviceProvider;
+    private List<Models.Mcp> _allMcps = new();
+    private Timer? _fillTimer;
+    private Timer? _databasePersistTimer;
 
-    public McpCapacityService(IServiceScopeFactory serviceScopeFactory)
+    public McpCapacityService(IServiceProvider serviceProvider)
     {
-        _serviceScopeFactory = serviceScopeFactory;
+        _serviceProvider = serviceProvider;
     }
 
-    public int GetMcpsWithHighLoadCount()
+    public Task StartAsync(CancellationToken stoppingToken)
     {
-        using var scope = _serviceScopeFactory.CreateScope();
-        var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
-        return unitOfWork.Mcps.GetMcpsWithMinimumLoad(Constants.MCP_NEARLY_FULL_LOAD).Count();
+        _fillTimer = new Timer(FillMcps, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        _databasePersistTimer = new Timer(PersistMcpStates, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+        return Task.CompletedTask;
+    }
+
+    private void FillMcps(object? state)
+    {
+    }
+
+    private void PersistMcpStates(object? state)
+    {
+        using (IServiceScope scope = _serviceProvider.CreateScope())
+        {
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
+
+            foreach (var mcp in _allMcps)
+            {
+                unitOfWork.Mcps.GetById(mcp.Id).CurrentLoad = mcp.CurrentLoad;
+            }
+
+            unitOfWork.Complete();
+        }
+    }
+
+    public Task StopAsync(CancellationToken stoppingToken)
+    {
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _fillTimer?.Dispose();
     }
 }

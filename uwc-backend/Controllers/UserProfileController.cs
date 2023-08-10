@@ -1,9 +1,8 @@
 using Communications.Employee;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Models.Types;
 using Services.Profile;
-using Services.Task;
+using Services.TaskEntry;
 
 namespace Controllers;
 
@@ -13,7 +12,7 @@ public class UserProfileController : ControllerBase
 {
     private readonly IUserProfileService _userProfileService;
 
-    public UserProfileController(IUserProfileService userProfileService, ITaskService taskService)
+    public UserProfileController(IUserProfileService userProfileService, IWorkService workService)
     {
         _userProfileService = userProfileService;
     }
