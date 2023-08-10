@@ -38,7 +38,7 @@ public class McpCapacityService : IHostedService, IDisposable
         foreach (var mcp in _allMcps)
         {
             if (mcp.CurrentLoad / mcp.Capacity > 1.2f) return;
-            mcp.CurrentLoad += _random.Next(3, 20);
+            mcp.CurrentLoad += _random.Next(30, 70);
         }
 
         Console.WriteLine("Filled.");

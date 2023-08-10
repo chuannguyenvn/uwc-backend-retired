@@ -74,6 +74,7 @@ public class VehicleLocationService : IHostedService, IDisposable
                     {
                         var t = Math.Clamp(distanceLeft / distanceToNextWaypoint, 0, 1);
                         locationData.CurrentLocation = Coordinate.Lerp(currentLocation, nextWaypointLocation, t);
+                        EmptyMcp(locationData.TargettingMcp.Id);
                         break;
                     }
 
@@ -107,6 +108,13 @@ public class VehicleLocationService : IHostedService, IDisposable
         using IServiceScope scope = _serviceProvider.CreateScope();
         var mcpCapacityService = scope.ServiceProvider.GetRequiredService<McpCapacityService>();
         return mcpCapacityService.GetRandomMcp();
+    }
+
+    private void EmptyMcp(int mcpId)
+    {
+        using IServiceScope scope = _serviceProvider.CreateScope();
+        var mcpCapacityService = scope.ServiceProvider.GetRequiredService<McpCapacityService>();
+        mcpCapacityService.EmptyMcp(mcpId);
     }
 
     private string ConstructMapboxDirectionRequest(Coordinate currentLocation, Coordinate destinationLocation)
