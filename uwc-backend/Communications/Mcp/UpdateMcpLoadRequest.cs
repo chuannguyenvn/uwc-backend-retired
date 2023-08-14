@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-namespace Communications.Mcp;
-
-public class UpdateMcpLoadRequest
+namespace Communications.Mcp
 {
-    [JsonProperty("Id")] public int Id { get; set; }
-    [JsonProperty("CurrentLoad")] public float CurrentLoad { get; set; }
+    public class UpdateMcpLoadRequest
+    {
+        [JsonProperty("Id")] public int Id { get; set; }
+        [JsonProperty("CurrentLoad")] public float CurrentLoad { get; set; }
+    }
 }

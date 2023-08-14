@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-namespace Communications.Message;
-
-public class UpdateMessageRequest
+namespace Communications.Message
 {
-    [JsonProperty("Id")] public int Id { get; set; }
-    [JsonProperty("TextContent")] public string TextContent { get; set; }
+    public class UpdateMessageRequest
+    {
+        [JsonProperty("Id")] public int Id { get; set; }
+        [JsonProperty("TextContent")] public string TextContent { get; set; }
+    }
 }
