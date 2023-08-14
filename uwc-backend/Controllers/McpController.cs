@@ -10,8 +10,8 @@ namespace Controllers;
 [Route("[controller]")]
 public class McpController : ControllerBase
 {
-    private readonly IMcpService _mcpService;
     private readonly McpCapacityService _mcpCapacityService;
+    private readonly IMcpService _mcpService;
 
     public McpController(IMcpService mcpService, McpCapacityService mcpCapacityService)
     {

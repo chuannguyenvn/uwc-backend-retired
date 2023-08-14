@@ -13,6 +13,7 @@ public class UnitOfWork : IDisposable
         Accounts = new AccountRepository(_uwcDbContext);
         SupervisorProfiles = new SupervisorProfileRepository(_uwcDbContext);
         DriverProfiles = new DriverProfileRepository(_uwcDbContext);
+        CleanerProfiles = new CleanerProfileRepository(_uwcDbContext);
         Mcps = new McpRepository(_uwcDbContext);
         TaskEntries = new TaskEntryRepository(_uwcDbContext);
         Messages = new MessageRepository(_uwcDbContext);

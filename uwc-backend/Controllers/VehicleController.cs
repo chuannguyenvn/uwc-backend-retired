@@ -11,8 +11,8 @@ namespace Controllers;
 [Route("[controller]")]
 public class VehicleController : ControllerBase
 {
-    private readonly IVehicleService _vehicleService;
     private readonly VehicleLocationService _vehicleLocationService;
+    private readonly IVehicleService _vehicleService;
 
     public VehicleController(IVehicleService vehicleService, VehicleLocationService vehicleLocationService)
     {
@@ -76,6 +76,6 @@ public class VehicleController : ControllerBase
     public IActionResult GetAllVehicleLocations()
     {
         var (success, result) = _vehicleLocationService.GetAllVehicleLocations();
-        return Ok(JsonConvert.SerializeObject(result));
+        return Ok(JsonConvert.SerializeObject(new GetAllVehicleLocationResponse(){Result = result}));
     }
 }

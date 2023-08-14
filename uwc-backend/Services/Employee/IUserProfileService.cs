@@ -1,12 +1,13 @@
 ﻿using Models;
-using Models.Types;
+using Types;
 
 namespace Services.Profile;
 
 public interface IUserProfileService
 {
-    public Task<(bool success, string message)> AddSupervisorProfile(string firstName, string lastName, Gender gender, DateTime dateOfBirth);
-    
+    public Task<(bool success, string message)>
+        AddSupervisorProfile(string firstName, string lastName, Gender gender, DateTime dateOfBirth);
+
     public Task<(bool success, string message)> AddCleanerProfile(string firstName, string lastName, Gender gender, DateTime dateOfBirth);
 
     public Task<(bool success, string message)> AddDriverProfile(string firstName, string lastName, Gender gender, DateTime dateOfBirth);

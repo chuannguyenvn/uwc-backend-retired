@@ -1,4 +1,4 @@
-﻿namespace Services.LiveData;
+﻿namespace Types;
 
 public struct Coordinate
 {
@@ -11,10 +11,25 @@ public struct Coordinate
         Longitude = longitude;
     }
 
-    public static Coordinate operator +(Coordinate a, Coordinate b) => new Coordinate(a.Latitude + b.Latitude, a.Longitude + b.Longitude);
-    public static Coordinate operator -(Coordinate a, Coordinate b) => new Coordinate(a.Latitude - b.Latitude, a.Longitude - b.Longitude);
-    public static Coordinate operator *(Coordinate a, float b) => new Coordinate(a.Latitude * b, a.Latitude * b);
-    public static Coordinate operator *(Coordinate a, double b) => new Coordinate(a.Latitude * b, a.Latitude * b);
+    public static Coordinate operator +(Coordinate a, Coordinate b)
+    {
+        return new(a.Latitude + b.Latitude, a.Longitude + b.Longitude);
+    }
+
+    public static Coordinate operator -(Coordinate a, Coordinate b)
+    {
+        return new(a.Latitude - b.Latitude, a.Longitude - b.Longitude);
+    }
+
+    public static Coordinate operator *(Coordinate a, float b)
+    {
+        return new(a.Latitude * b, a.Latitude * b);
+    }
+
+    public static Coordinate operator *(Coordinate a, double b)
+    {
+        return new(a.Latitude * b, a.Latitude * b);
+    }
 
     public static Coordinate Lerp(Coordinate from, Coordinate to, float t)
     {

@@ -1,12 +1,11 @@
 ﻿using Models;
-using Models.Types;
 using Repositories;
+using Types;
 
 public class DataSeeder
 {
-    private readonly UwcDbContext _uwcDbContext;
-
     private readonly List<UserProfile> _allProfiles = new();
+    private readonly UwcDbContext _uwcDbContext;
 
     public DataSeeder(UwcDbContext uwcDbContext)
     {
@@ -15,16 +14,16 @@ public class DataSeeder
 
     public void SeedSupervisorProfiles()
     {
-        string[] maleSupervisorFirstNames = DataSeederHelper.MaleSupervisorFirstNames;
-        string[] femaleSupervisorFirstNames = DataSeederHelper.FemaleSupervisorFirstNames;
-        string[] supervisorLastNames = DataSeederHelper.SupervisorLastNames;
+        var maleSupervisorFirstNames = DataSeederHelper.MaleSupervisorFirstNames;
+        var femaleSupervisorFirstNames = DataSeederHelper.FemaleSupervisorFirstNames;
+        var supervisorLastNames = DataSeederHelper.SupervisorLastNames;
 
-        for (int i = 0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
         {
             var firstName = i < 5 ? maleSupervisorFirstNames[i] : femaleSupervisorFirstNames[i - 5];
-            string lastName = supervisorLastNames[i];
-            Gender gender = i < 5 ? Gender.Male : Gender.Female;
-            DateTime dateOfBirth = DataSeederHelper.GenerateRandomDate(1960, 2000);
+            var lastName = supervisorLastNames[i];
+            var gender = i < 5 ? Gender.Male : Gender.Female;
+            var dateOfBirth = DataSeederHelper.GenerateRandomDate(1960, 2000);
 
             var supervisorProfile = new SupervisorProfile
             {
@@ -42,16 +41,16 @@ public class DataSeeder
 
     public void SeedDriverProfiles()
     {
-        string[] maleDriverFirstNames = DataSeederHelper.MaleDriverFirstNames;
-        string[] femaleDriverFirstNames = DataSeederHelper.FemaleDriverFirstNames;
-        string[] driverLastNames = DataSeederHelper.DriverLastNames;
+        var maleDriverFirstNames = DataSeederHelper.MaleDriverFirstNames;
+        var femaleDriverFirstNames = DataSeederHelper.FemaleDriverFirstNames;
+        var driverLastNames = DataSeederHelper.DriverLastNames;
 
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             var firstName = i < 10 ? maleDriverFirstNames[i] : femaleDriverFirstNames[i - 10];
-            string lastName = driverLastNames[i];
-            Gender gender = i < 10 ? Gender.Male : Gender.Female;
-            DateTime dateOfBirth = DataSeederHelper.GenerateRandomDate(1960, 2000);
+            var lastName = driverLastNames[i];
+            var gender = i < 10 ? Gender.Male : Gender.Female;
+            var dateOfBirth = DataSeederHelper.GenerateRandomDate(1960, 2000);
 
             var driverProfile = new DriverProfile
             {
@@ -69,16 +68,16 @@ public class DataSeeder
 
     public void SeedCleanerProfiles()
     {
-        string[] maleCleanerFirstNames = DataSeederHelper.MaleCleanerFirstNames;
-        string[] femaleCleanerFirstNames = DataSeederHelper.FemaleCleanerFirstNames;
-        string[] cleanerLastNames = DataSeederHelper.CleanerLastNames;
+        var maleCleanerFirstNames = DataSeederHelper.MaleCleanerFirstNames;
+        var femaleCleanerFirstNames = DataSeederHelper.FemaleCleanerFirstNames;
+        var cleanerLastNames = DataSeederHelper.CleanerLastNames;
 
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             var firstName = i < 10 ? maleCleanerFirstNames[i] : femaleCleanerFirstNames[i - 10];
-            string lastName = cleanerLastNames[i];
-            Gender gender = i < 10 ? Gender.Male : Gender.Female;
-            DateTime dateOfBirth = DataSeederHelper.GenerateRandomDate(1960, 2000);
+            var lastName = cleanerLastNames[i];
+            var gender = i < 10 ? Gender.Male : Gender.Female;
+            var dateOfBirth = DataSeederHelper.GenerateRandomDate(1960, 2000);
 
             var cleanerProfile = new CleanerProfile
             {
@@ -104,7 +103,7 @@ public class DataSeeder
                 PasswordHash = "password",
                 Salt = "salt",
                 LinkedProfile = userProfile,
-                Settings = "",
+                Settings = ""
             };
 
             _uwcDbContext.Accounts.Add(account);
@@ -113,13 +112,13 @@ public class DataSeeder
 
     public void SeedDrivingHistories()
     {
-        Random random = new Random();
+        var random = new Random();
 
         foreach (var driverProfile in _uwcDbContext.DriverProfiles.ToList())
         {
-            int historyCount = random.Next(1, 11);
+            var historyCount = random.Next(1, 11);
 
-            for (int i = 0; i < historyCount; i++)
+            for (var i = 0; i < historyCount; i++)
             {
                 var drivingHistory = new DrivingHistory
                 {
@@ -135,9 +134,9 @@ public class DataSeeder
 
     private Vehicle GetRandomVehicle()
     {
-        Random random = new Random();
-        int vehicleCount = _uwcDbContext.Vehicles.Count();
-        int randomIndex = random.Next(vehicleCount);
+        var random = new Random();
+        var vehicleCount = _uwcDbContext.Vehicles.Count();
+        var randomIndex = random.Next(vehicleCount);
         return _uwcDbContext.Vehicles.Skip(randomIndex).FirstOrDefault();
     }
 
@@ -145,9 +144,9 @@ public class DataSeeder
     {
         foreach (var driverProfile in _uwcDbContext.DriverProfiles)
         {
-            int licenseCount = DataSeederHelper.GenerateRandomLicenseCount();
+            var licenseCount = DataSeederHelper.GenerateRandomLicenseCount();
 
-            for (int i = 0; i < licenseCount; i++)
+            for (var i = 0; i < licenseCount; i++)
             {
                 var drivingLicense = new DrivingLicense
                 {
@@ -174,7 +173,13 @@ public class DataSeeder
                 Longitude = 106.667284093661,
                 Address = "500 Nguyễn Tri Phương, P.9, Q.10, TPHCM"
             },
-            new() {Capacity = 142, Latitude = 10.7629567124463, Longitude = 106.656977523526, Address = "968 3 Tháng 2, P.15, Q.11, TPHCM"},
+            new()
+            {
+                Capacity = 142,
+                Latitude = 10.7629567124463,
+                Longitude = 106.656977523526,
+                Address = "968 3 Tháng 2, P.15, Q.11, TPHCM"
+            },
             new()
             {
                 Capacity = 98,
@@ -189,7 +194,13 @@ public class DataSeeder
                 Longitude = 106.660531841364,
                 Address = "334 Tô Hiến Thành, P.14, Q.10, TPHCM"
             },
-            new() {Capacity = 128, Latitude = 10.7712254318066, Longitude = 106.665784313171, Address = "54 Thành Thái, P.10, Q.10, TPHCM"},
+            new()
+            {
+                Capacity = 128,
+                Latitude = 10.7712254318066,
+                Longitude = 106.665784313171,
+                Address = "54 Thành Thái, P.10, Q.10, TPHCM"
+            },
             new()
             {
                 Capacity = 89,
@@ -204,7 +215,10 @@ public class DataSeeder
                 Longitude = 106.64971397274442,
                 Address = "96 Phạm Đình Hổ, P.2, Q.6, TPHCM"
             },
-            new() {Capacity = 200, Latitude = 10.786135, Longitude = 106.651209, Address = "1150 Lạc Long Quân, P.8, Q.Tân Bình, TPHCM"},
+            new()
+            {
+                Capacity = 200, Latitude = 10.786135, Longitude = 106.651209, Address = "1150 Lạc Long Quân, P.8, Q.Tân Bình, TPHCM"
+            },
             new() {Capacity = 201, Latitude = 10.782575, Longitude = 106.660679, Address = "153 Bắc Hải, P.15, Q.10, TPHCM"},
             new() {Capacity = 195, Latitude = 10.775672, Longitude = 106.667233, Address = "533 Sư Vạn Hạnh, P.12, Q.10, TPHCM"},
             new() {Capacity = 141, Latitude = 10.776559, Longitude = 106.663600, Address = "218 Thành Thái, P.15, Q.10, TPHCM"},
@@ -227,20 +241,20 @@ public class DataSeeder
 
     public void SeedVehicles()
     {
-        string[] licensePlates = DataSeederHelper.GenerateLicensePlates(30);
+        var licensePlates = DataSeederHelper.GenerateLicensePlates(30);
         string[] models = {"Model 1", "Model 2", "Model 3", "Model 4", "Model 5"};
         VehicleType[] vehicleTypes = {VehicleType.FrontLoader, VehicleType.SideLoader, VehicleType.RearLoader};
 
-        Random random = new Random();
+        var random = new Random();
 
-        for (int i = 0; i < 30; i++)
+        for (var i = 0; i < 30; i++)
         {
-            string licensePlate = licensePlates[i];
-            string model = models[random.Next(models.Length)];
-            VehicleType vehicleType = vehicleTypes[random.Next(vehicleTypes.Length)];
-            double currentLoad = random.NextDouble() * 100;
-            double capacity = random.NextDouble() * 200;
-            double averageSpeed = random.NextDouble() * 80;
+            var licensePlate = licensePlates[i];
+            var model = models[random.Next(models.Length)];
+            var vehicleType = vehicleTypes[random.Next(vehicleTypes.Length)];
+            var currentLoad = random.NextDouble() * 100;
+            var capacity = random.NextDouble() * 200;
+            var averageSpeed = random.NextDouble() * 80;
 
             var vehicle = new Vehicle
             {

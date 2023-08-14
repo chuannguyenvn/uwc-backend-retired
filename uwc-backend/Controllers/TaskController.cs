@@ -69,7 +69,7 @@ public class TaskController : ControllerBase
 
         return Ok(result);
     }
-    
+
     [HttpGet("free")]
     public List<UserProfile> GetFreeEmployees()
     {

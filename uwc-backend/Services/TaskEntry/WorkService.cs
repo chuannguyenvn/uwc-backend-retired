@@ -33,7 +33,7 @@ public class WorkService : IWorkService
             return (false, "Supervisor Id does not exist");
 
         if (!_unitOfWork.DriverProfiles.DoesIdExist(worker)) return (false, "Worker Id does not exist.");
-        
+
         var supervisorEmployee = _unitOfWork.SupervisorProfiles.Find(employee => employee.Id == supervisor).First();
         var workerEmployee = _unitOfWork.DriverProfiles.Find(employee => employee.Id == worker).First();
 
@@ -87,7 +87,7 @@ public class WorkService : IWorkService
 
         if (!_unitOfWork.DriverProfiles.DoesIdExist(workerId))
             return (false, "Worker Id does not exist.");
-        
+
         var supervisor = _unitOfWork.SupervisorProfiles.Find(supervisor => supervisor.Id == supervisorId).First();
         var worker = _unitOfWork.DriverProfiles.Find(worker => worker.Id == workerId).First();
 

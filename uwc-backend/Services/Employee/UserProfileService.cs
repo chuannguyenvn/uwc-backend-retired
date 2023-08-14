@@ -1,6 +1,6 @@
 using Models;
-using Models.Types;
 using Repositories;
+using Types;
 using Utilities;
 
 namespace Services.Profile;
@@ -23,7 +23,7 @@ public class UserProfileService : IUserProfileService
             LastName = lastName,
             Gender = gender,
             DateOfBirth = dateOfBirth,
-            Role = UserRole.Supervisor,
+            Role = UserRole.Supervisor
         };
 
         _unitOfWork.SupervisorProfiles.Add(supervisorProfile);
@@ -41,7 +41,7 @@ public class UserProfileService : IUserProfileService
             LastName = lastName,
             Gender = gender,
             DateOfBirth = dateOfBirth,
-            Role = UserRole.Cleaner,
+            Role = UserRole.Cleaner
         };
 
         _unitOfWork.CleanerProfiles.Add(cleanerProfile);
@@ -59,7 +59,7 @@ public class UserProfileService : IUserProfileService
             LastName = lastName,
             Gender = gender,
             DateOfBirth = dateOfBirth,
-            Role = UserRole.Driver,
+            Role = UserRole.Driver
         };
 
         _unitOfWork.DriverProfiles.Add(driverProfile);

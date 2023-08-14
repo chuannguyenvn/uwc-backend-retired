@@ -5,15 +5,21 @@ namespace Services.LiveData;
 
 public class McpCapacityService : IHostedService, IDisposable
 {
+    private readonly Random _random = new();
     private readonly IServiceProvider _serviceProvider;
     private List<Models.Mcp> _allMcps;
-    private Timer? _fillTimer;
     private Timer? _databasePersistTimer;
-    private readonly Random _random = new();
+    private Timer? _fillTimer;
 
     public McpCapacityService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+
+    public void Dispose()
+    {
+        _fillTimer?.Dispose();
+        _databasePersistTimer?.Dispose();
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -26,9 +32,14 @@ public class McpCapacityService : IHostedService, IDisposable
         return Task.CompletedTask;
     }
 
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
     private void RetrieveMcps()
     {
-        using IServiceScope scope = _serviceProvider.CreateScope();
+        using var scope = _serviceProvider.CreateScope();
         var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
         _allMcps = unitOfWork.Mcps.GetAll().ToList();
     }
@@ -46,31 +57,17 @@ public class McpCapacityService : IHostedService, IDisposable
 
     private void PersistMcpStates(object? state)
     {
-        using (IServiceScope scope = _serviceProvider.CreateScope())
+        using (var scope = _serviceProvider.CreateScope())
         {
             var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
 
             var mcps = unitOfWork.Mcps.GetAll().ToList();
-            for (int i = 0; i < mcps.Count; i++)
-            {
-                mcps[i].CurrentLoad = _allMcps[i].CurrentLoad;
-            }
+            for (var i = 0; i < mcps.Count; i++) mcps[i].CurrentLoad = _allMcps[i].CurrentLoad;
 
             unitOfWork.Complete();
         }
 
         Console.WriteLine("Persisted.");
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
-
-    public void Dispose()
-    {
-        _fillTimer?.Dispose();
-        _databasePersistTimer?.Dispose();
     }
 
     public (bool success, object result) EmptyMcp(int mcpId)

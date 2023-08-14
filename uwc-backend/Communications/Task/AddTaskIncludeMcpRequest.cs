@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace Communications.Task
+namespace Communications.Task;
+
+public class AddTaskIncludeMcpRequest
 {
-    public class AddTaskIncludeMcpRequest
-    {
-        [JsonProperty("Task")] public int Task { get; set; }
-        [JsonProperty("Mcp")] public int Mcp { get; set; }
-    }
+    [JsonProperty("Task")] public int Task { get; set; }
+    [JsonProperty("Mcp")] public int Mcp { get; set; }
 }

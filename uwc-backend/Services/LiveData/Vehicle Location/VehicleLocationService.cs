@@ -1,28 +1,27 @@
 ﻿using Newtonsoft.Json;
 using Repositories;
+using Types;
 
 namespace Services.LiveData;
 
 public class VehicleLocationService : IHostedService, IDisposable
 {
-    private class VehicleLocationData
-    {
-        public Coordinate CurrentLocation = new();
-        public bool IsBot = true;
-        public List<Coordinate> Waypoints = new();
-        [JsonIgnore] public Models.Mcp TargettingMcp;
-    }
-
     private const string MAPBOX_DIRECTION_API =
-        "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{0},{1};{2},{3}?geometries=geojson&access_token=pk.eyJ1IjoiY2h1YW5wcm8wMzAiLCJhIjoiY2xhcG51ZWg5MDFqbTNwb2FlaW52MXNvciJ9.kFN5GOg3C8cGlk2PN4Tleg";
+        "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{0},{1};{2},{3}?geometries=geojson&access_token=pk.eyJ1IjoiY2h1YW4tbmd1eWVudm4iLCJhIjoiY2xsYTkycjJoMGg1MjNxbGhhcW5mMzNuOCJ9.tpAt14HVH_j1IKuKxsK31A";
 
-    private Dictionary<int, VehicleLocationData> _vehicleLocationDataById = new();
-    private Timer? _botMovementTimer;
     private readonly IServiceProvider _serviceProvider;
+    private Timer? _botMovementTimer;
+
+    private readonly Dictionary<int, VehicleLocationData> _vehicleLocationDataById = new();
 
     public VehicleLocationService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+
+    public void Dispose()
+    {
+        _botMovementTimer?.Dispose();
     }
 
     public Task StartAsync(CancellationToken stoppingToken)
@@ -34,9 +33,14 @@ public class VehicleLocationService : IHostedService, IDisposable
         return Task.CompletedTask;
     }
 
+    public Task StopAsync(CancellationToken stoppingToken)
+    {
+        return Task.CompletedTask;
+    }
+
     private void RetrieveVehicleIds()
     {
-        using IServiceScope scope = _serviceProvider.CreateScope();
+        using var scope = _serviceProvider.CreateScope();
         var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
         foreach (var vehicle in unitOfWork.Vehicles.GetAll())
         {
@@ -85,7 +89,7 @@ public class VehicleLocationService : IHostedService, IDisposable
 
     private MapboxDirectionResponse RequestMapboxDirection(Coordinate fromLocation, Coordinate toLocation)
     {
-        HttpClient client = new HttpClient();
+        var client = new HttpClient();
         var httpResponse = client.GetStringAsync(ConstructMapboxDirectionRequest(fromLocation, toLocation)).Result;
         var mapboxDirectionResponse = JsonConvert.DeserializeObject<MapboxDirectionResponse>(httpResponse);
         return mapboxDirectionResponse;
@@ -95,40 +99,32 @@ public class VehicleLocationService : IHostedService, IDisposable
     {
         var coordinates = new List<Coordinate>();
 
-        foreach (var waypoint in response.Waypoints)
-        {
-            coordinates.Add(new Coordinate(waypoint.Location[1], waypoint.Location[0]));
-        }
+        foreach (var waypoint in response.Waypoints) coordinates.Add(new Coordinate(waypoint.Location[1], waypoint.Location[0]));
 
         return coordinates;
     }
 
     private Models.Mcp GetRandomMcp()
     {
-        using IServiceScope scope = _serviceProvider.CreateScope();
+        using var scope = _serviceProvider.CreateScope();
         var mcpCapacityService = scope.ServiceProvider.GetRequiredService<McpCapacityService>();
         return mcpCapacityService.GetRandomMcp();
     }
 
     private void EmptyMcp(int mcpId)
     {
-        using IServiceScope scope = _serviceProvider.CreateScope();
+        using var scope = _serviceProvider.CreateScope();
         var mcpCapacityService = scope.ServiceProvider.GetRequiredService<McpCapacityService>();
         mcpCapacityService.EmptyMcp(mcpId);
     }
 
     private string ConstructMapboxDirectionRequest(Coordinate currentLocation, Coordinate destinationLocation)
     {
-        return String.Format(MAPBOX_DIRECTION_API,
+        return string.Format(MAPBOX_DIRECTION_API,
             currentLocation.Longitude,
             currentLocation.Latitude,
             destinationLocation.Longitude,
             destinationLocation.Latitude);
-    }
-
-    public Task StopAsync(CancellationToken stoppingToken)
-    {
-        return Task.CompletedTask;
     }
 
     public bool UpdateVehicleLocation(int vehicleId, Coordinate newCoordinate)
@@ -142,16 +138,16 @@ public class VehicleLocationService : IHostedService, IDisposable
     {
         var coordinatesByVehicleId = new Dictionary<int, Coordinate>();
 
-        foreach (var (id, data) in _vehicleLocationDataById)
-        {
-            coordinatesByVehicleId.Add(id, data.CurrentLocation);
-        }
+        foreach (var (id, data) in _vehicleLocationDataById) coordinatesByVehicleId.Add(id, data.CurrentLocation);
 
         return (true, coordinatesByVehicleId);
     }
 
-    public void Dispose()
+    private class VehicleLocationData
     {
-        _botMovementTimer?.Dispose();
+        public Coordinate CurrentLocation;
+        public bool IsBot = true;
+        [JsonIgnore] public Models.Mcp TargettingMcp;
+        public List<Coordinate> Waypoints = new();
     }
 }

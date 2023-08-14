@@ -4,9 +4,9 @@ public static class WebApplicationExtensions
 {
     public static WebApplication SeedData(this WebApplication webApplication)
     {
-        IServiceScopeFactory scopedFactory = webApplication.Services.GetRequiredService<IServiceScopeFactory>();
-        using IServiceScope scope = scopedFactory.CreateScope();
-        using UwcDbContext dbContext = scope.ServiceProvider.GetService<UwcDbContext>();
+        var scopedFactory = webApplication.Services.GetRequiredService<IServiceScopeFactory>();
+        using var scope = scopedFactory.CreateScope();
+        using var dbContext = scope.ServiceProvider.GetService<UwcDbContext>();
         if (dbContext == null) throw new NullReferenceException("Database is not present for seeding.");
         dbContext.Database.EnsureCreated();
 

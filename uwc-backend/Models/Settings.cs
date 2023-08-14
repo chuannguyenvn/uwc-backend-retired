@@ -1,7 +1,6 @@
-namespace Models
+namespace Models;
+
+public class Settings
 {
-    public class Settings
-    {
-        public string BearerKey { get; set; }
-    }
+    public string BearerKey { get; set; }
 }

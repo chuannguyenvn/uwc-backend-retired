@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models
+namespace Models;
+
+public class IndexedEntity
 {
-    public class IndexedEntity
-    {
-        [Key] public int Id { get; set; }
-    }
+    [Key] public int Id { get; set; }
 }

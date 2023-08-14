@@ -24,7 +24,8 @@ public class AuthenticationService : IAuthenticationService
         if (_unitOfWork.Accounts.DoesUsernameExist(username))
             return (false, "Username has already been taken.");
 
-        if (!_unitOfWork.DriverProfiles.DoesIdExist(employeeId))
+        if (!_unitOfWork.SupervisorProfiles.DoesIdExist(employeeId) && _unitOfWork.DriverProfiles.DoesIdExist(employeeId) &&
+            _unitOfWork.CleanerProfiles.DoesIdExist(employeeId))
             return (false, Prompts.EMPLOYEE_NOT_EXIST);
 
         var accountList = _unitOfWork.Accounts.Find(account => account.LinkedProfile.Id == employeeId);

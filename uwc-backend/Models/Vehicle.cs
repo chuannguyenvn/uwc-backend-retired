@@ -1,15 +1,14 @@
-using Models.Types;
+using Types;
 
-namespace Models
+namespace Models;
+
+public class Vehicle : IndexedEntity
 {
-    public class Vehicle : IndexedEntity
-    {
-        public string LicensePlate { get; set; }
-        public string Model { get; set; }
-        public VehicleType VehicleType { get; set; }
+    public string LicensePlate { get; set; }
+    public string Model { get; set; }
+    public VehicleType VehicleType { get; set; }
 
-        public double CurrentLoad { get; set; }
-        public double Capacity { get; set; }
-        public double AverageSpeed { get; set; }
-    }
+    public double CurrentLoad { get; set; }
+    public double Capacity { get; set; }
+    public double AverageSpeed { get; set; }
 }

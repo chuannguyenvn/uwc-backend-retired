@@ -2,7 +2,7 @@
 
 public static class ListExtensions
 {
-    private static Random _random;
+    private static readonly Random _random;
 
     static ListExtensions()
     {

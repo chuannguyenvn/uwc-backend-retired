@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Services.LiveData;
+using Types;
 
 namespace Communications.Vehicle;
 
