@@ -33,10 +33,10 @@ public class VehicleController : ControllerBase
     }
 
     [HttpGet("get/all")]
-    public List<Vehicle> GetAllVehicles()
+    public IActionResult GetAllVehicles()
     {
         var result = _vehicleService.GetAllVehicles();
-        return result;
+        return Ok(result);
     }
 
     [HttpPut("update")]

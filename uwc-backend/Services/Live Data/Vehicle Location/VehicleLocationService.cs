@@ -51,39 +51,44 @@ public class VehicleLocationService : IHostedService, IDisposable
 
     private void MoveBots(object? state)
     {
+        var random = new Random();
+
         Parallel.ForEach(_vehicleLocationDataById.Values,
             locationData =>
             {
-                if (!locationData.IsBot) return;
+                // if (!locationData.IsBot) return;
+                //
+                // if (locationData.Waypoints.Count == 0)
+                // {
+                //     var mostFullMcp = GetRandomMcp();
+                //     locationData.TargettingMcp = mostFullMcp;
+                //
+                //     var mcpCoordinate = new Coordinate(mostFullMcp.Latitude, mostFullMcp.Longitude);
+                //     var newRoute = RequestMapboxDirection(locationData.CurrentLocation, mcpCoordinate);
+                //     locationData.Waypoints = ProcessDirectionResponse(newRoute);
+                // }
+                //
+                // var distanceLeft = 0.0000005;
+                // while (distanceLeft > 0 && locationData.Waypoints.Count > 0)
+                // {
+                //     var currentLocation = locationData.CurrentLocation;
+                //     var nextWaypointLocation = locationData.Waypoints[0];
+                //     locationData.Waypoints.RemoveAt(0);
+                //
+                //     var distanceToNextWaypoint = currentLocation.DistanceTo(nextWaypointLocation);
+                //     if (distanceToNextWaypoint > distanceLeft)
+                //     {
+                //         var t = Math.Clamp(distanceLeft / distanceToNextWaypoint, 0, 1);
+                //         locationData.CurrentLocation = Coordinate.Lerp(currentLocation, nextWaypointLocation, t);
+                //         EmptyMcp(locationData.TargettingMcp.Id);
+                //         break;
+                //     }
+                //
+                //     distanceLeft -= distanceToNextWaypoint;
+                // }
 
-                if (locationData.Waypoints.Count == 0)
-                {
-                    var mostFullMcp = GetRandomMcp();
-                    locationData.TargettingMcp = mostFullMcp;
-
-                    var mcpCoordinate = new Coordinate(mostFullMcp.Latitude, mostFullMcp.Longitude);
-                    var newRoute = RequestMapboxDirection(locationData.CurrentLocation, mcpCoordinate);
-                    locationData.Waypoints = ProcessDirectionResponse(newRoute);
-                }
-
-                var distanceLeft = 0.00005;
-                while (distanceLeft > 0 && locationData.Waypoints.Count > 0)
-                {
-                    var currentLocation = locationData.CurrentLocation;
-                    var nextWaypointLocation = locationData.Waypoints[0];
-                    locationData.Waypoints.RemoveAt(0);
-
-                    var distanceToNextWaypoint = currentLocation.DistanceTo(nextWaypointLocation);
-                    if (distanceToNextWaypoint > distanceLeft)
-                    {
-                        var t = Math.Clamp(distanceLeft / distanceToNextWaypoint, 0, 1);
-                        locationData.CurrentLocation = Coordinate.Lerp(currentLocation, nextWaypointLocation, t);
-                        EmptyMcp(locationData.TargettingMcp.Id);
-                        break;
-                    }
-
-                    distanceLeft -= distanceToNextWaypoint;
-                }
+                locationData.CurrentLocation.Latitude += (random.NextDouble() - 0.5) * 0.0001;
+                locationData.CurrentLocation.Longitude += (random.NextDouble() - 0.5) * 0.0001;
             });
     }
 
