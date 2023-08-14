@@ -1,8 +1,9 @@
-﻿namespace Types;
-
-public enum VehicleType
+﻿namespace Types
 {
-    FrontLoader,
-    SideLoader,
-    RearLoader
+    public enum VehicleType
+    {
+        FrontLoader,
+        SideLoader,
+        RearLoader
+    }
 }

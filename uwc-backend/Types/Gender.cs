@@ -1,8 +1,9 @@
-﻿namespace Types;
-
-public enum Gender
+﻿namespace Types
 {
-    Male,
-    Female,
-    Other
+    public enum Gender
+    {
+        Male,
+        Female,
+        Other
+    }
 }

@@ -1,8 +1,9 @@
-﻿namespace Types;
-
-public enum UserRole
+﻿namespace Types
 {
-    Supervisor,
-    Cleaner,
-    Driver
+    public enum UserRole
+    {
+        Supervisor,
+        Cleaner,
+        Driver
+    }
 }
