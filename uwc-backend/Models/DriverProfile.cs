@@ -1,7 +1,8 @@
-﻿namespace Models;
-
-public class DriverProfile : UserProfile
+﻿namespace Models
 {
-    public List<DrivingLicense> DrivingLicenses { get; set; }
-    public List<DrivingHistory> DrivingHistories { get; set; }
+    public class DriverProfile : UserProfile
+    {
+        public List<DrivingLicense> DrivingLicenses { get; set; }
+        public List<DrivingHistory> DrivingHistories { get; set; }
+    }
 }

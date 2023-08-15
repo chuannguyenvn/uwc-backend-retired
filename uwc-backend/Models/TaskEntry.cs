@@ -1,9 +1,10 @@
-namespace Models;
-
-public class TaskEntry : IndexedEntity
+namespace Models
 {
-    public SupervisorProfile Supervisor { get; set; }
-    public DateTime Date { get; set; }
-    public UserProfile Worker { get; set; }
-    public Mcp Mcp { get; set; }
+    public class TaskEntry : IndexedEntity
+    {
+        public SupervisorProfile Supervisor { get; set; }
+        public DateTime Date { get; set; }
+        public UserProfile Worker { get; set; }
+        public Mcp Mcp { get; set; }
+    }
 }

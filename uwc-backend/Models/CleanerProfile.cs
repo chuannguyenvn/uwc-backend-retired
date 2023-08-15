@@ -1,5 +1,6 @@
-﻿namespace Models;
-
-public class CleanerProfile : UserProfile
+﻿namespace Models
 {
+    public class CleanerProfile : UserProfile
+    {
+    }
 }
