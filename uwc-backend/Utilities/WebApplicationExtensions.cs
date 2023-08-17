@@ -21,7 +21,7 @@ public static class WebApplicationExtensions
         dataSeeder.SeedVehicles();
         // dataSeeder.SeedTasks();
         // dataSeeder.SeedRoutes();
-        // dataSeeder.SeedMessages();
+        dataSeeder.SeedMessages();
         dataSeeder.FinishSeeding();
 
         return webApplication;

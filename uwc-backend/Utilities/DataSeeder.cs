@@ -6,7 +6,9 @@ public class DataSeeder
 {
     private readonly List<UserProfile> _allProfiles = new();
     private readonly UwcDbContext _uwcDbContext;
-
+    private Account _messagingTestSupervisorAccount;
+    private Account _messagingTestDriverAccount;
+    
     public DataSeeder(UwcDbContext uwcDbContext)
     {
         _uwcDbContext = uwcDbContext;
@@ -95,6 +97,7 @@ public class DataSeeder
 
     public void SeedAccounts()
     {
+        int counter = 0;
         foreach (var userProfile in _allProfiles)
         {
             var account = new Account
@@ -106,7 +109,17 @@ public class DataSeeder
                 Settings = ""
             };
 
+            if (counter == 0)
+            {
+                _messagingTestSupervisorAccount = account;
+            }
+            else if (counter == 10)
+            {
+                _messagingTestDriverAccount = account;
+            }
+            
             _uwcDbContext.Accounts.Add(account);
+            counter++;
         }
     }
 
@@ -268,6 +281,39 @@ public class DataSeeder
 
             _uwcDbContext.Vehicles.Add(vehicle);
         }
+    }
+
+    public void SeedMessages()
+    {
+        var supervisorAccount = _messagingTestSupervisorAccount;
+        var driverAccount = _messagingTestDriverAccount;
+
+        supervisorAccount.SentMessages = new();
+        supervisorAccount.ReceivedMessages = new();
+        driverAccount.SentMessages = new();
+        driverAccount.ReceivedMessages = new();
+        
+        var message1 = new Message
+        {
+            SenderAccount = supervisorAccount,
+            ReceiverAccount = driverAccount,
+            TextTime = DateTime.Now.AddMinutes(-10),
+            TextContent = "Take the food in the pantry with you, Steve. Don't let it go to waste."
+        };
+        _uwcDbContext.Messages.Add(message1);
+        supervisorAccount.SentMessages.Add(message1);
+        driverAccount.ReceivedMessages.Add(message1);
+
+        var message2 = new Message
+        {
+            SenderAccount = driverAccount,
+            ReceiverAccount = supervisorAccount,
+            TextTime = DateTime.Now.AddMinutes(-9),
+            TextContent = "Waste? I hate waste!"
+        };
+        _uwcDbContext.Messages.Add(message2);
+        driverAccount.SentMessages.Add(message2);
+        supervisorAccount.ReceivedMessages.Add(message2);
     }
 
     public void FinishSeeding()

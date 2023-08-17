@@ -51,11 +51,11 @@ public class MessageService : IMessageService
         foreach (var account in _unitOfWork.Accounts.GetAll().ToList())
         {
             if (!_unitOfWork.Messages.GetAll()
-                    .Any(message => message.SenderAccountId == userId || message.ReceiverAccountId == userId)) continue;
+                    .Any(message => message.SenderAccount.Id == userId || message.ReceiverAccount.Id == userId)) continue;
 
             result.Add(account.Id,
                 _unitOfWork.Messages.GetAll()
-                    .Where(message => message.SenderAccountId == userId || message.ReceiverAccountId == userId)
+                    .Where(message => message.SenderAccount.Id == userId || message.ReceiverAccount.Id == userId)
                     .OrderByDescending(message => message.TextTime)
                     .First());
         }

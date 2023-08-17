@@ -28,8 +28,14 @@ public class UwcDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Message>().HasOne(message => message.SenderAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
-        modelBuilder.Entity<Message>().HasOne(message => message.ReceiverAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Message>()
+            .HasOne(message => message.SenderAccount)
+            .WithMany(account => account.SentMessages)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Message>()
+            .HasOne(message => message.ReceiverAccount)
+            .WithMany(account => account.ReceivedMessages)
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<TaskEntry>().HasOne(task => task.Supervisor).WithMany().OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<TaskEntry>().HasOne(task => task.Worker).WithMany().OnDelete(DeleteBehavior.NoAction);

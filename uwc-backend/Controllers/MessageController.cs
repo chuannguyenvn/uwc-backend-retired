@@ -30,17 +30,17 @@ public class MessageController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("inbox/{userId}")]
-    public List<Message> GetAllMessagesWith([FromRoute] int userId)
+    [HttpGet("inbox/{senderId}/{receiverId}")]
+    public List<Message> GetAllMessagesWith([FromRoute] int senderId, [FromRoute] int receiverId)
     {
-        var result = _messageService.GetAllMessagesOfTwoUsers(User.GetLoggedInUserId(), userId);
+        var result = _messageService.GetAllMessagesOfTwoUsers(senderId, receiverId);
         return result;
     }
 
-    [HttpGet("inbox/latest")]
-    public Dictionary<int, Message> GetLatestMessages()
+    [HttpGet("inbox/latest/{senderId}")]
+    public Dictionary<int, Message> GetLatestMessages([FromRoute] int senderId)
     {
-        var result = _messageService.GetLatestMessagesOf(User.GetLoggedInUserId());
+        var result = _messageService.GetLatestMessagesOf(senderId);
         return result;
     }
 }

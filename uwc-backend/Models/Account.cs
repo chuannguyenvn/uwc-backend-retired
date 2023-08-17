@@ -9,6 +9,7 @@ namespace Models
         public UserProfile LinkedProfile { get; set; }
         public string Settings { get; set; }
 
-        public List<Message> Messages { get; set; }
+        public List<Message> SentMessages { get; set; }
+        public List<Message> ReceivedMessages { get; set; }
     }
 }

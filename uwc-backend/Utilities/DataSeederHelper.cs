@@ -1,16 +1,16 @@
 ﻿public static class DataSeederHelper
 {
-    public static readonly string[] MaleSupervisorFirstNames = {"Samuel", "Simon", "Sebastian", "Stephen", "Scott"};
+    public static readonly string[] MaleSupervisorFirstNames = {"Supervisor", "Simon", "Sebastian", "Stephen", "Scott"};
     public static readonly string[] FemaleSupervisorFirstNames = {"Sophia", "Samantha", "Sara", "Stella", "Sienna"};
 
     public static readonly string[] SupervisorLastNames =
     {
-        "Smith", "Stevens", "Sanders", "Sullivan", "Scott", "Simpson", "Spencer", "Stone", "Sanchez", "Summers"
+        "Supervisor", "Stevens", "Sanders", "Sullivan", "Scott", "Simpson", "Spencer", "Stone", "Sanchez", "Summers"
     };
 
     public static readonly string[] MaleDriverFirstNames =
     {
-        "David", "Daniel", "Dylan", "Dominic", "Derek", "Dennis", "Dean", "Damon", "Darius", "Donovan"
+        "Driver", "Daniel", "Dylan", "Dominic", "Derek", "Dennis", "Dean", "Damon", "Darius", "Donovan"
     };
 
     public static readonly string[] FemaleDriverFirstNames =
@@ -20,7 +20,7 @@
 
     public static readonly string[] DriverLastNames =
     {
-        "Davis",
+        "Driver",
         "Dawson",
         "Dixon",
         "Donovan",
