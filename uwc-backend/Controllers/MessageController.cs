@@ -30,10 +30,10 @@ public class MessageController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("inbox/{senderId}/{receiverId}")]
-    public List<Message> GetAllMessagesWith([FromRoute] int senderId, [FromRoute] int receiverId)
+    [HttpGet("inbox/{thisUser}/{otherUser}")]
+    public List<Message> GetAllMessagesWith([FromRoute] int thisUser, [FromRoute] int otherUser)
     {
-        var result = _messageService.GetAllMessagesOfTwoUsers(senderId, receiverId);
+        var result = _messageService.GetAllMessagesOfTwoUsers(thisUser, otherUser);
         return result;
     }
 

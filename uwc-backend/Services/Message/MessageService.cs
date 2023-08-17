@@ -30,14 +30,14 @@ public class MessageService : IMessageService
         return (true, "Add message successfully.");
     }
 
-    public List<Models.Message> GetAllMessagesOfTwoUsers(int senderId, int receiverId)
+    public List<Models.Message> GetAllMessagesOfTwoUsers(int thisUser, int otherUser)
     {
-        if (!_unitOfWork.DriverProfiles.DoesIdExist(senderId)) return new List<Models.Message>();
-        if (!_unitOfWork.DriverProfiles.DoesIdExist(receiverId)) return new List<Models.Message>();
+        if (!_unitOfWork.Accounts.DoesIdExist(thisUser)) return new List<Models.Message>();
+        if (!_unitOfWork.Accounts.DoesIdExist(otherUser)) return new List<Models.Message>();
 
         var messageList = _unitOfWork.Messages.Find(message =>
-            (message.SenderAccount.Id == senderId && message.ReceiverAccount.Id == receiverId) ||
-            (message.SenderAccount.Id == receiverId && message.ReceiverAccount.Id == senderId));
+            (message.SenderAccount.Id == thisUser && message.ReceiverAccount.Id == otherUser) ||
+            (message.SenderAccount.Id == otherUser && message.ReceiverAccount.Id == thisUser));
 
         var result = messageList.OrderBy(message => message.TextTime).ToList();
         return result;
@@ -45,7 +45,7 @@ public class MessageService : IMessageService
 
     public Dictionary<int, Models.Message> GetLatestMessagesOf(int userId)
     {
-        if (!_unitOfWork.DriverProfiles.DoesIdExist(userId)) return new Dictionary<int, Models.Message>();
+        if (!_unitOfWork.Accounts.DoesIdExist(userId)) return new Dictionary<int, Models.Message>();
 
         var result = new Dictionary<int, Models.Message>();
         foreach (var account in _unitOfWork.Accounts.GetAll().ToList())
