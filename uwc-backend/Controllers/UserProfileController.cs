@@ -84,7 +84,7 @@ public class UserProfileController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetAllUserProfiles()
     {
-        var result = _userProfileService.GetAllUserProfiles();
+        var (success, message, result) = await _userProfileService.GetAllUserProfiles();
         return Ok(result);
     }
 
