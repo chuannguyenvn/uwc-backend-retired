@@ -38,7 +38,7 @@ public class MessageController : ControllerBase
     }
 
     [HttpGet("inbox/latest/{senderId}")]
-    public Dictionary<int, Message> GetLatestMessages([FromRoute] int senderId)
+    public List<Message> GetLatestMessages([FromRoute] int senderId)
     {
         var result = _messageService.GetLatestMessagesOf(senderId);
         return result;

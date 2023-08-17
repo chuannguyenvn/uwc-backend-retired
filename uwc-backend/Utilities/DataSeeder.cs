@@ -285,13 +285,15 @@ public class DataSeeder
 
     public void SeedMessages()
     {
+        _uwcDbContext.SaveChanges();
+        
         var supervisorAccount = _messagingTestSupervisorAccount;
         var driverAccount = _messagingTestDriverAccount;
 
-        supervisorAccount.SentMessages = new();
-        supervisorAccount.ReceivedMessages = new();
-        driverAccount.SentMessages = new();
-        driverAccount.ReceivedMessages = new();
+        // supervisorAccount.SentMessages = new();
+        // supervisorAccount.ReceivedMessages = new();
+        // driverAccount.SentMessages = new();
+        // driverAccount.ReceivedMessages = new();
         
         var message1 = new Message
         {
@@ -301,8 +303,8 @@ public class DataSeeder
             TextContent = "Take the food in the pantry with you, Steve. Don't let it go to waste."
         };
         _uwcDbContext.Messages.Add(message1);
-        supervisorAccount.SentMessages.Add(message1);
-        driverAccount.ReceivedMessages.Add(message1);
+        // supervisorAccount.SentMessages.Add(message1);
+        // driverAccount.ReceivedMessages.Add(message1);
 
         var message2 = new Message
         {
@@ -312,8 +314,11 @@ public class DataSeeder
             TextContent = "Waste? I hate waste!"
         };
         _uwcDbContext.Messages.Add(message2);
-        driverAccount.SentMessages.Add(message2);
-        supervisorAccount.ReceivedMessages.Add(message2);
+        // driverAccount.SentMessages.Add(message2);
+        // supervisorAccount.ReceivedMessages.Add(message2);
+
+        _uwcDbContext.Accounts.Update(supervisorAccount);
+        _uwcDbContext.Accounts.Update(driverAccount);
     }
 
     public void FinishSeeding()

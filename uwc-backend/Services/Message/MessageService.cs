@@ -43,23 +43,10 @@ public class MessageService : IMessageService
         return result;
     }
 
-    public Dictionary<int, Models.Message> GetLatestMessagesOf(int userId)
+    public List<Models.Message> GetLatestMessagesOf(int userId)
     {
-        if (!_unitOfWork.Accounts.DoesIdExist(userId)) return new Dictionary<int, Models.Message>();
+        if (!_unitOfWork.Accounts.DoesIdExist(userId)) return new ();
 
-        var result = new Dictionary<int, Models.Message>();
-        foreach (var account in _unitOfWork.Accounts.GetAll().ToList())
-        {
-            if (!_unitOfWork.Messages.GetAll()
-                    .Any(message => message.SenderAccount.Id == userId || message.ReceiverAccount.Id == userId)) continue;
-
-            result.Add(account.Id,
-                _unitOfWork.Messages.GetAll()
-                    .Where(message => message.SenderAccount.Id == userId || message.ReceiverAccount.Id == userId)
-                    .OrderByDescending(message => message.TextTime)
-                    .First());
-        }
-
-        return result;
+        return _unitOfWork.Messages.GetMessagesOfUser(userId).ToList();
     }
 }

@@ -132,7 +132,12 @@ public class GenericRepository<T> where T : IndexedEntity
     {
         return _context.Set<T>().Any();
     }
-
+    
+    public bool HasAny(Func<T, bool> predicate)
+    {
+        return Count(predicate) > 0;
+    }
+    
     public void RemoveById(int id)
     {
         _context.Set<T>().Remove(_context.Set<T>().Single(x => x.Id == id));
