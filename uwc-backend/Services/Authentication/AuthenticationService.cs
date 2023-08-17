@@ -48,7 +48,7 @@ public class AuthenticationService : IAuthenticationService
         var account = _unitOfWork.Accounts.GetUnique(account => account.Username == username);
         if (account.PasswordHash != password) return (false, Prompts.WRONG_PASSWORD, "");
 
-        return (true, Prompts.SUCCESS, "token");
+        return (true, Prompts.SUCCESS, account.Id.ToString());
     }
 
     private ClaimsIdentity AssembleClaimsIdentity(Account account)
