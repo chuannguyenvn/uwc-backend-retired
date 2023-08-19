@@ -1,8 +1,8 @@
-﻿using Communications.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.AccountManagement;
 using Utilities;
+using Commons.Communications.Account;
 
 namespace Controllers;
 

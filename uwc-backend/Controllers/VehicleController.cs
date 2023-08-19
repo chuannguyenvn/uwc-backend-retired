@@ -1,9 +1,9 @@
-using Communications.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Newtonsoft.Json;
 using Services.LiveData;
 using Services.Vehicle;
+using Commons.Communications.Vehicle;
 
 namespace Controllers;
 

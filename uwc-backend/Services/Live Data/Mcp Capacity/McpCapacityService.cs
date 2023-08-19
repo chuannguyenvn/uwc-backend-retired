@@ -26,8 +26,8 @@ public class McpCapacityService : IHostedService, IDisposable
     {
         RetrieveMcps();
 
-        _fillTimer = new Timer(FillMcps, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
-        _databasePersistTimer = new Timer(PersistMcpStates, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+        _fillTimer = new Timer(FillMcps, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        _databasePersistTimer = new Timer(PersistMcpStates, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
 
         return Task.CompletedTask;
     }
@@ -48,7 +48,7 @@ public class McpCapacityService : IHostedService, IDisposable
     {
         foreach (var mcp in _allMcps)
         {
-            if (mcp.CurrentLoad / mcp.Capacity > 1.2f) return;
+            if (mcp.CurrentLoad / mcp.Capacity > 1.2f) continue;
             mcp.CurrentLoad += _random.Next(30, 70);
         }
 

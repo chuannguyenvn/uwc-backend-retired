@@ -1,6 +1,6 @@
 ﻿using Models;
 using Repositories;
-using Types;
+using Commons.Types;
 
 public class DataSeeder
 {

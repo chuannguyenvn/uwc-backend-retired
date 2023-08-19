@@ -1,7 +1,7 @@
 using Models;
 using Repositories;
-using Types;
 using Utilities;
+using Commons.Types;
 
 namespace Services.Profile;
 

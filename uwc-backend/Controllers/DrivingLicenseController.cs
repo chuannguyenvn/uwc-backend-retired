@@ -1,7 +1,7 @@
-using Communications.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Vehicle;
+using Commons.Communications.Vehicle;
 
 namespace Controllers;
 

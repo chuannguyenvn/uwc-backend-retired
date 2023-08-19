@@ -1,6 +1,6 @@
 using Models;
 using Repositories;
-using Types;
+using Commons.Types;
 
 namespace Services.Vehicle;
 

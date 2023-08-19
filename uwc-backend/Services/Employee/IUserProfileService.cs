@@ -1,5 +1,5 @@
 ﻿using Models;
-using Types;
+using Commons.Types;
 
 namespace Services.Profile;
 

@@ -1,8 +1,8 @@
-using Communications.Employee;
 using Microsoft.AspNetCore.Mvc;
 using Services.Profile;
 using Services.TaskEntry;
-using Types;
+using Commons.Communications.Employee;
+using Commons.Types;
 
 namespace Controllers;
 
