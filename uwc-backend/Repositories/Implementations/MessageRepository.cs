@@ -14,6 +14,23 @@ public class MessageRepository : GenericRepository<Message>
         return _context.Messages.Where(employee => employee.Id == id);
     }
 
+    public IEnumerable<Message> GetMessagesOfTwoUsers(int thisUserId, int otherUserId)
+    {
+        if (!_context.Accounts.Any(account => account.Id == thisUserId)) return new List<Message>();
+        if (!_context.Accounts.Any(account => account.Id == otherUserId)) return new List<Message>();
+
+        var messageList = _context.Messages.Include(message => message.SenderAccount)
+            .ThenInclude(account => account.LinkedProfile)
+            .Include(message => message.ReceiverAccount)
+            .ThenInclude(account => account.LinkedProfile)
+            .Where(message =>
+                (message.SenderAccount.Id == thisUserId && message.ReceiverAccount.Id == otherUserId) ||
+                (message.SenderAccount.Id == otherUserId && message.ReceiverAccount.Id == thisUserId));
+
+        var result = messageList.OrderBy(message => message.TextTime).ToList();
+        return result;
+    }
+    
     public IEnumerable<Message> GetMessagesOfUser(int userId)
     {
         if (!_context.Accounts.Any(account => account.Id == userId)) return new List<Message>();

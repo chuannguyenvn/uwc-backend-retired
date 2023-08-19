@@ -30,17 +30,12 @@ public class MessageService : IMessageService
         return (true, "Add message successfully.");
     }
 
-    public List<Models.Message> GetAllMessagesOfTwoUsers(int thisUser, int otherUser)
+    public List<Models.Message> GetAllMessagesOfTwoUsers(int thisUserId, int otherUserId)
     {
-        if (!_unitOfWork.Accounts.DoesIdExist(thisUser)) return new List<Models.Message>();
-        if (!_unitOfWork.Accounts.DoesIdExist(otherUser)) return new List<Models.Message>();
+        if (!_unitOfWork.Accounts.DoesIdExist(thisUserId)) return new List<Models.Message>();
+        if (!_unitOfWork.Accounts.DoesIdExist(otherUserId)) return new List<Models.Message>();
 
-        var messageList = _unitOfWork.Messages.Find(message =>
-            (message.SenderAccount.Id == thisUser && message.ReceiverAccount.Id == otherUser) ||
-            (message.SenderAccount.Id == otherUser && message.ReceiverAccount.Id == thisUser));
-
-        var result = messageList.OrderBy(message => message.TextTime).ToList();
-        return result;
+        return _unitOfWork.Messages.GetMessagesOfTwoUsers(thisUserId, otherUserId).ToList();
     }
 
     public List<Models.Message> GetLatestMessagesOf(int userId)
