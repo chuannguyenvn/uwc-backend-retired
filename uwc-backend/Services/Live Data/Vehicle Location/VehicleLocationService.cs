@@ -5,7 +5,7 @@ using Commons.Types;
 
 namespace Services.LiveData;
 
-public partial class VehicleLocationService : IHostedService, IDisposable
+public class VehicleLocationService : IHostedService, IDisposable
 {
     private const string MAPBOX_DIRECTION_API =
         "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{0},{1};{2},{3}?geometries=geojson&access_token=pk.eyJ1IjoiY2h1YW4tbmd1eWVudm4iLCJhIjoiY2xsYTkycjJoMGg1MjNxbGhhcW5mMzNuOCJ9.tpAt14HVH_j1IKuKxsK31A";
@@ -29,7 +29,7 @@ public partial class VehicleLocationService : IHostedService, IDisposable
     {
         RetrieveVehicleIds();
 
-        _botMovementTimer = new Timer(MoveBots, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        _botMovementTimer = new Timer(MoveBots, null, TimeSpan.Zero, TimeSpan.FromSeconds(10000000000));
 
         return Task.CompletedTask;
     }
@@ -58,7 +58,8 @@ public partial class VehicleLocationService : IHostedService, IDisposable
             {
                 if (!locationData.IsBot) return;
 
-                if (locationData.MapboxDirectionResponse == null || locationData.MapboxDirectionResponse.Waypoints.Count == 0)
+                if (locationData.MapboxDirectionResponse == null ||
+                    locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count == 0)
                 {
                     var mostFullMcp = GetRandomMcp();
                     locationData.TargettingMcp = mostFullMcp;
@@ -67,33 +68,35 @@ public partial class VehicleLocationService : IHostedService, IDisposable
                     locationData.MapboxDirectionResponse = RequestMapboxDirection(locationData.CurrentLocation, mcpCoordinate);
                 }
 
-                var distanceLeft = 0.001;
-                while (distanceLeft > 0 && locationData.MapboxDirectionResponse.Waypoints.Count > 0)
+                var distanceLeft = 0.0005;
+                while (distanceLeft > 0 && locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count > 0)
                 {
                     var currentLocation = locationData.CurrentLocation;
-                    var nextWaypointLocation = new Coordinate(locationData.MapboxDirectionResponse.Waypoints[0].Location);
+                    var nextWaypointLocation = new Coordinate(locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates[0]);
 
                     var distanceToNextWaypoint = currentLocation.DistanceTo(nextWaypointLocation);
                     if (distanceToNextWaypoint > distanceLeft)
                     {
                         var t = Math.Clamp(distanceLeft / distanceToNextWaypoint, 0, 1);
                         locationData.CurrentLocation = Coordinate.Lerp(currentLocation, nextWaypointLocation, t);
-                        locationData.CurrentOrientationAngle = (float)(Math.Atan2(nextWaypointLocation.Latitude - currentLocation.Latitude,
-                            nextWaypointLocation.Longitude - currentLocation.Longitude) * 180 / Math.PI);
-
-                        EmptyMcp(locationData.TargettingMcp.Id);
+                        locationData.CurrentOrientationAngle = (float)locationData.CurrentLocation.AngleTo(nextWaypointLocation);
                         break;
                     }
 
-                    locationData.MapboxDirectionResponse.Waypoints.RemoveAt(0);
+                    locationData.CurrentLocation = nextWaypointLocation;
+                    locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.RemoveAt(0);
                     distanceLeft -= distanceToNextWaypoint;
+                }
+
+                if (locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count == 0)
+                {
+                    EmptyMcp(locationData.TargettingMcp.Id);
                 }
             });
     }
 
     private MapboxDirectionResponse RequestMapboxDirection(Coordinate fromLocation, Coordinate toLocation)
     {
-        Console.WriteLine("RequestMapboxDirection");
         var client = new HttpClient();
         var httpResponse = client.GetStringAsync(ConstructMapboxDirectionRequest(fromLocation, toLocation)).Result;
         var mapboxDirectionResponse = JsonConvert.DeserializeObject<MapboxDirectionResponse>(httpResponse);
