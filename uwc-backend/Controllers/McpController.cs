@@ -61,7 +61,7 @@ public class McpController : ControllerBase
     [HttpGet("get/all")]
     public List<Mcp> GetAllMcps()
     {
-        var result = _mcpService.GetAllMcps();
+        var result = _mcpCapacityService.GetAllMcps();
         return result;
     }
 

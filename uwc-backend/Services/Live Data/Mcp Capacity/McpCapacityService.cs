@@ -85,4 +85,9 @@ public class McpCapacityService : IHostedService, IDisposable
     {
         return _allMcps.GetRandomElement();
     }
+    
+    public List<Models.Mcp> GetAllMcps()
+    {
+        return _allMcps;
+    }
 }
