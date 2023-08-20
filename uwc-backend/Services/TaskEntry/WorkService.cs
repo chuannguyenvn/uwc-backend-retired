@@ -1,11 +1,12 @@
 ﻿using Models;
 using Repositories;
+using Services.LiveData;
 
 namespace Services.TaskEntry;
 
 public interface IWorkService
 {
-    public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, int route);
+    public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, List<int> mcpIds);
 
     public List<Models.TaskEntry> GetAllTasksOfEmployee(int id);
 
@@ -21,13 +22,15 @@ public interface IWorkService
 public class WorkService : IWorkService
 {
     private readonly UnitOfWork _unitOfWork;
+    private readonly VehicleLocationService _vehicleLocationService;
 
-    public WorkService(UnitOfWork _unitOfWork)
+    public WorkService(UnitOfWork unitOfWork, VehicleLocationService vehicleLocationService)
     {
-        this._unitOfWork = _unitOfWork;
+        _unitOfWork = unitOfWork;
+        _vehicleLocationService = vehicleLocationService;
     }
 
-    public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, int route)
+    public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, List<int> mcpIds)
     {
         if (!_unitOfWork.DriverProfiles.DoesIdExist(supervisor))
             return (false, "Supervisor Id does not exist");
@@ -45,6 +48,9 @@ public class WorkService : IWorkService
 
         _unitOfWork.TaskEntries.Add(taskInformation);
         _unitOfWork.Complete();
+        
+        _vehicleLocationService.AddRoute(_unitOfWork.DriverProfiles.GetById(worker).DrivingHistories[^1].VehicleUsed.Id, mcpIds);
+        
         return (true, "Task added successfully");
     }
 

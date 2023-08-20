@@ -6,6 +6,7 @@ public class DataSeeder
 {
     private readonly List<UserProfile> _allProfiles = new();
     private readonly List<Account> _allAccounts = new();
+    private readonly List<Vehicle> _allVehicles = new();
     private readonly UwcDbContext _uwcDbContext;
 
     public DataSeeder(UwcDbContext uwcDbContext)
@@ -38,6 +39,8 @@ public class DataSeeder
             _uwcDbContext.SupervisorProfiles.Add(supervisorProfile);
             _allProfiles.Add(supervisorProfile);
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void SeedDriverProfiles()
@@ -65,6 +68,8 @@ public class DataSeeder
             _uwcDbContext.DriverProfiles.Add(driverProfile);
             _allProfiles.Add(driverProfile);
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void SeedCleanerProfiles()
@@ -92,6 +97,8 @@ public class DataSeeder
             _uwcDbContext.CleanerProfiles.Add(cleanerProfile);
             _allProfiles.Add(cleanerProfile);
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void SeedAccounts()
@@ -110,28 +117,37 @@ public class DataSeeder
             _allAccounts.Add(account);
             _uwcDbContext.Accounts.Add(account);
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void SeedDrivingHistories()
     {
         var random = new Random();
 
-        foreach (var driverProfile in _uwcDbContext.DriverProfiles.ToList())
+        for (int i = 10; i < 30; i++)
         {
             var historyCount = random.Next(1, 11);
 
-            for (var i = 0; i < historyCount; i++)
+            for (var j = 0; j < historyCount; j++)
             {
                 var drivingHistory = new DrivingHistory
                 {
-                    DriverProfile = driverProfile,
-                    Timestamp = DataSeederHelper.GenerateRandomDate(2015, 2023),
+                    DriverProfile = _allProfiles[i] as DriverProfile,
+                    Timestamp = DataSeederHelper.GenerateRandomDate(2015, 2022),
                     VehicleUsed = GetRandomVehicle()
                 };
 
                 _uwcDbContext.DrivingHistories.Add(drivingHistory);
             }
+
+            _uwcDbContext.DrivingHistories.Add(new DrivingHistory
+            {
+                DriverProfile = _allProfiles[i] as DriverProfile, Timestamp = DateTime.UtcNow, VehicleUsed = _allVehicles[i - 10]
+            });
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     private Vehicle GetRandomVehicle()
@@ -161,6 +177,8 @@ public class DataSeeder
                 _uwcDbContext.DrivingLicenses.Add(drivingLicense);
             }
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void SeedMcps()
@@ -238,8 +256,10 @@ public class DataSeeder
 
             _uwcDbContext.Mcps.Add(mcp);
         }
+
+        _uwcDbContext.SaveChanges();
     }
-    
+
     public void SeedVehicles()
     {
         var licensePlates = DataSeederHelper.GenerateLicensePlates(30);
@@ -267,8 +287,11 @@ public class DataSeeder
                 AverageSpeed = averageSpeed
             };
 
+            _allVehicles.Add(vehicle);
             _uwcDbContext.Vehicles.Add(vehicle);
         }
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void SeedMessages()
@@ -776,6 +799,8 @@ public class DataSeeder
             TextTime = DateTime.UtcNow.AddDays(-1).Date.AddHours(17).AddMinutes(5).AddSeconds(45),
             TextContent = "Heading out for a nighttime pickup. Let's keep the city clean even during the quiet hours!"
         });
+
+        _uwcDbContext.SaveChanges();
     }
 
     public void FinishSeeding()

@@ -8,7 +8,7 @@ namespace Services.LiveData;
 public class VehicleLocationService : IHostedService, IDisposable
 {
     private const string MAPBOX_DIRECTION_API =
-        "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{0},{1};{2},{3}?geometries=geojson&access_token=pk.eyJ1IjoiY2h1YW4tbmd1eWVudm4iLCJhIjoiY2xsYTkycjJoMGg1MjNxbGhhcW5mMzNuOCJ9.tpAt14HVH_j1IKuKxsK31A";
+        "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/{0};{1}?geometries=geojson&access_token=pk.eyJ1IjoiZGlnaXRhbGJveTAzMCIsImEiOiJjbGxqY2hpaGsxcDllM2VsZ3B1ajZyOGp4In0.DySADZ5B0wTt_dRRQ4CEAw";
 
     private readonly IServiceProvider _serviceProvider;
     private Timer? _botMovementTimer;
@@ -29,7 +29,7 @@ public class VehicleLocationService : IHostedService, IDisposable
     {
         RetrieveVehicleIds();
 
-        _botMovementTimer = new Timer(MoveBots, null, TimeSpan.Zero, TimeSpan.FromSeconds(10000000000));
+        _botMovementTimer = new Timer(MoveBots, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
 
         return Task.CompletedTask;
     }
@@ -47,7 +47,6 @@ public class VehicleLocationService : IHostedService, IDisposable
         {
             var data = new VehicleMovementData {CurrentLocation = new Coordinate(10.770486, 106.658127), IsBot = true};
             _vehicleLocationDataById.Add(vehicle.Id, data);
-            break;
         }
     }
 
@@ -62,7 +61,7 @@ public class VehicleLocationService : IHostedService, IDisposable
                     locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count == 0)
                 {
                     var mostFullMcp = GetRandomMcp();
-                    locationData.TargettingMcp = mostFullMcp;
+                    locationData.TargettingMcps = new List<Models.Mcp>() {mostFullMcp};
 
                     var mcpCoordinate = new Coordinate(mostFullMcp.Latitude, mostFullMcp.Longitude);
                     locationData.MapboxDirectionResponse = RequestMapboxDirection(locationData.CurrentLocation, mcpCoordinate);
@@ -90,7 +89,8 @@ public class VehicleLocationService : IHostedService, IDisposable
 
                 if (locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count == 0)
                 {
-                    EmptyMcp(locationData.TargettingMcp.Id);
+                    EmptyMcp(locationData.TargettingMcps[0].Id);
+                    locationData.TargettingMcps.RemoveAt(0);
                 }
             });
     }
@@ -99,6 +99,14 @@ public class VehicleLocationService : IHostedService, IDisposable
     {
         var client = new HttpClient();
         var httpResponse = client.GetStringAsync(ConstructMapboxDirectionRequest(fromLocation, toLocation)).Result;
+        var mapboxDirectionResponse = JsonConvert.DeserializeObject<MapboxDirectionResponse>(httpResponse);
+        return mapboxDirectionResponse;
+    }
+
+    private MapboxDirectionResponse RequestMapboxDirection(Coordinate fromLocation, List<Coordinate> toLocations)
+    {
+        var client = new HttpClient();
+        var httpResponse = client.GetStringAsync(ConstructMapboxDirectionRequest(fromLocation, toLocations)).Result;
         var mapboxDirectionResponse = JsonConvert.DeserializeObject<MapboxDirectionResponse>(httpResponse);
         return mapboxDirectionResponse;
     }
@@ -119,11 +127,14 @@ public class VehicleLocationService : IHostedService, IDisposable
 
     private string ConstructMapboxDirectionRequest(Coordinate currentLocation, Coordinate destinationLocation)
     {
+        return string.Format(MAPBOX_DIRECTION_API, currentLocation.ToStringAPI(), destinationLocation.ToStringAPI());
+    }
+
+    private string ConstructMapboxDirectionRequest(Coordinate currentLocation, List<Coordinate> destinationLocations)
+    {
         return string.Format(MAPBOX_DIRECTION_API,
-            currentLocation.Longitude,
-            currentLocation.Latitude,
-            destinationLocation.Longitude,
-            destinationLocation.Latitude);
+            currentLocation.ToStringAPI(),
+            String.Join(',', destinationLocations.Select(location => location.ToStringAPI())));
     }
 
     public bool UpdateVehicleLocation(int vehicleId, Coordinate newCoordinate)
@@ -136,5 +147,23 @@ public class VehicleLocationService : IHostedService, IDisposable
     public (bool success, Dictionary<int, VehicleMovementData> result) GetAllVehicleLocations()
     {
         return (true, _vehicleLocationDataById);
+    }
+
+    public void AddRoute(int vehicleId, List<int> mcpIds)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
+
+        var remainingWaypoints = _vehicleLocationDataById[vehicleId]
+            .MapboxDirectionResponse.Waypoints.Select(waypoint => new Coordinate(waypoint.Location));
+
+        var newMcps = mcpIds.Select(mcpId => unitOfWork.Mcps.GetById(mcpId)).ToList();
+        _vehicleLocationDataById[vehicleId].TargettingMcps.AddRange(newMcps);
+
+        var newWaypoints = newMcps.Select(mcp => new Coordinate(mcp.Latitude, mcp.Longitude));
+        var allWaypoints = remainingWaypoints.Concat(newWaypoints).ToList();
+
+        _vehicleLocationDataById[vehicleId].MapboxDirectionResponse =
+            RequestMapboxDirection(_vehicleLocationDataById[vehicleId].CurrentLocation, allWaypoints);
     }
 }

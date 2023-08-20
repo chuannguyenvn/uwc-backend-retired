@@ -7,6 +7,6 @@ namespace Commons.Communications.Task
         [JsonProperty("Date")] public DateTime Date { get; set; }
         [JsonProperty("Supervisor")] public int SupervisorId { get; set; }
         [JsonProperty("Worker")] public int WorkerId { get; set; }
-        [JsonProperty("Route")] public int RouteId { get; set; }
+        [JsonProperty("McpIds")] public List<int> McpIds { get; set; } = new();
     }
 }

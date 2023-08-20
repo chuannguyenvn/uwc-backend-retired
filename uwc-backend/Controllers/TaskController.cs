@@ -22,7 +22,7 @@ public class TaskController : ControllerBase
         var (success, result) = _workService.AddTask(addTaskRequest.Date,
             addTaskRequest.SupervisorId,
             addTaskRequest.WorkerId,
-            addTaskRequest.RouteId);
+            addTaskRequest.McpIds);
 
         if (!success) return BadRequest(result);
 

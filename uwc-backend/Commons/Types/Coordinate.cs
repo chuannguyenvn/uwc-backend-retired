@@ -6,7 +6,7 @@ namespace Commons.Types
     {
         public double Latitude;
         public double Longitude;
-        
+
         public Coordinate(double latitude, double longitude)
         {
             Latitude = latitude;
@@ -54,7 +54,12 @@ namespace Commons.Types
         {
             return "Lat: " + Latitude + ". Longitude: " + Longitude;
         }
-        
+
+        public string ToStringAPI()
+        {
+            return Longitude + "," + Latitude;
+        }
+
         public double AngleTo(Coordinate other)
         {
             // Calculate the vectors between 'this' and 'other' coordinates
@@ -76,7 +81,7 @@ namespace Commons.Types
 
             return angleInDegrees;
         }
-        
+
         public double DistanceTo(Coordinate other)
         {
             return Math.Sqrt(Math.Pow(Latitude - other.Latitude, 2) + Math.Pow(Longitude - other.Longitude, 2));

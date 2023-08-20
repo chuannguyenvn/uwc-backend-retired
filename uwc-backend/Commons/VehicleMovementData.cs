@@ -7,7 +7,7 @@ namespace Commons
         public Coordinate CurrentLocation;
         public float CurrentOrientationAngle;
         public bool IsBot = true;
-        public Models.Mcp TargettingMcp;
+        public List<Models.Mcp> TargettingMcps;
         public MapboxDirectionResponse MapboxDirectionResponse;
     }
 }

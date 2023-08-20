@@ -30,7 +30,7 @@ public class UwcDbContext : DbContext
 
         modelBuilder.Entity<Message>().HasOne(message => message.SenderAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<Message>().HasOne(message => message.ReceiverAccount).WithMany().OnDelete(DeleteBehavior.NoAction);
-        
+
         modelBuilder.Entity<TaskEntry>().HasOne(task => task.Supervisor).WithMany().OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<TaskEntry>().HasOne(task => task.Worker).WithMany().OnDelete(DeleteBehavior.NoAction);
     }
