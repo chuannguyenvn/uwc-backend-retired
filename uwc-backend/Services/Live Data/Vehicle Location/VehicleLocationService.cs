@@ -43,10 +43,19 @@ public class VehicleLocationService : IHostedService, IDisposable
     {
         using var scope = _serviceProvider.CreateScope();
         var unitOfWork = scope.ServiceProvider.GetRequiredService<UnitOfWork>();
-        foreach (var vehicle in unitOfWork.Vehicles.GetAll())
+        foreach (var driverProfile in unitOfWork.DriverProfiles.GetAll())
         {
-            var data = new VehicleMovementData {CurrentLocation = new Coordinate(10.770486, 106.658127), IsBot = true};
-            _vehicleLocationDataById.Add(vehicle.Id, data);
+            var data = new VehicleMovementData
+            {
+                DriverProfile = driverProfile,
+                CurrentLocation = new Coordinate(10.770486, 106.658127),
+                CurrentOrientationAngle = 0,
+                IsBot = true,
+                TargettingMcps = new(),
+                MapboxDirectionResponse = new(),
+            };
+
+            _vehicleLocationDataById.Add(driverProfile.Id - 10, data);
         }
     }
 
@@ -57,7 +66,8 @@ public class VehicleLocationService : IHostedService, IDisposable
             {
                 if (!locationData.IsBot) return;
 
-                if (locationData.MapboxDirectionResponse == null ||
+                if (locationData.MapboxDirectionResponse == null || locationData.MapboxDirectionResponse.Routes == null ||
+                    locationData.MapboxDirectionResponse.Routes.Count == 0 ||
                     locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count == 0)
                 {
                     var mostFullMcp = GetRandomMcp();
