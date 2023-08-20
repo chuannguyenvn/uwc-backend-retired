@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Commons.Types;
+using Models;
 using Repositories;
 using Services.LiveData;
 
@@ -32,15 +33,15 @@ public class WorkService : IWorkService
 
     public (bool success, object result) AddTask(DateTime date, int supervisor, int worker, List<int> mcpIds)
     {
-        if (!_unitOfWork.DriverProfiles.DoesIdExist(supervisor))
+        if (!_unitOfWork.SupervisorProfiles.DoesIdExist(supervisor))
             return (false, "Supervisor Id does not exist");
-
+        
         if (!_unitOfWork.DriverProfiles.DoesIdExist(worker)) return (false, "Worker Id does not exist.");
 
         var supervisorEmployee = _unitOfWork.SupervisorProfiles.Find(employee => employee.Id == supervisor).First();
         var workerEmployee = _unitOfWork.DriverProfiles.Find(employee => employee.Id == worker).First();
 
-        if (supervisorEmployee.Role != 0) return (false, "Supervisor Id does not match");
+        if (supervisorEmployee.Role != UserRole.Supervisor) return (false, "Supervisor Id does not match");
 
         if (workerEmployee.Role == 0) return (false, "Worker Id does not match");
 
@@ -49,7 +50,7 @@ public class WorkService : IWorkService
         _unitOfWork.TaskEntries.Add(taskInformation);
         _unitOfWork.Complete();
         
-        _vehicleLocationService.AddRoute(_unitOfWork.DriverProfiles.GetById(worker).DrivingHistories[^1].VehicleUsed.Id, mcpIds);
+        _vehicleLocationService.AddRoute(workerEmployee.Id - 10, mcpIds);
         
         return (true, "Task added successfully");
     }
