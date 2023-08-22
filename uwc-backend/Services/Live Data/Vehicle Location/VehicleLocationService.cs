@@ -96,7 +96,7 @@ public class VehicleLocationService : IHostedService, IDisposable
                     locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.RemoveAt(0);
                     distanceLeft -= distanceToNextWaypoint;
 
-                    if (nextWaypointLocation.IsApproximatelyEqualTo(new Coordinate(locationData.TargettingMcps[0].Latitude, locationData.TargettingMcps[0].Longitude)))
+                    if (locationData.TargettingMcps.Count > 0 && nextWaypointLocation.IsApproximatelyEqualTo(new Coordinate(locationData.TargettingMcps[0].Latitude, locationData.TargettingMcps[0].Longitude)))
                     {
                         EmptyMcp(locationData.TargettingMcps[0].Id);
                         locationData.TargettingMcps.RemoveAt(0);

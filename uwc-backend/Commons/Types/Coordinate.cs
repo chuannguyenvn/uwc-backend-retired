@@ -89,7 +89,7 @@ namespace Commons.Types
 
         public bool IsApproximatelyEqualTo(Coordinate other)
         {
-            return Math.Abs(Latitude - other.Latitude) < 0.0001 && Math.Abs(Longitude - other.Longitude) < 0.0001;
+            return Math.Abs(Latitude - other.Latitude) < 0.001 && Math.Abs(Longitude - other.Longitude) < 0.001;
         }
     }
 }
