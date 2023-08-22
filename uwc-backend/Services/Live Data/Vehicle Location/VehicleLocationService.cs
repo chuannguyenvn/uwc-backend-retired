@@ -77,7 +77,7 @@ public class VehicleLocationService : IHostedService, IDisposable
                     locationData.MapboxDirectionResponse = RequestMapboxDirection(locationData.CurrentLocation, mcpCoordinate);
                 }
 
-                var distanceLeft = 0.0005;
+                var distanceLeft = 0.001;
                 while (distanceLeft > 0 && locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count > 0)
                 {
                     var currentLocation = locationData.CurrentLocation;
@@ -95,12 +95,12 @@ public class VehicleLocationService : IHostedService, IDisposable
                     locationData.CurrentLocation = nextWaypointLocation;
                     locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.RemoveAt(0);
                     distanceLeft -= distanceToNextWaypoint;
-                }
 
-                if (locationData.MapboxDirectionResponse.Routes[0].Geometry.Coordinates.Count == 0)
-                {
-                    EmptyMcp(locationData.TargettingMcps[0].Id);
-                    locationData.TargettingMcps.RemoveAt(0);
+                    if (nextWaypointLocation.IsApproximatelyEqualTo(new Coordinate(locationData.TargettingMcps[0].Latitude, locationData.TargettingMcps[0].Longitude)))
+                    {
+                        EmptyMcp(locationData.TargettingMcps[0].Id);
+                        locationData.TargettingMcps.RemoveAt(0);
+                    }
                 }
             });
     }
@@ -116,6 +116,7 @@ public class VehicleLocationService : IHostedService, IDisposable
     private MapboxDirectionResponse RequestMapboxDirection(Coordinate fromLocation, List<Coordinate> toLocations)
     {
         var client = new HttpClient();
+        Console.WriteLine(ConstructMapboxDirectionRequest(fromLocation, toLocations));
         var httpResponse = client.GetStringAsync(ConstructMapboxDirectionRequest(fromLocation, toLocations)).Result;
         var mapboxDirectionResponse = JsonConvert.DeserializeObject<MapboxDirectionResponse>(httpResponse);
         return mapboxDirectionResponse;
@@ -144,7 +145,7 @@ public class VehicleLocationService : IHostedService, IDisposable
     {
         return string.Format(MAPBOX_DIRECTION_API,
             currentLocation.ToStringAPI(),
-            String.Join(',', destinationLocations.Select(location => location.ToStringAPI())));
+            String.Join(';', destinationLocations.Select(location => location.ToStringAPI())));
     }
 
     public bool UpdateVehicleLocation(int vehicleId, Coordinate newCoordinate)
@@ -172,6 +173,7 @@ public class VehicleLocationService : IHostedService, IDisposable
 
         var newWaypoints = newMcps.Select(mcp => new Coordinate(mcp.Latitude, mcp.Longitude));
         var allWaypoints = remainingWaypoints.Concat(newWaypoints).ToList();
+        allWaypoints.RemoveAt(0);
 
         _vehicleLocationDataById[vehicleId].MapboxDirectionResponse =
             RequestMapboxDirection(_vehicleLocationDataById[vehicleId].CurrentLocation, allWaypoints);

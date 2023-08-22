@@ -86,5 +86,10 @@ namespace Commons.Types
         {
             return Math.Sqrt(Math.Pow(Latitude - other.Latitude, 2) + Math.Pow(Longitude - other.Longitude, 2));
         }
+
+        public bool IsApproximatelyEqualTo(Coordinate other)
+        {
+            return Math.Abs(Latitude - other.Latitude) < 0.0001 && Math.Abs(Longitude - other.Longitude) < 0.0001;
+        }
     }
 }
